@@ -1400,174 +1400,179 @@ public class MainApplication extends javax.swing.JFrame  {
                 List <Projection> projections = new ArrayList<> ();
                 Projections.init(projections);
                 
-                //Clear results
-                clearResults();
-                
-                //Set detection and optimization methods
-                switch (index_method + index_optimization)
-                {
-                        case 11: method = TAnalysisMethod.NLSM7;
-                                 break;
-                        case 12: method = TAnalysisMethod.NLSM8;
-                                 break;
-                        case 21: method = TAnalysisMethod.NMM7;
-                                 break;
-                        case 22: method = TAnalysisMethod.NMM8;
-                                 break;
-                        case 31: method = TAnalysisMethod.DEM7;
-                                 break;
-                        case 32: method = TAnalysisMethod.DEM8;
-                                 break;         
-                }
-                
-                //Different amount of points (1 omitted point)
-                if (abs(n_test - n_reference) == 1)
-                {
-                        //Show warning
-                        final Object[] options = {"Delete point", "Cancel"};
-                        final int response = JOptionPane.showOptionDialog(null, "Different amount of control points (1 point is missing). The analysis cannot be computed. Delete LAST collected point?", "Warning",
-                                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
-                      
-                        //Delete last control point
-                        if (response == 0)
-                        {
-                                //Delete a control point on the test map
-                                if (n_test > n_reference)
-                                        test_points.remove(n_test - 1);
-                                
-                                //Delete a control point on the reference map
-                                else
-                                        map.deletePoint(n_reference - 1);
-                                
-                                //Repaint maps
-                                early_map.repaint();
-                                map.repaintMap();
-                                
-                                //Enable adding points
-                                add_test_point = true;
-                                add_reference_point = true;
-                        }
-                }
-                
-                //Different amount of points (more than 1 omitted point, wrong data!)
-                else if (abs(n_test - n_reference) > 1)
-                {
-                        //Show warning
-                        final Object[] options = {"Delete points", "Cancel"};
-                        final int response = JOptionPane.showOptionDialog(null, "Wrong data, " + abs(n_test - n_reference) + " poins are missing! " + "The analysis cannot be computed. Delete ALL collected points?", "Warning",
-                                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
-                      
-                        //Clear all control points
-                        if (response == 0)
-                        {
-                                clearAll();
-                        }
-                        
-                        return;
-                }
+				//The previous analysis has been finished
+				if (!computation_in_progress)
+				{
+					//Clear results
+					clearResults();
+					
+					//Set detection and optimization methods
+					switch (index_method + index_optimization)
+					{
+							case 11: method = TAnalysisMethod.NLSM7;
+									 break;
+							case 12: method = TAnalysisMethod.NLSM8;
+									 break;
+							case 21: method = TAnalysisMethod.NMM7;
+									 break;
+							case 22: method = TAnalysisMethod.NMM8;
+									 break;
+							case 31: method = TAnalysisMethod.DEM7;
+									 break;
+							case 32: method = TAnalysisMethod.DEM8;
+									 break;         
+					}
+					
+					//Different amount of points (1 omitted point)
+					if (abs(n_test - n_reference) == 1)
+					{
+							//Show warning
+							final Object[] options = {"Delete point", "Cancel"};
+							final int response = JOptionPane.showOptionDialog(null, "Different amount of control points (1 point is missing). The analysis cannot be computed. Delete LAST collected point?", "Warning",
+									JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+						  
+							//Delete last control point
+							if (response == 0)
+							{
+									//Delete a control point on the test map
+									if (n_test > n_reference)
+											test_points.remove(n_test - 1);
+									
+									//Delete a control point on the reference map
+									else
+											map.deletePoint(n_reference - 1);
+									
+									//Repaint maps
+									early_map.repaint();
+									map.repaintMap();
+									
+									//Enable adding points
+									add_test_point = true;
+									add_reference_point = true;
+							}
+					}
+					
+					//Different amount of points (more than 1 omitted point, wrong data!)
+					else if (abs(n_test - n_reference) > 1)
+					{
+							//Show warning
+							final Object[] options = {"Delete points", "Cancel"};
+							final int response = JOptionPane.showOptionDialog(null, "Wrong data, " + abs(n_test - n_reference) + " poins are missing! " + "The analysis cannot be computed. Delete ALL collected points?", "Warning",
+									JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+						  
+							//Clear all control points
+							if (response == 0)
+							{
+									clearAll();
+							}
+							
+							return;
+					}
 
-                //Not enough points
-                if (n_test < 5)
-                        return;
+					//Not enough points
+					if (n_test < 5)
+							return;
 
-                //Analyze map projection in new thread
-                CartAnalysisMT ca = new CartAnalysisMT(test_points, reference_points, projections, results, method, System.out, analyzeButton, new Runnable() 
-                {
-                        @Override
-                        public void run() 
-                        {
-                                //Print results: all operation performed after the thread has been finished
-                                results_form.printResult(n_results);
+					//Analyze map projection in new thread
+					CartAnalysisMT ca = new CartAnalysisMT(test_points, reference_points, projections, results, method, System.out, analyzeButton, new Runnable() 
+					{
+							@Override
+							public void run() 
+							{
+									//Print results: all operation performed after the thread has been finished
+									results_form.printResult(n_results);
 
-                                // Geographic extent of the analyzed territory   
-                                double lat_min = (Collections.min(reference_points, new SortByLat())).getLat();
-                                double lat_max = (Collections.max(reference_points, new SortByLat())).getLat();
-                                double lon_min = (Collections.min(reference_points, new SortByLon())).getLon();
-                                double lon_max = (Collections.max(reference_points, new SortByLon())).getLon();
-                                double lat_aver = 0.5 * (lat_min + lat_max), lon_aver = 0.5 * (lon_min + lon_max);
+									// Geographic extent of the analyzed territory   
+									double lat_min = (Collections.min(reference_points, new SortByLat())).getLat();
+									double lat_max = (Collections.max(reference_points, new SortByLat())).getLat();
+									double lon_min = (Collections.min(reference_points, new SortByLon())).getLon();
+									double lon_max = (Collections.max(reference_points, new SortByLon())).getLon();
+									double lat_aver = 0.5 * (lat_min + lat_max), lon_aver = 0.5 * (lon_min + lon_max);
 
-                                //Get limits; stretch over the whole planishere, if necessarry
-                                if (((lon_min < MIN_LON + 40) || (lon_max > MAX_LON - 40)) && (lon_max - lon_min > 200))
-                                {
-                                        lon_min = MIN_LON;
-                                        lon_max = MAX_LON;
-                                }
+									//Get limits; stretch over the whole planishere, if necessarry
+									if (((lon_min < MIN_LON + 40) || (lon_max > MAX_LON - 40)) && (lon_max - lon_min > 200))
+									{
+											lon_min = MIN_LON;
+											lon_max = MAX_LON;
+									}
 
-                                TInterval lat_interval = new TInterval (lat_min, lat_max);
-                                TInterval lon_interval = new TInterval ( lon_min, lon_max);
-                                
-                                //Change step of  meridians/parallels
-                                final double dlat = lat_max - lat_min;
-                                final double dlon = lon_max - lon_min;
-                                final double lat_step = ( dlat < 20.0 ? (dlat < 2.0 ? 0.1 : 1.0) : 10.0);
-                                final double lon_step = ( dlon < 20.0 ? (dlon < 2.0 ? 0.1 : 1.0) : 10.0);
-                                        
-                                //Create and store graticules
-                                int index = 0;
-                                for (java.util.Map.Entry<Double, TResult> entry : results.entrySet())
-                                {
-                                        //Create lists of meridians/parallels
-                                        List <Meridian> meridians = new ArrayList<>();
-                                        List <Parallel> parallels = new ArrayList<>();
-                                        List <List<Point3DCartesian> > meridians_proj = new ArrayList<>();
-                                        List <List<Point3DCartesian> > parallels_proj = new ArrayList<>();
+									TInterval lat_interval = new TInterval (lat_min, lat_max);
+									TInterval lon_interval = new TInterval ( lon_min, lon_max);
+									
+									//Change step of  meridians/parallels
+									final double dlat = lat_max - lat_min;
+									final double dlon = lon_max - lon_min;
+									final double lat_step = ( dlat < 20.0 ? (dlat < 2.0 ? 0.1 : 1.0) : 10.0);
+									final double lon_step = ( dlon < 20.0 ? (dlon < 2.0 ? 0.1 : 1.0) : 10.0);
+											
+									//Create and store graticules
+									int index = 0;
+									for (java.util.Map.Entry<Double, TResult> entry : results.entrySet())
+									{
+											//Create lists of meridians/parallels
+											List <Meridian> meridians = new ArrayList<>();
+											List <Parallel> parallels = new ArrayList<>();
+											List <List<Point3DCartesian> > meridians_proj = new ArrayList<>();
+											List <List<Point3DCartesian> > parallels_proj = new ArrayList<>();
 
-                                        //Set font height      
-                                        Double key = entry.getKey();
-                                        TResult value = entry.getValue();
+											//Set font height      
+											Double key = entry.getKey();
+											TResult value = entry.getValue();
 
-                                         //Get map rotation
-                                        final double alpha = value.map_rotation;
+											 //Get map rotation
+											final double alpha = value.map_rotation;
 
-                                        //Compute projected points
-                                        List <Point3DCartesian> points_proj = new ArrayList<>();
-                                        CartTransformation.latsLonstoXY (reference_points, value.proj, alpha, points_proj);
+											//Compute projected points
+											List <Point3DCartesian> points_proj = new ArrayList<>();
+											CartTransformation.latsLonstoXY (reference_points, value.proj, alpha, points_proj);
 
-                                        //Create graticule 
-                                        Graticule2.createGraticule(value.proj, lat_interval, lon_interval, lat_step, lon_step, 0.1 * lat_step, 0.1 * lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj);
+											//Create graticule 
+											Graticule2.createGraticule(value.proj, lat_interval, lon_interval, lat_step, lon_step, 0.1 * lat_step, 0.1 * lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj);
 
-                                        //Store meridians/parallels, reconstructed points, meridians/paralleles 
-                                        value.meridians = meridians;
-                                        value.parallels = parallels;
-                                        value.points_proj = points_proj;
-                                        value.meridians_proj= meridians_proj;
-                                        value.parallels_proj = parallels_proj;
+											//Store meridians/parallels, reconstructed points, meridians/paralleles 
+											value.meridians = meridians;
+											value.parallels = parallels;
+											value.points_proj = points_proj;
+											value.meridians_proj= meridians_proj;
+											value.parallels_proj = parallels_proj;
 
-                                        //Increment index
-                                        index ++;
-                                }
+											//Increment index
+											index ++;
+									}
 
-                                //Display results of the best fit projection: set meridians/paralells
-                                TResult result_first = results.firstEntry().getValue();
-                                early_map.setMeridians(result_first.meridians);
-                                early_map.setParallels(result_first.parallels);
+									//Display results of the best fit projection: set meridians/paralells
+									TResult result_first = results.firstEntry().getValue();
+									early_map.setMeridians(result_first.meridians);
+									early_map.setParallels(result_first.parallels);
 
-                                //Display results of the best fit projection: set projected points, projected meridians/parallels
-                                early_map.setProjection(result_first.proj);
-                                early_map.setProjectedMeridians(result_first.meridians_proj);
-                                early_map.setProjectedParallels(result_first.parallels_proj);
-                                early_map.setProjectedPoints(result_first.points_proj);
-                                
-                                //Update main window title
-                                MainApplication.this.setTitle("Map projection analysis: " + result_first.proj.getName() + " projection");
+									//Display results of the best fit projection: set projected points, projected meridians/parallels
+									early_map.setProjection(result_first.proj);
+									early_map.setProjectedMeridians(result_first.meridians_proj);
+									early_map.setProjectedParallels(result_first.parallels_proj);
+									early_map.setProjectedPoints(result_first.points_proj);
+									
+									//Update main window title
+									MainApplication.this.setTitle("Map projection analysis: " + result_first.proj.getName() + " projection");
 
-                                //Update early map
-                                early_map.repaint();
+									//Update early map
+									early_map.repaint();
 
-                                //Show window with results
-                                results_form.setVisible(true);
-                                
-                                //Enable change buttons
-                                computation_in_progress = false;
-                        }
-                });
-                
-                //Disable change buttons
-                computation_in_progress = true;
-                
-                //Create new thread and run
-                Thread t = new Thread(ca);
-                t.start();       
+									//Show window with results
+									results_form.setVisible(true);
+									
+									//Enable change buttons
+									computation_in_progress = false;
+							}
+					});
+					
+					//Disable change buttons
+					computation_in_progress = true;
+					
+					//Create new thread and run
+					Thread t = new Thread(ca);
+					t.start(); 
+				}
+				
         }
        
         
