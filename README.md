@@ -1,8 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 # detectprojv2j
-# detectprojv2j
-
 
 <h2><strong><strong><span style="font-family: Arial;">Software </span></strong><span style="color: #ff0000; font-family: Arial;">detectproj</span><span style="font-family: Arial;">, version 1.1,<br />GNU/GPL projection analysis software for Windows ® 7/8/8.1/10, GNU/Linux and MacOS.</span></strong></h2>
 <p>Automated estimation of the map projection and its parameters based on the non-linear optimization...<br />Designed for cartographers as well as for enthusiasts.<br />Available free of charge.<br /><br /></p>
