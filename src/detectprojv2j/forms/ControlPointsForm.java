@@ -1,0 +1,334 @@
+// Description: List of collected control points
+
+// Copyright (c) 2015 - 2016
+// Tomas Bayer
+// Charles University in Prague, Faculty of Science
+// bayertom@natur.cuni.cz
+
+// This library is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this library. If not, see <http://www.gnu.org/licenses/>.
+
+package detectprojv2j.forms;
+
+import java.util.List;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Locale;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import detectprojv2j.structures.point.Point3DCartesian;
+
+
+public class ControlPointsForm extends javax.swing.JFrame {
+        
+        private final EarlyMap early_map;                                               //Early map prepresentation
+        private final Map map;                                                          //Reference map prepresentation (OSM)
+        private JPopupMenu pop_up_menu;                                                 //Pop-up menu
+        
+        public ControlPointsForm(EarlyMap early_map_, Map map_)
+        {
+                //Initialize parameters
+                initComponents();
+                
+                //Assign points
+                early_map = early_map_;
+                map = map_;
+                
+                //Set rows of the table
+                DefaultTableModel model = (DefaultTableModel)controlPointsTable.getModel();
+                model.setRowCount(20);
+                
+                //Initialize table: create header
+                initializeTable();
+                
+                //Create  pop up menu
+                pop_up_menu = new JPopupMenu();
+                JMenuItem deleteItem = new JMenuItem("Delete control point");
+                
+                deleteItem.addActionListener(new ActionListener () 
+                {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) 
+                        {
+                                //Delete nearest point: analyzed map
+                                if (!MainApplication.computation_in_progress)
+                                {
+                                        //Is there any nearest point?
+                                        if (MainApplication.index_nearest >= 0)
+                                        {
+                                                //Delete nearest point: test map
+                                                if ((MainApplication.add_reference_point) && (early_map.test_points.size() > MainApplication.index_nearest))
+                                                        early_map.test_points.remove(MainApplication.index_nearest);
+
+                                                //Delete nearest point: reference map
+                                                if ((MainApplication.add_test_point) && (map.reference_points.size() > MainApplication.index_nearest))
+                                                        map.deleteNearestPoint();
+                                                
+                                                //Delete nearest point: projected reference point
+                                                if ((early_map.projected_points != null) && (early_map.projected_points.size() > MainApplication.index_nearest))
+                                                        early_map.projected_points.remove(MainApplication.index_nearest);
+                                                
+                                                //Repaint both maps
+                                                early_map.repaint();
+                                                map.repaint();
+                                                
+                                                //Enable adding new points
+                                                MainApplication.add_test_point = true;
+                                                MainApplication.add_reference_point = true;
+
+                                                //Update table
+                                                clearTable();
+                                                printResult();
+                                                
+                                        }
+                                }
+                        }
+                });
+                
+                pop_up_menu.add(deleteItem);
+                
+                controlPointsTable.getSelectionModel().addListSelectionListener( new ListSelectionListener() 
+                {
+                        @Override
+                        public void valueChanged(ListSelectionEvent event) 
+                        {
+                                //Index of the selected row
+                                int index = controlPointsTable.getSelectedRow();
+                                
+                                //Highlight selected control point
+                                if ((index < Math.max(early_map.test_points.size(), map.reference_points.size())) && (index >= 0))
+                                {
+                                        //Assign index
+                                        MainApplication.index_nearest_prev = MainApplication.index_nearest;
+                                        MainApplication.index_nearest = index;
+
+                                        //Repaint maps
+                                        early_map.repaint();
+                                        map.repaintMap();
+                                }
+                        }
+                });
+        }
+
+        @SuppressWarnings("unchecked")
+        // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+        private void initComponents() {
+
+                jScrollPane1 = new javax.swing.JScrollPane();
+                controlPointsTable = new javax.swing.JTable();
+
+                setTitle("List of control points and residuals");
+                setAlwaysOnTop(true);
+                setLocation(new java.awt.Point(200, 500));
+                setResizable(false);
+                setType(java.awt.Window.Type.UTILITY);
+
+                controlPointsTable.setModel(new javax.swing.table.DefaultTableModel(
+                        new Object [][] {
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null},
+                                {null, null, null, null, null, null, null, null}
+                        },
+                        new String [] {
+                                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8"
+                        }
+                ) {
+                        boolean[] canEdit = new boolean [] {
+                                false, false, false, false, false, false, false, false
+                        };
+
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                return canEdit [columnIndex];
+                        }
+                });
+                controlPointsTable.setRequestFocusEnabled(false);
+                controlPointsTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+                controlPointsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                controlPointsTableMouseClicked(evt);
+                        }
+                });
+                jScrollPane1.setViewportView(controlPointsTable);
+
+                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+                getContentPane().setLayout(layout);
+                layout.setHorizontalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 862, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                );
+                layout.setVerticalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
+                );
+
+                pack();
+        }// </editor-fold>//GEN-END:initComponents
+
+        private void controlPointsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_controlPointsTableMouseClicked
+                
+                 //Delete control point frp, the table
+                if (!SwingUtilities.isLeftMouseButton(evt)) 
+                {
+                        //Show pop-up menu, remove test point, reference point, or a pair
+                        if (MainApplication.index_nearest != -1)
+                                pop_up_menu.show(controlPointsTable, evt.getX(), evt.getY()); 
+                }
+        }//GEN-LAST:event_controlPointsTableMouseClicked
+
+        
+        private void initializeTable()
+        {
+                //Set properties of the table
+                String[] col_names = { "#", "X_test [pix]", "Y_test [pix]", "Lat_ref [deg]", "Lon_ref [deg]", "X_proj [pix]", "Y_proj [pix]", "dX [pix]", "dY [pix]"};
+                DefaultTableModel model = (DefaultTableModel)controlPointsTable.getModel();
+                model.setColumnIdentifiers(col_names);
+                
+                //Set center alignment for the header
+                JTableHeader header = controlPointsTable.getTableHeader();
+                DefaultTableCellRenderer r_header = (DefaultTableCellRenderer)header.getDefaultRenderer();
+                r_header.setHorizontalAlignment(SwingConstants.CENTER);
+                
+                //Create renderer for the remaining part  of the table
+                DefaultTableCellRenderer r_cells = new DefaultTableCellRenderer();
+                r_cells.setHorizontalAlignment(SwingConstants.CENTER);
+                
+                //Set center alignment for each column of the table
+                for (int i = 0; i < col_names.length; i++)
+                        controlPointsTable.getColumnModel().getColumn(i).setCellRenderer(r_cells); 
+        }
+        
+        
+        public void printResult()
+        {
+                //Print results to the table
+                clearTable();
+                
+                //Get table model
+                DefaultTableModel model = (DefaultTableModel)controlPointsTable.getModel();
+
+                //Get amount of points
+                final int n_test = early_map.test_points.size();
+                final int n_reference = map.reference_points.size();
+                
+                //Set amount of items
+                final int n_rows = Math.max(n_test, n_reference);
+                if (n_rows >= 0)
+                        model.setRowCount(n_rows);
+                
+                //Print #
+                for (int index = 0; index < n_rows; index++)
+                        model.setValueAt(index + 1, index, 0);
+                
+                //Print all test points
+                for (int index = 0; index < n_test; index++)
+                {
+                        //Format numbers to the table
+                        String X_string = String.format(Locale.ROOT, "%10.3f", early_map.test_points.get(index).getX());
+                        String Y_string = String.format(Locale.ROOT, "%10.3f", early_map.test_points.get(index).getY());      
+
+                        //Print results
+                        model.setValueAt(X_string, index, 1);
+                        model.setValueAt(Y_string, index, 2);
+                }
+                
+                //Print all reference points
+                for (int index = 0; index < n_reference; index++)
+                {
+                        //Format numbers to the table  
+                        String lat_string = String.format(Locale.ROOT, "%10.3f", map.reference_points.get(index).getLat());  
+                        String lon_string = String.format(Locale.ROOT, "%10.3f", map.reference_points.get(index).getLon());  
+
+                        //Print results
+                        model.setValueAt(lat_string, index, 3);
+                        model.setValueAt(lon_string, index, 4);
+                }
+                
+                //Print all projected reference points
+                List <Point3DCartesian> reference_points_projected = early_map.getProjectedPoints();
+                if (reference_points_projected != null)
+                {
+                        final int n_projected = reference_points_projected.size();
+                        for (int index = 0; index < n_projected; index++)
+                        {
+                                //Format numbers to the table
+                                String X_proj_string = String.format(Locale.ROOT, "%10.3f", reference_points_projected.get(index).getX());
+                                String Y_proj_string = String.format(Locale.ROOT, "%10.3f", reference_points_projected.get(index).getY());      
+                                String dX_string = String.format(Locale.ROOT, "%10.3f", (early_map.test_points.get(index).getX() - reference_points_projected.get(index).getX()));
+                                String dY_string = String.format(Locale.ROOT, "%10.3f", (early_map.test_points.get(index).getY() - reference_points_projected.get(index).getY()));   
+
+                                //Print results
+                                model.setValueAt(X_proj_string, index, 5);
+                                model.setValueAt(Y_proj_string, index, 6);
+                                model.setValueAt(dX_string, index, 7);
+                                model.setValueAt(dY_string, index, 8);
+                        }
+                }
+        }
+        
+        
+        public void clearTable()
+        {
+                //Clear content of the table
+                DefaultTableModel model = (DefaultTableModel)controlPointsTable.getModel();
+                
+                //Clear all items
+                final int n = model.getRowCount();
+ 
+                for (int index = 0; index < n; index++)
+                {
+                        //Print results
+                        model.setValueAt("", index, 0);
+                        model.setValueAt("", index, 1);
+                        model.setValueAt("", index, 2);
+                        model.setValueAt("", index, 3);
+                        model.setValueAt("", index, 4);
+                        model.setValueAt("", index, 5);
+                        model.setValueAt("", index, 6);
+                        model.setValueAt("", index, 7);
+                        model.setValueAt("", index, 8);
+                }
+        }
+                
+        
+        // Variables declaration - do not modify//GEN-BEGIN:variables
+        private javax.swing.JTable controlPointsTable;
+        private javax.swing.JScrollPane jScrollPane1;
+        // End of variables declaration//GEN-END:variables
+}
