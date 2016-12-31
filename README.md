@@ -150,7 +150,7 @@
 
 
 
-<h3>&nbsp;Map 1: Map of Europe, normal aspect of the projection</h3>
+<h3>&nbsp;Sample 1: Map of Europe, normal aspect of the projection</h3>
 <table style="width: 655px; height: 204px; margin-right: auto; margin-left: auto;">
 <tbody>
 <tr>
@@ -194,7 +194,7 @@
 <p><span style="font-size: 12pt;"><br /><img src="https://web.natur.cuni.cz/~bayertom/images/europe_1_bone_grat_2.jpg" alt="europe 1 bone grat 2" width="885" height="636" style="display: block; margin-left: auto; margin-right: auto;" /></span></p>
 <p><span style="font-size: 12pt;">Determined parameters of the projection:<br /></span><span style="font-size: 12pt;"><span style="font-size: 12pt;">Projection: Bonne.<br /></span>Transformed pole position: ?<sub>k</sub> = 90.0<sup>0</sup>, ?<sub>k</sub> = 0.0<sup>0</sup>.</span><br /><span style="font-size: 12pt;"> Standard parallels: ?<sub>1</sub> =53. 5<sup>0</sup>, ?2 =53. 5<sup>0</sup>.</span><br /><span style="font-size: 12pt;"> Longitude of the central meridian: ?<sub>0</sub> = 14.7<sup>0</sup>.</span><br /><span style="font-size: 12pt;"> Arbitrary constant parameter: k = 1.0. </span><br /><span style="font-size: 12pt;"> Auxiliary sphere radius: R'= 0.3m. </span><br /><span style="font-size: 12pt;"> Map scale: S = 20 910 248.</span><br /><span style="font-size: 12pt;"> Angle of rotation: ? = 0.00.</span></p>
 <p>&nbsp;</p>
-<h3><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Map 2: World map in hemisphere, transverse aspect of the projection<br /></span></h3>
+<h3><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Sample 2: World map in hemisphere, transverse aspect of the projection<br /></span></h3>
 <table style="width: 655px; height: 204px; margin-right: auto; margin-left: auto;">
 <tbody>
 <tr>
