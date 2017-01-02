@@ -83,11 +83,11 @@ public class Meridian {
                 //Create meridian
 
                 //Set start value of the latitude as a multiplier of dlat 
-                final double lat_start = Round.roundToMultipleFloor(lat_interval.min, dlat) + dlat;
-                final double lat_end = Round.roundToMultipleCeil(lat_interval.max, dlat) - dlat;
+                final double lat_start = Round.roundToMultipleFloor(lat_interval.min_value, dlat) + dlat;
+                final double lat_end = Round.roundToMultipleCeil(lat_interval.max_value, dlat) - dlat;
 
                 //Add first point (lower bound of the interval)
-                lats.add(max(min(lat_interval.min + lat_min_shift, MAX_LAT), MIN_LAT));
+                lats.add(max(min(lat_interval.min_value + lat_min_shift, MAX_LAT), MIN_LAT));
 
                 //Add intermediate points
                 for (double lat_point = lat_start; lat_point <= lat_end; lat_point += dlat)
@@ -96,7 +96,7 @@ public class Meridian {
                 }
 
                 //Add last point (upper bound of the interval)
-                lats.add(max(min(lat_interval.max - lat_max_shift, MAX_LAT), MIN_LAT));
+                lats.add(max(min(lat_interval.max_value - lat_max_shift, MAX_LAT), MIN_LAT));
         }
 
 

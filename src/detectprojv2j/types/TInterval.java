@@ -1,4 +1,4 @@
-// Description: Interval given by min and max values
+// Description: Interval given by min_value and max_value values
 
 // Copyright (c) 2015 - 2016
 // Tomas Bayer
@@ -21,15 +21,15 @@
 package detectprojv2j.types;
 
 
-//Interval given by min-max value
+//Interval given by min_value-max_value value
 public class TInterval 
 {
-        public double min;
-        public double max;
+        public double min_value;
+        public double max_value;
         
-        public TInterval ( double min_, double max_)
+        public TInterval ( double min_value_, double max_value_)
         {
-                min = min_;
-                max = max_;
+                min_value = min_value_;
+                max_value = max_value_;
         }
 }

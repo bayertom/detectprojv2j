@@ -84,11 +84,11 @@ public class Parallel {
                 //Create parallel
 
                 //Set start value of the latitude as a multiplier of dlat 
-                final double lon_start = Round.roundToMultipleFloor(lon_interval.min, dlon) + dlon;
-                final double lon_end = Round.roundToMultipleCeil(lon_interval.max, dlon) - dlon;
+                final double lon_start = Round.roundToMultipleFloor(lon_interval.min_value, dlon) + dlon;
+                final double lon_end = Round.roundToMultipleCeil(lon_interval.max_value, dlon) - dlon;
 
                 //Add first point (lower bound of the interval)
-                lons.add(max(min(lon_interval.min + lon_min_shift, MAX_LON), MIN_LON));
+                lons.add(max(min(lon_interval.min_value + lon_min_shift, MAX_LON), MIN_LON));
 
                 //Add intermediate points
                 for (double lon_point = lon_start; lon_point <= lon_end; lon_point += dlon)
@@ -97,7 +97,7 @@ public class Parallel {
                 }
 
                 //Add last point (upper bound of the interval)
-                lons.add(max(min(lon_interval.max - lon_max_shift, MAX_LON), MIN_LON));
+                lons.add(max(min(lon_interval.max_value - lon_max_shift, MAX_LON), MIN_LON));
         }
 
 

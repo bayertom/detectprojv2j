@@ -54,8 +54,8 @@ public class Graticule {
                 final double lon0 = proj.getLon0();
 
                 //Get size of the interval
-                final double lat_interval_width = lat_extent.max - lat_extent.min;
-                final double lon_interval_width = lon_extent.max - lon_extent.min;
+                final double lat_interval_width = lat_extent.max_value - lat_extent.min_value;
+                final double lon_interval_width = lon_extent.max_value - lon_extent.min_value;
 
                 //Generate meridians and parallels
                 if ( lat_step <= lat_interval_width || lon_step <= lon_interval_width )
@@ -76,11 +76,11 @@ public class Graticule {
                         //Process all lat intervals
                         for ( i[0] = 0; i[0] <  lat_intervals.size(); i[0]++)
                         {
-                                //cout << "lat: <" << i_lat_intervals.min << ", " << i_lat_intervals.max << "> \n";
+                                //cout << "lat: <" << i_lat_intervals.min_value << ", " << i_lat_intervals.max_value << "> \n";
                                 //Process all lon intervals
                                 for ( j[0] = 0; j[0] <  lon_intervals.size();  )
                                 {
-                                        //cout << "   lon: <" << i_lon_intervals.min << ", " << i_lon_intervals.max << "> \n";
+                                        //cout << "   lon: <" << i_lon_intervals.min_value << ", " << i_lon_intervals.max_value << "> \n";
                                         //Create temporary meridians and parallels
                                         List <Meridian> meridians_temp = new ArrayList<>();
                                         List <Parallel> parallels_temp = new ArrayList<>();
@@ -120,28 +120,28 @@ public class Graticule {
                                                 }
 
                                                 //Empty lat interval, delete
-                                                if (abs((lat_intervals.get(i[0])).max - (lat_intervals.get(i[0])).min) < 10 * GRATICULE_LAT_LON_SHIFT)
+                                                if (abs((lat_intervals.get(i[0])).max_value - (lat_intervals.get(i[0])).min_value) < 10 * GRATICULE_LAT_LON_SHIFT)
                                                 {
                                                         lat_intervals.remove(i[0]);
        
                                                 }
 
                                                 //Lat value is lower bound: shift lower bound
-                                                else if ((abs((lat_intervals.get(i[0])).min - lat_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
-                                                         (abs((lat_intervals.get(i[0])).max - (lat_intervals.get(i[0])).min) > 10 * GRATICULE_LAT_LON_SHIFT))
+                                                else if ((abs((lat_intervals.get(i[0])).min_value - lat_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
+                                                         (abs((lat_intervals.get(i[0])).max_value - (lat_intervals.get(i[0])).min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
                                                 {
-                                                        lat_intervals.get(i[0]).min +=  2 *GRATICULE_LAT_LON_SHIFT;
+                                                        lat_intervals.get(i[0]).min_value +=  2 *GRATICULE_LAT_LON_SHIFT;
                                                 }
 
                                                 //Lat value is upper bound: shift upper bound
-                                                else if ((abs((lat_intervals.get(i[0])).max - lat_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
-                                                         (abs((lat_intervals.get(i[0])).max - (lat_intervals.get(i[0])).min) > 10 * GRATICULE_LAT_LON_SHIFT))
+                                                else if ((abs((lat_intervals.get(i[0])).max_value - lat_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
+                                                         (abs((lat_intervals.get(i[0])).max_value - (lat_intervals.get(i[0])).min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
                                                 {
-                                                        lat_intervals.get(i[0]).max -= 2 * GRATICULE_LAT_LON_SHIFT;
+                                                        lat_intervals.get(i[0]).max_value -= 2 * GRATICULE_LAT_LON_SHIFT;
                                                 }
 
                                                 //Lat value inside interval: split intervals
-                                                else if ((((lat_intervals.get(i[0])).min) < lat_error[0]) && ((lat_intervals.get(i[0])).max > lat_error[0]))
+                                                else if ((((lat_intervals.get(i[0])).min_value) < lat_error[0]) && ((lat_intervals.get(i[0])).max_value > lat_error[0]))
                                                 {
                                                         splitIntervals(lat_intervals, lat_intervals.get(i[0]), i, lat_error[0]);
                                                         
@@ -150,27 +150,27 @@ public class Graticule {
                                                 }
 
                                                 //Empty lon interval, delete
-                                                if (abs((lon_intervals.get(j[0])).max - (lon_intervals.get(j[0])).min) < 10 * GRATICULE_LAT_LON_SHIFT)
+                                                if (abs((lon_intervals.get(j[0])).max_value - (lon_intervals.get(j[0])).min_value) < 10 * GRATICULE_LAT_LON_SHIFT)
                                                 {
                                                         lon_intervals.remove(j[0]);
                                                 }
 
                                                 //Lon value is lower bound : shift lower bound
-                                                else if ((abs((lon_intervals.get(j[0])).min - lon_error[0]) <  2 *GRATICULE_LAT_LON_SHIFT) && 
-                                                         (abs((lon_intervals.get(j[0])).max - (lon_intervals.get(j[0])).min) > 10 * GRATICULE_LAT_LON_SHIFT))
+                                                else if ((abs((lon_intervals.get(j[0])).min_value - lon_error[0]) <  2 *GRATICULE_LAT_LON_SHIFT) && 
+                                                         (abs((lon_intervals.get(j[0])).max_value - (lon_intervals.get(j[0])).min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
                                                 {
-                                                        (lon_intervals.get(j[0])).min += 2 * GRATICULE_LAT_LON_SHIFT;
+                                                        (lon_intervals.get(j[0])).min_value += 2 * GRATICULE_LAT_LON_SHIFT;
                                                 }
 
                                                 //Lon value is upper bound: shift upper bound
-                                                else if ((abs((lon_intervals.get(j[0])).max - lon_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
-                                                         (abs((lon_intervals.get(j[0])).max - (lon_intervals.get(j[0])).min) > 10 * GRATICULE_LAT_LON_SHIFT))
+                                                else if ((abs((lon_intervals.get(j[0])).max_value - lon_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
+                                                         (abs((lon_intervals.get(j[0])).max_value - (lon_intervals.get(j[0])).min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
                                                 {
-                                                        (lon_intervals.get(j[0])).max -= 2 * GRATICULE_LAT_LON_SHIFT;
+                                                        (lon_intervals.get(j[0])).max_value -= 2 * GRATICULE_LAT_LON_SHIFT;
                                                 }
 
                                                 //Lon value inside interval: split intervals
-                                                else if ((lon_intervals.get(j[0]).min  < lon_error[0] ) && (lon_intervals.get(j[0]).max > lon_error[0] ))
+                                                else if ((lon_intervals.get(j[0]).min_value  < lon_error[0] ) && (lon_intervals.get(j[0]).max_value > lon_error[0] ))
                                                 {
                                                         splitIntervals ( lon_intervals, lon_intervals.get(j[0]), j, lon_error[0] );
 
@@ -178,8 +178,8 @@ public class Graticule {
                                                         split_amount++;
                                                 }
 
-                                                //cout << (*i_lat_intervals).min << "   " << (*i_lat_intervals).max << '\n';
-                                                //cout << (*i_lon_intervals).min << "   " << (*i_lon_intervals).max << '\n';
+                                                //cout << (*i_lat_intervals).min_value << "   " << (*i_lat_intervals).max_value << '\n';
+                                                //cout << (*i_lon_intervals).min_value << "   " << (*i_lon_intervals).max_value << '\n';
                                         }
 
                                         //Other than math error: error in equation or in parser
@@ -203,19 +203,19 @@ public class Graticule {
                 TInterval  lat_interval_part2 = new TInterval(-90, 90);
 
                 //First lat interval ( -90, latp )
-                lat_interval_part1.min = max ( MIN_LAT, lat_extent.min ); 
-                lat_interval_part1.max = min ( latp, lat_extent.max );
+                lat_interval_part1.min_value = max (MIN_LAT, lat_extent.min_value ); 
+                lat_interval_part1.max_value = min (latp, lat_extent.max_value );
 
                 //Test interval and add to the list
-                if ( lat_interval_part1.max > lat_interval_part1.min )
+                if ( lat_interval_part1.max_value > lat_interval_part1.min_value )
                         lat_intervals.add ( lat_interval_part1 );
 
                 //Second lat interval ( latp, 90 )
-                lat_interval_part2.min = max ( latp, lat_extent.min );
-                lat_interval_part2.max = min ( lat_extent.max, MAX_LAT );
+                lat_interval_part2.min_value = max (latp, lat_extent.min_value );
+                lat_interval_part2.max_value = min (lat_extent.max_value, MAX_LAT );
 
                 //Test interval and add to the list
-                if ( lat_interval_part2.max > lat_interval_part2.min )
+                if ( lat_interval_part2.max_value > lat_interval_part2.min_value )
                         lat_intervals.add ( lat_interval_part2 );
         }
 
@@ -231,27 +231,27 @@ public class Graticule {
                 if ( lonp >= 0 )
                 {
                         //First interval <-180, lonp - 180)
-                        lon_interval_part1.min = max ( MIN_LON, lon_extent.min ); 
-                        lon_interval_part1.max =  min ( lonp - 180.0, lon_extent.max );
+                        lon_interval_part1.min_value = max (MIN_LON, lon_extent.min_value ); 
+                        lon_interval_part1.max_value =  min (lonp - 180.0, lon_extent.max_value );
 
                         //Test first interval and add to the list
-                        if ( lon_interval_part1.max > lon_interval_part1.min )
+                        if ( lon_interval_part1.max_value > lon_interval_part1.min_value )
                                 lon_intervals.add ( lon_interval_part1 );
 
                         //Second interval (lonp - 180, lonp>
-                        lon_interval_part2.min = max ( lonp - 180.0, lon_extent.min ); 
-                        lon_interval_part2.max = min ( lonp, lon_extent.max );
+                        lon_interval_part2.min_value = max (lonp - 180.0, lon_extent.min_value ); 
+                        lon_interval_part2.max_value = min (lonp, lon_extent.max_value );
 
                         //Test second interval and add to the list
-                        if ( lon_interval_part2.max > lon_interval_part2.min )
+                        if ( lon_interval_part2.max_value > lon_interval_part2.min_value )
                                 lon_intervals.add ( lon_interval_part2 );
 
                         //Third interval (lonp, MAX_LON>
-                        lon_interval_part3.min = max ( lonp, lon_extent.min ); 
-                        lon_interval_part3.max = min ( MAX_LON, lon_extent.max );
+                        lon_interval_part3.min_value = max (lonp, lon_extent.min_value ); 
+                        lon_interval_part3.max_value = min (MAX_LON, lon_extent.max_value );
 
                         //Test third interval and add to the list
-                        if ( lon_interval_part3.max > lon_interval_part3.min )
+                        if ( lon_interval_part3.max_value > lon_interval_part3.min_value )
                                 lon_intervals.add ( lon_interval_part3 );
                 }
 
@@ -259,27 +259,27 @@ public class Graticule {
                 else
                 {
                         //First interval <-180, lonp >
-                        lon_interval_part1.min = max ( MIN_LON, lon_extent.min ); 
-                        lon_interval_part1.max = min ( lonp, lon_extent.max );
+                        lon_interval_part1.min_value = max (MIN_LON, lon_extent.min_value ); 
+                        lon_interval_part1.max_value = min (lonp, lon_extent.max_value );
 
                         //Test first interval and add to the list
-                        if ( lon_interval_part1.max > lon_interval_part1.min )
+                        if ( lon_interval_part1.max_value > lon_interval_part1.min_value )
                                 lon_intervals.add ( lon_interval_part1 );
 
                         //Second interval <lonp, lonp + 180>
-                        lon_interval_part2.min = max ( lonp, lon_extent.min ); 
-                        lon_interval_part2.max = min ( lonp + 180.0, lon_extent.max );
+                        lon_interval_part2.min_value = max (lonp, lon_extent.min_value ); 
+                        lon_interval_part2.max_value = min (lonp + 180.0, lon_extent.max_value );
 
                         //Test second interval and add to the list
-                        if ( lon_interval_part2.max > lon_interval_part2.min )
+                        if ( lon_interval_part2.max_value > lon_interval_part2.min_value )
                                 lon_intervals.add ( lon_interval_part2 );
 
                         //Third interval (lonp + 180, 180>
-                        lon_interval_part3.min = max ( lonp + 180.0, lon_extent.min ); 
-                        lon_interval_part3.max = min ( MAX_LON, lon_extent.max );
+                        lon_interval_part3.min_value = max (lonp + 180.0, lon_extent.min_value ); 
+                        lon_interval_part3.max_value = min (MAX_LON, lon_extent.max_value );
 
                         //Test third interval and add to the list
-                        if ( lon_interval_part3.max > lon_interval_part3.min )
+                        if ( lon_interval_part3.max_value > lon_interval_part3.min_value )
                                 lon_intervals.add ( lon_interval_part3 );
                 }
         }
@@ -288,12 +288,12 @@ public class Graticule {
         public static void splitIntervals ( List<TInterval> intervals, TInterval interval, int [] index, final double error )
         {
                 //Split one interval in 2
-                final double max_val = interval.max;
+                final double max_val = interval.max_value;
 
-                //Resize old interval <min, max> to <min, error)
-                interval.max = error;
+                //Resize old interval <min, max_value> to <min, error)
+                interval.max_value = error;
 
-                //Create new interval (error, max>
+                //Create new interval (error, max_value>
                 TInterval  interval_temp  = new TInterval(error, max_val);
 
                 //Add the new interval to the list
@@ -308,9 +308,9 @@ public class Graticule {
                 final double d_lat, final double alpha, List <Meridian > meridians, List <List<Point3DCartesian>> meridians_proj, double [] lat_error, double [] lon_error )
         {
                 //Set start value of the longitude as a multiplier of lon_step 
-                final double lon_start = Round.roundToMultipleFloor(lon_interval.min, lon_step) + lon_step;
-                final double lon_end = Round.roundToMultipleCeil(lon_interval.max, lon_step) - lon_step;
-                double lon = max(min(lon_interval.min + GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON);
+                final double lon_start = Round.roundToMultipleFloor(lon_interval.min_value, lon_step) + lon_step;
+                final double lon_end = Round.roundToMultipleCeil(lon_interval.max_value, lon_step) - lon_step;
+                double lon = max(min(lon_interval.min_value + GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON);
 
                 try
                 {
@@ -336,7 +336,7 @@ public class Graticule {
                         }
 
                         //Create last meridian (upper bound of the interval, not higher than MAX_LON)
-                        lon = max(min(lon_interval.max - GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON);
+                        lon = max(min(lon_interval.max_value - GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON);
 
                         Meridian  m3 = new Meridian(lon, lat_interval, d_lat, GRATICULE_LAT_LON_SHIFT, GRATICULE_LAT_LON_SHIFT);
                         List <Point3DCartesian> mer3 = new ArrayList<>();
@@ -370,9 +370,9 @@ public class Graticule {
                 final double d_lon, final double alpha, List <Parallel > parallels, List <List<Point3DCartesian>> parallels_proj, double [] lat_error, double [] lon_error )
         {
                 //Set start value of the longitude as a multiplier of lon_step 
-                final double lat_start = Round.roundToMultipleFloor(lat_interval.min, lat_step) + lat_step;
-                final double lat_end = Round.roundToMultipleCeil(lat_interval.max, lat_step) - lat_step;
-                double lat = max(min(lat_interval.min + GRATICULE_LAT_LON_SHIFT, MAX_LAT), MIN_LAT);
+                final double lat_start = Round.roundToMultipleFloor(lat_interval.min_value, lat_step) + lat_step;
+                final double lat_end = Round.roundToMultipleCeil(lat_interval.max_value, lat_step) - lat_step;
+                double lat = max(min(lat_interval.min_value + GRATICULE_LAT_LON_SHIFT, MAX_LAT), MIN_LAT);
 
                 try
                 {
@@ -398,7 +398,7 @@ public class Graticule {
                         }
 
                         //Create last parallel (upper bound of the interval, not hreater than MAX_LAT)
-                        lat = max(min(lat_interval.max - GRATICULE_LAT_LON_SHIFT, MAX_LAT), MIN_LAT);
+                        lat = max(min(lat_interval.max_value - GRATICULE_LAT_LON_SHIFT, MAX_LAT), MIN_LAT);
                         Parallel  p3 = new Parallel(lat, lon_interval, d_lon, GRATICULE_LAT_LON_SHIFT, GRATICULE_LAT_LON_SHIFT);
                         List <Point3DCartesian> par3 = new ArrayList<>();
                         p3.project(proj, alpha, par3);

@@ -59,21 +59,21 @@ public class Graticule2 {
                 final double lon0 = proj.getLon0();
 
                 //Get size of the interval
-                final double lat_interval_width = lat_extent.max - lat_extent.min;
-                final double lon_interval_width = lon_extent.max - lon_extent.min;
+                final double lat_interval_width = lat_extent.max_value - lat_extent.min_value;
+                final double lon_interval_width = lon_extent.max_value - lon_extent.min_value;
 
                 //Generate meridians and parallels
                 if ( lat_step <= lat_interval_width || lon_step <= lon_interval_width )
                 {
                         //Create lat interval
-                        TInterval lat_interval = new TInterval(lat_extent.min,lat_extent.max);
-                        lat_interval.min = max(lat_extent.min, MIN_LAT + GRATICULE_LAT_LON_SHIFT);
-                        lat_interval.max = min(lat_extent.max, MAX_LAT - GRATICULE_LAT_LON_SHIFT);
+                        TInterval lat_interval = new TInterval(lat_extent.min_value,lat_extent.max_value);
+                        lat_interval.min_value = max(lat_extent.min_value, MIN_LAT + GRATICULE_LAT_LON_SHIFT);
+                        lat_interval.max_value = min(lat_extent.max_value, MAX_LAT - GRATICULE_LAT_LON_SHIFT);
 
                         //Create lon interval
-                        TInterval lon_interval = new TInterval(lon_extent.min,lon_extent.max);
-                        lon_extent.min = max(lon_extent.min, MIN_LON + GRATICULE_LAT_LON_SHIFT);
-                        lon_extent.max = min(lon_extent.max, MAX_LON - GRATICULE_LAT_LON_SHIFT);
+                        TInterval lon_interval = new TInterval(lon_extent.min_value,lon_extent.max_value);
+                        lon_extent.min_value = max(lon_extent.min_value, MIN_LON + GRATICULE_LAT_LON_SHIFT);
+                        lon_extent.max_value = min(lon_extent.max_value, MAX_LON - GRATICULE_LAT_LON_SHIFT);
 
                         //Create 2D interval
                         TInterval2D lat_lon_interval = new TInterval2D(lat_interval, lon_interval);
@@ -88,7 +88,7 @@ public class Graticule2 {
                                 //Get the current lat/lon interval on the top of S
                                 TInterval2D interval = S.pop();
 			
-                                //cout << "   lon: <" << i_lon_intervals.min << ", " << i_lon_intervals.max << "> \n";
+                                //cout << "   lon: <" << i_lon_intervals.min_value << ", " << i_lon_intervals.max_value << "> \n";
                                 //Create temporary containers for the meridians/parallels
                                 List <Meridian> meridians_temp = new ArrayList<>();
                                 List <Parallel> parallels_temp = new ArrayList<>();
@@ -125,70 +125,70 @@ public class Graticule2 {
                                         }
 
                                         //Empty lat interval, delete
-                                        if (abs(interval.i1.max - interval.i1.min) < 10 * GRATICULE_LAT_LON_SHIFT)
+                                        if (abs(interval.i1.max_value - interval.i1.min_value) < 10 * GRATICULE_LAT_LON_SHIFT)
                                         {
                                                 continue;
                                         }
 
                                         //Lat value is lower bound: shift lower bound
-                                        else if ((abs(interval.i1.min - lat_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
-                                                 (abs(interval.i1.max - interval.i1.min) > 10 * GRATICULE_LAT_LON_SHIFT))
+                                        else if ((abs(interval.i1.min_value - lat_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
+                                                 (abs(interval.i1.max_value - interval.i1.min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
                                         {
-                                                interval.i1.min +=  2 *GRATICULE_LAT_LON_SHIFT;
+                                                interval.i1.min_value +=  2 *GRATICULE_LAT_LON_SHIFT;
                                         }
 
                                         //Lat value is upper bound: shift upper bound
-                                        else if ((abs(interval.i1.min - lat_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
-                                                 (abs(interval.i1.max - interval.i1.min) > 10 * GRATICULE_LAT_LON_SHIFT))
+                                        else if ((abs(interval.i1.min_value - lat_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
+                                                 (abs(interval.i1.max_value - interval.i1.min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
                                         {
-                                                interval.i1.max -= 2 * GRATICULE_LAT_LON_SHIFT;
+                                                interval.i1.max_value -= 2 * GRATICULE_LAT_LON_SHIFT;
                                         }
 
                                         //Lat value inside interval: split intervals
-                                        else if ((interval.i1.min < lat_error[0]) && (interval.i1.max > lat_error[0]))
+                                        else if ((interval.i1.min_value < lat_error[0]) && (interval.i1.max_value > lat_error[0]))
                                         {
                                                 //Create second 2D interval and add to the stack S
                                                 TInterval2D interval2 = new TInterval2D(interval.i1, interval.i2);
-                                                interval2.i1.min = lat_error[0] + 2 * GRATICULE_LAT_LON_SHIFT;
+                                                interval2.i1.min_value = lat_error[0] + 2 * GRATICULE_LAT_LON_SHIFT;
                                                 S.push(interval2);
 
                                                 //Change upper bound of the first 2D interval
-                                                interval.i1.max = lat_error[0] - 2 * GRATICULE_LAT_LON_SHIFT;
+                                                interval.i1.max_value = lat_error[0] - 2 * GRATICULE_LAT_LON_SHIFT;
 
                                                 //Increment split amount
                                                 split_amount++;
                                         }
 
                                         //Empty lon interval, delete
-                                        else if (abs(interval.i2.max - interval.i2.min) < 10 * GRATICULE_LAT_LON_SHIFT)
+                                        else if (abs(interval.i2.max_value - interval.i2.min_value) < 10 * GRATICULE_LAT_LON_SHIFT)
                                         {
                                                 continue;
                                         }
 
                                         //Lon value is lower bound: shift lower bound
-                                        else if ((abs(interval.i2.min - lon_error[0]) <  2 *GRATICULE_LAT_LON_SHIFT) && 
-                                                 (abs(interval.i2.max - interval.i2.min) > 10 * GRATICULE_LAT_LON_SHIFT))
+                                        else if ((abs(interval.i2.min_value - lon_error[0]) <  2 *GRATICULE_LAT_LON_SHIFT) && 
+                                                 (abs(interval.i2.max_value - interval.i2.min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
                                         {
-                                                interval.i2.min += 2 * GRATICULE_LAT_LON_SHIFT;
+                                                interval.i2.min_value += 2 * GRATICULE_LAT_LON_SHIFT;
                                         }
 
                                         //Lon value is upper bound: shift upper bound
-                                        else if ((abs(interval.i2.max- lon_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
-                                                 (abs(interval.i2.max - interval.i2.min) > 10 * GRATICULE_LAT_LON_SHIFT))
+                                        else if ((abs(interval.i2.max_value- lon_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
+                                                 (abs(interval.i2.max_value - interval.i2.min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
                                         {
-                                                interval.i2.max -= 2 * GRATICULE_LAT_LON_SHIFT;
+                                                interval.i2.max_value -= 2 * GRATICULE_LAT_LON_SHIFT;
                                         }
 
                                         //Lon value inside interval: split intervals
-                                        else if ((interval.i2.min  < lon_error[0]) && (interval.i2.max > lon_error[0]))
+                                        else if ((interval.i2.min_value  < lon_error[0]) && (interval.i2.max_value > lon_error[0]))
                                         {
                                                 //Create second 2D interval and add to the stack S
                                                 TInterval2D interval2 = new TInterval2D(interval.i1, interval.i2);
-                                                interval2.i2.min = lon_error[0] + 2 * GRATICULE_LAT_LON_SHIFT;
+                                                interval2.i2.min_value = lon_error[0] + 2 * GRATICULE_LAT_LON_SHIFT;
                                                 S.push(interval2);
 
                                                 //Change upper bound of the first 2D interval
-                                                interval.i2.max = lon_error[0] - 2 * GRATICULE_LAT_LON_SHIFT;
+                                                interval.i2.max_value = lon_error[0] - 2 * GRATICULE_LAT_LON_SHIFT;
 
                                                 //Increment split amount
                                                 split_amount++;
@@ -214,10 +214,10 @@ public class Graticule2 {
                 final double d_lat, final double alpha, List <Meridian > meridians, List <List<Point3DCartesian>> meridians_proj, double [] lat_error, double [] lon_error )
         {
                 //Set start value of the longitude as a multiplier of lon_step 
-                final double lon_start = Round.roundToMultipleFloor(lon_interval.min, lon_step) + lon_step;
-                final double lon_end = Round.roundToMultipleCeil(lon_interval.max, lon_step) - lon_step;
+                final double lon_start = Round.roundToMultipleFloor(lon_interval.min_value, lon_step) + lon_step;
+                final double lon_end = Round.roundToMultipleCeil(lon_interval.max_value, lon_step) - lon_step;
                 
-                double lon = max(min(lon_interval.min + GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON);
+                double lon = max(min(lon_interval.min_value + GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON);
 
                 try
                 {
@@ -232,12 +232,12 @@ public class Graticule2 {
 
                         //Create last meridian (upper bound of the interval, not higher than MAX_LON)
                         //Split the interval, if a meridian is intersected by the prime meridian of the transformed system [lat_trans, lon_trans]
-                        lon = max(min(lon_interval.max - GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON);
+                        lon = max(min(lon_interval.max_value - GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON);
                         createMeridianFragment(proj, lon, lat_interval, d_lat, alpha, meridians, meridians_proj);
                         
                         //Create meridian intersecting the pole of the transformed system [lat_trans, lon_trans]
                         lon = proj.getCartPole().getLon();
-                        if ((lon > lon_interval.min) && (lon < lon_interval.max))
+                        if ((lon > lon_interval.min_value) && (lon < lon_interval.max_value))
                         {
                                 createMeridianFragment(proj, lon - GRATICULE_LAT_LON_SHIFT, lat_interval, d_lat, alpha, meridians, meridians_proj);
                                 createMeridianFragment(proj, lon + GRATICULE_LAT_LON_SHIFT, lat_interval, d_lat, alpha, meridians, meridians_proj);
@@ -245,7 +245,7 @@ public class Graticule2 {
 
                         //Create meridian opposite the pole of the transformed system [lat_trans, lon_trans]
                         lon = (lon > 0 ? lon - 180 : lon + 180);
-                        if ((lon > lon_interval.min) && (lon < lon_interval.max))
+                        if ((lon > lon_interval.min_value) && (lon < lon_interval.max_value))
                         {
                                 createMeridianFragment(proj, lon - GRATICULE_LAT_LON_SHIFT, lat_interval, d_lat, alpha, meridians, meridians_proj);
                                 createMeridianFragment(proj, lon + GRATICULE_LAT_LON_SHIFT, lat_interval, d_lat, alpha, meridians, meridians_proj);
@@ -275,10 +275,10 @@ public class Graticule2 {
                 final double d_lon, final double alpha, List <Parallel > parallels, List <List<Point3DCartesian>> parallels_proj, double [] lat_error, double [] lon_error )
         {
                 //Set start value of the longitude as a multiplier of lon_step 
-                final double lat_start = Round.roundToMultipleFloor(lat_interval.min, lat_step) + lat_step;
-                final double lat_end = Round.roundToMultipleCeil(lat_interval.max, lat_step) - lat_step;
+                final double lat_start = Round.roundToMultipleFloor(lat_interval.min_value, lat_step) + lat_step;
+                final double lat_end = Round.roundToMultipleCeil(lat_interval.max_value, lat_step) - lat_step;
                 
-                double lat = max(min(lat_interval.min + GRATICULE_LAT_LON_SHIFT, MAX_LAT), MIN_LAT);
+                double lat = max(min(lat_interval.min_value + GRATICULE_LAT_LON_SHIFT, MAX_LAT), MIN_LAT);
 
                 try
                 {
@@ -294,7 +294,7 @@ public class Graticule2 {
 
                         //Create last parallel (upper bound of the interval, not greater than MAX_LAT)
                         //Split the interval, if a parallel is intersected by the prime meridian of the transformed system [lat_trans, lon_trans]
-                        lat = max(min(lat_interval.max - GRATICULE_LAT_LON_SHIFT, MAX_LAT), MIN_LAT);
+                        lat = max(min(lat_interval.max_value - GRATICULE_LAT_LON_SHIFT, MAX_LAT), MIN_LAT);
                         createParallelFragment(proj, lat, lon_interval, d_lon, alpha, parallels, parallels_proj);
                 }
 
@@ -357,9 +357,9 @@ public class Graticule2 {
                 //to two subintervals [lat_min, lat_inters], [lat_inters, lat_max]
                 List <TInterval> lats_split = new ArrayList<>();
                 
-                final Point3DGeographic p1 = new Point3DGeographic(lat_interval.min, lon);
-                final Point3DGeographic p2 = new Point3DGeographic(0.5 * (lat_interval.min + lat_interval.max), lon);
-                final Point3DGeographic p3 = new Point3DGeographic(lat_interval.max, lon);
+                final Point3DGeographic p1 = new Point3DGeographic(lat_interval.min_value, lon);
+                final Point3DGeographic p2 = new Point3DGeographic(0.5 * (lat_interval.min_value + lat_interval.max_value), lon);
+                final Point3DGeographic p3 = new Point3DGeographic(lat_interval.max_value, lon);
 
                 //Sample central meridian of the transformed system in the oblique aspect
                 //Transform it to the normal aspect
@@ -393,26 +393,26 @@ public class Graticule2 {
                         final double lon_inters2 = i2[0].getLon();
 
                         //Is an intersection point i1 latitude inside the lat interval? Create 2 intervals.
-                        if ((lat_inters1 > lat_interval.min) && (lat_inters1 < lat_interval.max) && (abs(lon - lon_inters1) < ANGLE_ROUND_ERROR))
+                        if ((lat_inters1 > lat_interval.min_value) && (lat_inters1 < lat_interval.max_value) && (abs(lon - lon_inters1) < ANGLE_ROUND_ERROR))
                         {
-                                lats_split.add(new TInterval (lat_interval.min, lat_inters1 - GRATICULE_LAT_LON_SHIFT ));
-                                lats_split.add(new TInterval (lat_inters1 + GRATICULE_LAT_LON_SHIFT, lat_interval.max ));
+                                lats_split.add(new TInterval (lat_interval.min_value, lat_inters1 - GRATICULE_LAT_LON_SHIFT ));
+                                lats_split.add(new TInterval (lat_inters1 + GRATICULE_LAT_LON_SHIFT, lat_interval.max_value ));
 
                                 return lats_split;
                         }
 
                         //Is an intersection point i1 latitude inside the lat interval? Create 2 intervals.
-                        else if ((lat_inters2 > lat_interval.min) && (lat_inters2 < lat_interval.max) && (abs(lon - lon_inters2) < ANGLE_ROUND_ERROR))
+                        else if ((lat_inters2 > lat_interval.min_value) && (lat_inters2 < lat_interval.max_value) && (abs(lon - lon_inters2) < ANGLE_ROUND_ERROR))
                         {		
-                                lats_split.add(new TInterval ( lat_interval.min, lat_inters2 - GRATICULE_LAT_LON_SHIFT));
-                                lats_split.add(new TInterval ( lat_inters2 + GRATICULE_LAT_LON_SHIFT, lat_interval.max));
+                                lats_split.add(new TInterval ( lat_interval.min_value, lat_inters2 - GRATICULE_LAT_LON_SHIFT));
+                                lats_split.add(new TInterval ( lat_inters2 + GRATICULE_LAT_LON_SHIFT, lat_interval.max_value));
 
                                 return lats_split;
                         }
                 }
 
                 //No intersection, no split
-                lats_split.add(new TInterval (lat_interval.min, lat_interval.max));
+                lats_split.add(new TInterval (lat_interval.min_value, lat_interval.max_value));
 
                 return lats_split;
         }
@@ -424,9 +424,9 @@ public class Graticule2 {
                 //to three subintervals [lon_min, lon_inters1], [lon_inters1, lon_inters2], [lon_inters2, lon_max]
                 List <TInterval> lons_split = new ArrayList<>();
 
-                final Point3DGeographic p1 = new Point3DGeographic(lat, lon_interval.min + 1.0);
-                final Point3DGeographic p2 = new Point3DGeographic(lat, 0.5 * (lon_interval.min + lon_interval.max));
-                final Point3DGeographic p3 = new Point3DGeographic(lat, lon_interval.max - 1.0);
+                final Point3DGeographic p1 = new Point3DGeographic(lat, lon_interval.min_value + 1.0);
+                final Point3DGeographic p2 = new Point3DGeographic(lat, 0.5 * (lon_interval.min_value + lon_interval.max_value));
+                final Point3DGeographic p3 = new Point3DGeographic(lat, lon_interval.max_value - 1.0);
 
                 //Sample central meridian of the transformed system in the oblique aspect
                 //Transform it to the normal aspect
@@ -458,36 +458,36 @@ public class Graticule2 {
                         final double lon_inters2 = max(i1[0].getLon(), i2[0].getLon());
 
                         //Both intersections inside the lon interval? Create 3 intervals.
-                        if ((lon_inters1 > lon_interval.min && lon_inters1 < lon_interval.max) && (lon_inters2 > lon_interval.min && lon_inters2 < lon_interval.max))
+                        if ((lon_inters1 > lon_interval.min_value && lon_inters1 < lon_interval.max_value) && (lon_inters2 > lon_interval.min_value && lon_inters2 < lon_interval.max_value))
                         {
-                                lons_split.add( new TInterval (lon_interval.min, lon_inters1 - GRATICULE_LAT_LON_SHIFT));
+                                lons_split.add( new TInterval (lon_interval.min_value, lon_inters1 - GRATICULE_LAT_LON_SHIFT));
                                 lons_split.add( new TInterval (lon_inters1 + GRATICULE_LAT_LON_SHIFT, lon_inters2 - GRATICULE_LAT_LON_SHIFT));
-                                lons_split.add( new TInterval (lon_inters2 + GRATICULE_LAT_LON_SHIFT, lon_interval.max ));
+                                lons_split.add( new TInterval (lon_inters2 + GRATICULE_LAT_LON_SHIFT, lon_interval.max_value ));
 
                                 return lons_split;
                         }
 
                         //Only the first intersection lon1 inside the lon interval. Create 2 intervals.
-                        else if (lon_inters1 > lon_interval.min && lon_inters1 < lon_interval.max)
+                        else if (lon_inters1 > lon_interval.min_value && lon_inters1 < lon_interval.max_value)
                         {
-                                lons_split.add( new TInterval (lon_interval.min, lon_inters1 - GRATICULE_LAT_LON_SHIFT));
-                                lons_split.add( new TInterval (lon_inters1 + GRATICULE_LAT_LON_SHIFT, lon_interval.max));
+                                lons_split.add( new TInterval (lon_interval.min_value, lon_inters1 - GRATICULE_LAT_LON_SHIFT));
+                                lons_split.add( new TInterval (lon_inters1 + GRATICULE_LAT_LON_SHIFT, lon_interval.max_value));
 
                                 return lons_split;
                         }
 
                         //Only the second intersection lon2 inside the lon interval. Create 2 intervals.
-                        else if (lon_inters2 > lon_interval.min && lon_inters2 < lon_interval.max)
+                        else if (lon_inters2 > lon_interval.min_value && lon_inters2 < lon_interval.max_value)
                         {
-                                lons_split.add( new TInterval (lon_interval.min, lon_inters2 - GRATICULE_LAT_LON_SHIFT));
-                                lons_split.add( new TInterval (lon_inters2 + GRATICULE_LAT_LON_SHIFT, lon_interval.max));
+                                lons_split.add( new TInterval (lon_interval.min_value, lon_inters2 - GRATICULE_LAT_LON_SHIFT));
+                                lons_split.add( new TInterval (lon_inters2 + GRATICULE_LAT_LON_SHIFT, lon_interval.max_value));
 
                                 return lons_split;
                         }
                 }
 
                 //No intersection, no split
-                lons_split.add(new TInterval (lon_interval.min, lon_interval.max));
+                lons_split.add(new TInterval (lon_interval.min_value, lon_interval.max_value));
 
                 return lons_split;
         }  

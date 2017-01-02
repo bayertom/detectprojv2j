@@ -1,4 +1,4 @@
-// Description: 2D interval given by min and max values
+// Description: 2D interval given by min_value and max_value values
 
 // Copyright (c) 2015 - 2016
 // Tomas Bayer
@@ -29,7 +29,7 @@ public class TInterval2D
         
         public TInterval2D ( final TInterval i1_, final TInterval i2_ )
         {
-                i1 = new TInterval(i1_.min, i1_.max);
-                i2 = new TInterval(i2_.min, i2_.max);
+                i1 = new TInterval(i1_.min_value, i1_.max_value);
+                i2 = new TInterval(i2_.min_value, i2_.max_value);
         }
 }

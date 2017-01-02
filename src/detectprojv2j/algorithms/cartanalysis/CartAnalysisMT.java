@@ -336,8 +336,8 @@ public class CartAnalysisMT implements Runnable
                 A.items[0][0] = 0.01 * scale;
                 A.items[1][0] = -90.0;
                 A.items[2][0] = -180.0;
-                A.items[3][0] = proj.getLat1Interval().min;
-                A.items[4][0] = proj.getLat1Interval().min;
+                A.items[3][0] = proj.getLat1Interval().min_value;
+                A.items[4][0] = proj.getLat1Interval().min_value;
                 A.items[5][0] = -180;
                 A.items[6][0] = 0;
 
@@ -353,8 +353,8 @@ public class CartAnalysisMT implements Runnable
                 B.items[0][0] = 100.0 * scale;
                 B.items[1][0] = 90.0;
                 B.items[2][0] = 180.0;
-                B.items[3][0] = proj.getLat1Interval().max;
-                B.items[4][0] = proj.getLat1Interval().max;
+                B.items[3][0] = proj.getLat1Interval().max_value;
+                B.items[4][0] = proj.getLat1Interval().max_value;
                 B.items[5][0] = 180.0;
                 B.items[6][0] = 100.0;
 
@@ -371,8 +371,8 @@ public class CartAnalysisMT implements Runnable
                 //Set initial solution
                 A.items[0][0] = -90.0;
                 A.items[1][0] = -180.0;
-                A.items[2][0] = proj.getLat1Interval().min;
-                A.items[3][0] = proj.getLat1Interval().min;
+                A.items[2][0] = proj.getLat1Interval().min_value;
+                A.items[3][0] = proj.getLat1Interval().min_value;
                 A.items[4][0] = -180.0;
                 A.items[5][0] = 0.0;
 
@@ -388,8 +388,8 @@ public class CartAnalysisMT implements Runnable
                 //Set initial solution
                 B.items[0][0] = 90.0;
                 B.items[1][0] = 180.0;
-                B.items[2][0] = proj.getLat1Interval().max;
-                B.items[3][0] = proj.getLat1Interval().max;
+                B.items[2][0] = proj.getLat1Interval().max_value;
+                B.items[3][0] = proj.getLat1Interval().max_value;
                 B.items[4][0] = 180.0;
                 B.items[5][0] = 100.0;
                 
