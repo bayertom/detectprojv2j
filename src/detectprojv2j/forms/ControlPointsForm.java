@@ -41,9 +41,15 @@ public class ControlPointsForm extends javax.swing.JFrame {
         
         private final EarlyMap early_map;                                               //Early map prepresentation
         private final Map map;                                                          //Reference map prepresentation (OSM)
-        private JPopupMenu pop_up_menu;                                                 //Pop-up menu
+        private JPopupMenu pop_up_menu;                                                 //Pop-up menu (point deletition)
+        private boolean [] add_test_point;                                              //Control point may be added to the early map
+        private boolean [] add_reference_point;                                         //Control point may be added to the reference (OSM) map
+        private boolean computation_in_progress;                                        //Test, whether a computation is in progress
+        private int [] index_nearest;                                                   //Index of the point nearest to the cursor position
+        private int [] index_nearest_prev;                                              //Index of the previous point nearest to the cursor position
+
         
-        public ControlPointsForm(EarlyMap early_map_, Map map_)
+        public ControlPointsForm(EarlyMap early_map_, Map map_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_)
         {
                 //Initialize parameters
                 initComponents();
@@ -51,6 +57,13 @@ public class ControlPointsForm extends javax.swing.JFrame {
                 //Assign points
                 early_map = early_map_;
                 map = map_;
+                
+                //Assign indicators
+                add_test_point = add_test_point_;
+                add_reference_point = add_reference_point_;
+                computation_in_progress = computation_in_progress_;
+                index_nearest = index_nearest_;
+                index_nearest_prev = index_nearest_prev_;
                 
                 //Set rows of the table
                 DefaultTableModel model = (DefaultTableModel)controlPointsTable.getModel();
@@ -69,35 +82,34 @@ public class ControlPointsForm extends javax.swing.JFrame {
                         public void actionPerformed(ActionEvent ae) 
                         {
                                 //Delete nearest point: analyzed map
-                                if (!MainApplication.computation_in_progress)
+                                if (computation_in_progress)
                                 {
                                         //Is there any nearest point?
-                                        if (MainApplication.index_nearest >= 0)
+                                        if (index_nearest[0] >= 0)
                                         {
                                                 //Delete nearest point: test map
-                                                if ((MainApplication.add_reference_point) && (early_map.test_points.size() > MainApplication.index_nearest))
-                                                        early_map.test_points.remove(MainApplication.index_nearest);
+                                                if ((add_reference_point[0]) && (early_map.test_points.size() > index_nearest[0]))
+                                                        early_map.test_points.remove(index_nearest[0]);
 
                                                 //Delete nearest point: reference map
-                                                if ((MainApplication.add_test_point) && (map.reference_points.size() > MainApplication.index_nearest))
+                                                if ((add_test_point[0]) && (map.reference_points.size() > index_nearest[0]))
                                                         map.deleteNearestPoint();
                                                 
                                                 //Delete nearest point: projected reference point
-                                                if ((early_map.projected_points != null) && (early_map.projected_points.size() > MainApplication.index_nearest))
-                                                        early_map.projected_points.remove(MainApplication.index_nearest);
+                                                if ((early_map.projected_points != null) && (early_map.projected_points.size() > index_nearest[0]))
+                                                        early_map.projected_points.remove(index_nearest[0]);
                                                 
                                                 //Repaint both maps
                                                 early_map.repaint();
                                                 map.repaint();
                                                 
                                                 //Enable adding new points
-                                                MainApplication.add_test_point = true;
-                                                MainApplication.add_reference_point = true;
+                                                add_test_point[0] = true;
+                                                add_reference_point[0] = true;
 
                                                 //Update table
                                                 clearTable();
                                                 printResult();
-                                                
                                         }
                                 }
                         }
@@ -105,6 +117,7 @@ public class ControlPointsForm extends javax.swing.JFrame {
                 
                 pop_up_menu.add(deleteItem);
                 
+                //Set selection model
                 controlPointsTable.getSelectionModel().addListSelectionListener( new ListSelectionListener() 
                 {
                         @Override
@@ -117,8 +130,8 @@ public class ControlPointsForm extends javax.swing.JFrame {
                                 if ((index < Math.max(early_map.test_points.size(), map.reference_points.size())) && (index >= 0))
                                 {
                                         //Assign index
-                                        MainApplication.index_nearest_prev = MainApplication.index_nearest;
-                                        MainApplication.index_nearest = index;
+                                        index_nearest_prev[0] = index_nearest[0];
+                                        index_nearest[0] = index;
 
                                         //Repaint maps
                                         early_map.repaint();
@@ -138,7 +151,6 @@ public class ControlPointsForm extends javax.swing.JFrame {
                 setTitle("List of control points and residuals");
                 setAlwaysOnTop(true);
                 setLocation(new java.awt.Point(200, 500));
-                setResizable(false);
                 setType(java.awt.Window.Type.UTILITY);
 
                 controlPointsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -207,7 +219,7 @@ public class ControlPointsForm extends javax.swing.JFrame {
                 if (!SwingUtilities.isLeftMouseButton(evt)) 
                 {
                         //Show pop-up menu, remove test point, reference point, or a pair
-                        if (MainApplication.index_nearest != -1)
+                        if (index_nearest[0] != -1)
                                 pop_up_menu.show(controlPointsTable, evt.getX(), evt.getY()); 
                 }
         }//GEN-LAST:event_controlPointsTableMouseClicked

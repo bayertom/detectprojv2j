@@ -239,17 +239,18 @@ public class Graticule2 {
                         lon = proj.getCartPole().getLon();
                         if ((lon > lon_interval.min_value) && (lon < lon_interval.max_value))
                         {
-                                createMeridianFragment(proj, lon - GRATICULE_LAT_LON_SHIFT, lat_interval, d_lat, alpha, meridians, meridians_proj);
-                                createMeridianFragment(proj, lon + GRATICULE_LAT_LON_SHIFT, lat_interval, d_lat, alpha, meridians, meridians_proj);
+                                createMeridianFragment(proj, min(max(lon - GRATICULE_LAT_LON_SHIFT, MIN_LON), MAX_LON), lat_interval, d_lat, alpha, meridians, meridians_proj);
+                                createMeridianFragment(proj, max(min(lon + GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON), lat_interval, d_lat, alpha, meridians, meridians_proj);
                         }
 
                         //Create meridian opposite the pole of the transformed system [lat_trans, lon_trans]
                         lon = (lon > 0 ? lon - 180 : lon + 180);
                         if ((lon > lon_interval.min_value) && (lon < lon_interval.max_value))
                         {
-                                createMeridianFragment(proj, lon - GRATICULE_LAT_LON_SHIFT, lat_interval, d_lat, alpha, meridians, meridians_proj);
-                                createMeridianFragment(proj, lon + GRATICULE_LAT_LON_SHIFT, lat_interval, d_lat, alpha, meridians, meridians_proj);
+                                createMeridianFragment(proj, min(max(lon - GRATICULE_LAT_LON_SHIFT, MIN_LON), MAX_LON), lat_interval, d_lat, alpha, meridians, meridians_proj);
+                                createMeridianFragment(proj, max(min(lon + GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON), lat_interval, d_lat, alpha, meridians, meridians_proj);
                         }
+                        
                 }
 
                 //Throw math exception: get error values

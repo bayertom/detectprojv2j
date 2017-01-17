@@ -60,8 +60,8 @@ import detectprojv2j.consts.Consts;
 
 
 
-public class EarlyMap extends JPanel {
-
+public class EarlyMap extends JPanel 
+{
         private boolean repaint_vector_data;                                    //Indicator, whether vector data need to be repainted
         private double zoom;                                                    //Actual zoom ratio: xoom = [0.05, 10]
         private double dx;                                                      //Cummulated horizontal shifts
@@ -71,20 +71,33 @@ public class EarlyMap extends JPanel {
         private AffineTransform at;                                             //Affine transformation object
         private Point start, end;                                               //Points for the current Canvas shift computation
         
-        public List <Point3DCartesian> test_points;                             //List of test points (public, more comfortable access);
-        
-        private Projection proj;                                                //Projection assigned to the early map
-        public List <Point3DCartesian> projected_points;                       //List of projected points
-        private List <Meridian > meridians;                                     //List of meridians
-        private List <Parallel> parallels;                                      //List of parallels
-        private List <List<Point3DCartesian> > meridians_proj;                  //List of projected meridians
-        private List <List<Point3DCartesian> > parallels_proj;                  //List of projected parallels
+        public List <Point3DCartesian> test_points;                             //List of test points (public, more comfortable access)
+        public List <Point3DCartesian> projected_points;                        //List of projected points (public, more comfortable access)
         
         private Map map;                                                        //Open street map representation
-        private JPopupMenu pop_up_menu;                                         //Pop-up menu
+        private JPopupMenu pop_up_menu;                                         //Pop-up menu (point deletition)
         private ControlPointsForm control_points_form;                          //Table with results (needs to be updated)
-
-        public EarlyMap(List <Point3DCartesian> test_points_, Map map_, final ControlPointsForm control_points_form_ ) 
+        
+        private Projection proj;                                                //Projection assigned to the early map
+        private List <Meridian > meridians;                                     //List of meridians of the graticule
+        private List <Parallel> parallels;                                      //List of parallels of the graticule
+        private List <List<Point3DCartesian> > meridians_proj;                  //List of projected meridians of the graticule
+        private List <List<Point3DCartesian> > parallels_proj;                  //List of projected parallels of the graticule
+       
+        private boolean [] add_test_point;                                      //Control point may be added to the early map
+        private boolean [] add_reference_point;                                 //Control point may be added to the reference (OSM) map
+        private boolean [] enable_add_control_points;                           //Enable add control points, if a pushbutton is selected
+        private boolean [] enable_zoom_in_lm;                                   //Enable zoom-in operation using the left mouse
+        private boolean [] enable_zoom_out_lm;                                  //Enable zoom-out operation using the left mouse
+        private boolean [] enable_zoom_fit_all_lm;                              //Enable zoom fit all operation using the left mouse
+        private boolean computation_in_progress;                                //Test, whether a computation is in progress
+        
+        private int [] index_nearest;                                           //Index of the point nearest to the cursor position
+        private int [] index_nearest_prev;                                      //Index of the previous point nearest to the cursor position
+        
+        
+        public EarlyMap(List <Point3DCartesian> test_points_, Map map_, final ControlPointsForm control_points_form_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] enable_add_control_points_,
+                boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
         {
                 //Initialize repaint
                 repaint_vector_data = true;
@@ -138,6 +151,17 @@ public class EarlyMap extends JPanel {
                 //Assign table with results
                 control_points_form = control_points_form_;
                 
+                //Assign indicators
+                add_test_point = add_test_point_;                                    
+                add_reference_point = add_reference_point_;
+                enable_add_control_points = enable_add_control_points_;
+                enable_zoom_in_lm = enable_zoom_in_lm_;
+                enable_zoom_out_lm = enable_zoom_out_lm_;
+                enable_zoom_fit_all_lm = enable_zoom_fit_all_lm_;
+                computation_in_progress = computation_in_progress_;
+                index_nearest = index_nearest_;
+                index_nearest_prev = index_nearest_prev_;
+                
                 //Meridians and parallels
                 meridians = null;
                 parallels = null;
@@ -161,30 +185,30 @@ public class EarlyMap extends JPanel {
                         public void actionPerformed(ActionEvent ae) 
                         {
                                 //Delete nearest point: analyzed map
-                                if (!MainApplication.computation_in_progress)
+                                if (!computation_in_progress)
                                 {
                                         //Is there any nearest point?
-                                        if (MainApplication.index_nearest >= 0)
+                                        if (index_nearest[0] >= 0)
                                         {
                                                 //Delete nearest point: test map
-                                                if ((MainApplication.add_reference_point) && (test_points.size() > MainApplication.index_nearest))
-                                                        test_points.remove(MainApplication.index_nearest);
+                                                if ((add_reference_point[0]) && (test_points.size() > index_nearest[0]))
+                                                        test_points.remove(index_nearest[0]);
 
                                                 //Delete nearest point: reference map
-                                                if ((MainApplication.add_test_point) && (map.reference_points.size() > MainApplication.index_nearest))
+                                                if ((add_test_point[0]) && (map.reference_points.size() > index_nearest[0]))
                                                         map.deleteNearestPoint();
                                                 
                                                 //Delete nearest point: projected reference point
-                                                if ((projected_points != null) && (projected_points.size() > MainApplication.index_nearest))
-                                                        projected_points.remove(MainApplication.index_nearest);
+                                                if ((projected_points != null) && (projected_points.size() > index_nearest[0]))
+                                                        projected_points.remove(index_nearest[0]);
 
                                                 //Repaint both maps
                                                 repaint();
                                                 map.repaint();
                                                 
                                                 //Enable adding new points
-                                                MainApplication.add_test_point = true;
-                                                MainApplication.add_reference_point = true;
+                                                add_test_point[0] = true;
+                                                add_reference_point[0] = true;
 
                                                 //Update table with results
                                                 control_points_form.clearTable();
@@ -228,25 +252,25 @@ public class EarlyMap extends JPanel {
                                 if (SwingUtilities.isLeftMouseButton(e)) {
 
                                         //Enable zoom in
-                                        if (MainApplication.enable_zoom_in_lm)
+                                        if (enable_zoom_in_lm[0])
                                         {
                                                 zoomIn();
                                         }
                                         
                                         //Enable zoom out
-                                        else if (MainApplication.enable_zoom_out_lm)
+                                        else if (enable_zoom_out_lm[0])
                                         {
                                                 zoomOut();
                                         }
                                         
                                         //Enable zoom out
-                                        else if (MainApplication.enable_zoom_fit_all_lm)
+                                        else if (enable_zoom_fit_all_lm[0])
                                         {
                                                 zoomFitAll();
                                         }
 
                                         //Add test point
-                                        else if (MainApplication.add_test_point && MainApplication.enable_add_control_points)
+                                        else if (add_test_point[0] && enable_add_control_points[0])
                                         { 
                                                 //Get transformed cursor position for the actual zoom level
                                                 final double xcur = (start.getX() - at.getTranslateX()) / at.getScaleX();
@@ -259,13 +283,13 @@ public class EarlyMap extends JPanel {
                                                 
                                                 //Disable adding the test points (next point will be reference)
                                                 //(true, true)->(false, true)
-                                                if (MainApplication.add_reference_point)
-                                                        MainApplication.add_test_point = false;
+                                                if (add_reference_point[0])
+                                                        add_test_point[0] = false;
                                                 
                                                 //Enable add any of test/reference points
                                                 //(false, true) -> (true, true)
                                                 else 
-                                                        MainApplication.add_reference_point = true;
+                                                        add_reference_point[0] = true;
                                                 
                                                 //Update table with control points
                                                 control_points_form.clearTable();
@@ -280,7 +304,7 @@ public class EarlyMap extends JPanel {
                                 {
                                         //No nearest point closer than a given threshold
                                         //Set zero shift, initial point of the shift (start = end)
-                                        if (MainApplication.index_nearest == -1)
+                                        if (index_nearest[0] == -1)
                                                 end = start;
                                         
                                         //Point closer than a given threshold has been found
@@ -322,7 +346,7 @@ public class EarlyMap extends JPanel {
                                 if (SwingUtilities.isLeftMouseButton(e))
                                 {
                                         //Did we find a nerest point closer than a threshold?
-                                        if (MainApplication.index_nearest != -1)
+                                        if (index_nearest[0] != -1)
                                         {
                                                 //Get transformed cursor position for the actual zoom level
                                                 Point pcur = e.getPoint();
@@ -331,7 +355,7 @@ public class EarlyMap extends JPanel {
                                                 
                                                 //Change coordinates x,y of the shifteditem
                                                 //Use -y due to the different axis orientation
-                                                Point3DCartesian p = test_points.get(MainApplication.index_nearest);
+                                                Point3DCartesian p = test_points.get(index_nearest[0]);
                                                 p.setX(xcur);
                                                 p.setY(-ycur);
                                         }
@@ -372,22 +396,22 @@ public class EarlyMap extends JPanel {
                                         Point3DCartesian p_temp = new Point3DCartesian(xcur, -ycur, 0);
 
                                         //Get point nearest to the cursor position
-                                        int [] index_nearest = {0};
-                                        double [] dist_nearest = {0};
-                                        getNearestPointIndex(p_temp, dist_nearest, index_nearest);
+                                        int [] index_nearest_point = {0};
+                                        double [] dist_nearest_point = {0};
+                                        getNearestPointIndex(p_temp, dist_nearest_point, index_nearest_point);
 
                                         //Point is closer than a threshold
-                                        if ((index_nearest[0] >= 0) &&(dist_nearest[0] < threshold))
+                                        if ((index_nearest_point[0] >= 0) &&(dist_nearest_point[0] < threshold))
                                         {
                                                 //Index is different from the current nearest point
-                                                if ( MainApplication.index_nearest != index_nearest[0])
+                                                if ( index_nearest[0] != index_nearest_point[0])
                                                 {
                                                         //Do not assign -1 as the previous nearest
-                                                        if (MainApplication.index_nearest != -1)
-                                                                MainApplication.index_nearest_prev = MainApplication.index_nearest;
+                                                        if (index_nearest[0] != -1)
+                                                                index_nearest_prev[0] = index_nearest[0];
 
                                                         //Assign the nearest point
-                                                        MainApplication.index_nearest = index_nearest[0];
+                                                        index_nearest[0] = index_nearest_point[0];
                                                 }
                                         }   
 
@@ -395,11 +419,11 @@ public class EarlyMap extends JPanel {
                                         else 
                                         {
                                                 //Do not assign -1 as the previous nearest point
-                                                if (MainApplication.index_nearest != -1)
-                                                        MainApplication.index_nearest_prev = MainApplication.index_nearest;
+                                                if (index_nearest[0] != -1)
+                                                        index_nearest_prev[0] = index_nearest[0];
 
                                                 //There is no nearest point closer than a threshold
-                                                MainApplication.index_nearest = -1;
+                                                index_nearest[0] = -1;
                                         }
 
                                         //Repaint both maps
@@ -423,13 +447,13 @@ public class EarlyMap extends JPanel {
                         return;
                 }
                 
-                //Sort points according to the distance from point
+                //Sort points according to the distance from the given point
                 Point3DCartesian p_nearest = Collections.min(test_points, new SortByDistCart(point));
                 
                 //Get spherical distance to the nerest point
-                final double dx = point.getX() - p_nearest.getX();
-                final double dy = point.getY() - p_nearest.getY();
-                dist_nearest[0] = sqrt(dx * dx + dy * dy);
+                final double dX = point.getX() - p_nearest.getX();
+                final double dY = point.getY() - p_nearest.getY();
+                dist_nearest[0] = sqrt(dX * dX + dY * dY);
 
                 //Get index of the nearest point
                 index_nearest[0] = test_points.indexOf(p_nearest);
@@ -575,11 +599,11 @@ public class EarlyMap extends JPanel {
                 }
                 
                 //Draw the highlighted point: change sign due to a different y-axis orientation
-                if ( (MainApplication.index_nearest != -1) && (test_points.size() > MainApplication.index_nearest ))
+                if ( (index_nearest[0] != -1) && (test_points.size() > index_nearest[0] ))
                 {
                         //Initially, draw a filled circle
                         g2.setColor(Color.CYAN);
-                        Ellipse2D.Float e = new Ellipse2D.Float((float)(test_points.get(MainApplication.index_nearest).getX() - marker_radius), (float)(-test_points.get(MainApplication.index_nearest).getY() - marker_radius), (float)(2.0 * marker_radius), (float)(2 * marker_radius));
+                        Ellipse2D.Float e = new Ellipse2D.Float((float)(test_points.get(index_nearest[0]).getX() - marker_radius), (float)(-test_points.get(index_nearest[0]).getY() - marker_radius), (float)(2.0 * marker_radius), (float)(2 * marker_radius));
                         g2.fill(at.createTransformedShape((Shape)e));
                         
                         //Subsequently, draw the boundary
@@ -666,13 +690,13 @@ public class EarlyMap extends JPanel {
                 double xcur = 0, ycur = 0;
                 
                 //A point is highlighted
-                if ((test_points.size() > MainApplication.index_nearest) && (MainApplication.index_nearest >= 0))
+                if ((test_points.size() > index_nearest[0]) && (index_nearest[0] >= 0))
                 {
                         //Get coordinates of the point
-                        xcur = (test_points.get(MainApplication.index_nearest).getX() - at.getTranslateX()) / at.getScaleX();
-                        ycur = (test_points.get(MainApplication.index_nearest).getY() - at.getTranslateY()) / at.getScaleY();;
+                        xcur = (test_points.get(index_nearest[0]).getX() - at.getTranslateX()) / at.getScaleX();
+                        ycur = (test_points.get(index_nearest[0]).getY() - at.getTranslateY()) / at.getScaleY();;
                         
-                        point_num_text = String.format(Locale.ROOT, "%3d", MainApplication.index_nearest + 1) + " : ";
+                        point_num_text = String.format(Locale.ROOT, "%3d", index_nearest[0] + 1) + " : ";
                 }
                 
                 //Get position of a cursor     

@@ -62,13 +62,29 @@ import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 import org.openstreetmap.gui.jmapviewer.MapMarkerCircle;
 
 
-public class Map extends JMapViewer {
-        public List<Point3DGeographic> reference_points;                                 //List of reference points (public, more comfortable access)
-        private EarlyMap early_map;                                                      //Early map representation
-        private JPopupMenu pop_up_menu;                                                  //Pop-up menu
-        private ControlPointsForm control_points_form;                                   //Table with results (needs to be updated)
+public class Map extends JMapViewer 
+{
         
-        public Map(List<Point3DGeographic> reference_points_, EarlyMap early_map_, final ControlPointsForm control_points_form_) 
+        public List<Point3DGeographic> reference_points;                        //List of reference points (public, more comfortable access)
+        
+        private EarlyMap early_map;                                             //Early map representation
+        private JPopupMenu pop_up_menu;                                         //Pop-up menu (point deletition)
+        private ControlPointsForm control_points_form;                          //Table with results (needs to be updated)
+        
+        private boolean [] add_test_point;                                      //Control point may be added to the early map
+        private boolean [] add_reference_point;                                 //Control point may be added to the reference (OSM) map
+        private boolean [] enable_add_control_points;                           //Enable add control points, if a pushbutton is selected
+        private boolean [] enable_zoom_in_lm;                                   //Enable zoom-in operation using the left mouse
+        private boolean [] enable_zoom_out_lm;                                  //Enable zoom-out operation using the left mouse
+        private boolean [] enable_zoom_fit_all_lm;                              //Enable zoom fit all operation using the left mouse
+        private boolean computation_in_progress;                                //Test, whether a computation is in progress
+        
+        private int [] index_nearest;                                           //Index of the point nearest to the cursor position
+        private int [] index_nearest_prev;                                      //Index of the previous point nearest to the cursor position
+   
+        
+        public Map(List<Point3DGeographic> reference_points_, EarlyMap early_map_, final ControlPointsForm control_points_form_,  boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] enable_add_control_points_,
+                boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
         {
                 //Assign points
                 reference_points = reference_points_;
@@ -78,6 +94,17 @@ public class Map extends JMapViewer {
                 
                 //Assign table with results
                 control_points_form = control_points_form_;
+                
+                //Assign indicators
+                add_test_point = add_test_point_;                                    
+                add_reference_point = add_reference_point_;
+                enable_add_control_points = enable_add_control_points_;
+                enable_zoom_in_lm = enable_zoom_in_lm_;
+                enable_zoom_out_lm = enable_zoom_out_lm_;
+                enable_zoom_fit_all_lm = enable_zoom_fit_all_lm_;
+                computation_in_progress = computation_in_progress_;
+                index_nearest = index_nearest_;
+                index_nearest_prev = index_nearest_prev_;
                 
                 //Enable tool tip represented by the geographic coordinates
                 this.setToolTipText("");
@@ -96,30 +123,30 @@ public class Map extends JMapViewer {
                         public void actionPerformed(ActionEvent ae) 
                         {
                                 //Delete nearest point: analyzed map
-                                if (!MainApplication.computation_in_progress)
+                                if (!computation_in_progress)
                                 {
                                         //Is there any nearest point?
-                                        if (MainApplication.index_nearest >= 0)
+                                        if (index_nearest[0] >= 0)
                                         {
                                                 //Delete nearest point: test map
-                                                if ((MainApplication.add_reference_point) && (early_map.test_points.size() > MainApplication.index_nearest))
-                                                        early_map.test_points.remove(MainApplication.index_nearest);
+                                                if ((add_reference_point[0]) && (early_map.test_points.size() > index_nearest[0]))
+                                                        early_map.test_points.remove(index_nearest[0]);
 
                                                 //Delete nearest point: reference map
-                                                if ((MainApplication.add_test_point) && (reference_points.size() > MainApplication.index_nearest))
+                                                if ((add_test_point[0]) && (reference_points.size() > index_nearest[0]))
                                                         deleteNearestPoint();
                                                 
                                                 //Delete nearest point: projected reference point
-                                                if ((early_map.projected_points != null) && (early_map.projected_points.size() > MainApplication.index_nearest))
-                                                        early_map.projected_points.remove(MainApplication.index_nearest);
+                                                if ((early_map.projected_points != null) && (early_map.projected_points.size() > index_nearest[0]))
+                                                        early_map.projected_points.remove(index_nearest[0]);
 
                                                 //Repaint both maps
                                                 early_map.repaint();
                                                 repaint();
                                                 
                                                 //Enable adding new points
-                                                MainApplication.add_test_point = true;
-                                                MainApplication.add_reference_point = true;
+                                                add_test_point[0] = true;
+                                                add_reference_point[0] = true;
 
                                                 //Update table with control points
                                                 control_points_form.clearTable();
@@ -140,25 +167,25 @@ public class Map extends JMapViewer {
                                 if (SwingUtilities.isLeftMouseButton(e)) {
                                         
                                         //Enable zoom in
-                                        if (MainApplication.enable_zoom_in_lm)
+                                        if (enable_zoom_in_lm[0])
                                         {
                                                 zoomIn();
                                         }
                                         
                                         //Enable zoom out
-                                        else if (MainApplication.enable_zoom_out_lm)
+                                        else if (enable_zoom_out_lm[0])
                                         {
                                                 zoomOut();
                                         }
                                         
                                          //Enable zoom fit all
-                                        else if (MainApplication.enable_zoom_fit_all_lm)
+                                        else if (enable_zoom_fit_all_lm[0])
                                         {
                                                 setZoom(1);
                                         }
                                         
                                         //Add reference point
-                                        else if (MainApplication.add_reference_point && MainApplication.enable_add_control_points)
+                                        else if (add_reference_point[0] && enable_add_control_points[0])
                                         {
                                                 //Get geographic position of the cursor
                                                 //Lon must be reduced, OSM longitude in [-2PI, 2PI]
@@ -177,13 +204,13 @@ public class Map extends JMapViewer {
                                                 
                                                 //Disable adding the reference points (next point will be test)
                                                 //(true, true)->(true, false)
-                                                if (MainApplication.add_test_point)
-                                                        MainApplication.add_reference_point = false;
+                                                if (add_test_point[0])
+                                                        add_reference_point[0] = false;
                                                 
                                                 //Enable add any of test/reference points
                                                 //(false, true) -> (true, true)
                                                 else
-                                                        MainApplication.add_test_point = true;
+                                                        add_test_point[0] = true;
                                                 
                                                 //Repaint OSM
                                                 repaintMap();
@@ -198,7 +225,7 @@ public class Map extends JMapViewer {
                                 else
                                 {
                                         //Show pop-up menu, remove test point, reference point, or a pair
-                                        if (MainApplication.index_nearest != -1)
+                                        if (index_nearest[0] != -1)
                                                 pop_up_menu.show(map, e.getX(), e.getY());   
                                 }
                                 
@@ -223,34 +250,34 @@ public class Map extends JMapViewer {
                                         Point3DGeographic p_temp = new Point3DGeographic(lat, lon, 0);
 
                                         //Get point nearest to the cursor position
-                                        int [] index_nearest = {0};
-                                        double [] dist_nearest = {0};
-                                        getNearestPointIndex(p_temp, 6380, dist_nearest, index_nearest);
+                                        int [] index_nearest_point = {0};
+                                        double [] dist_nearest_point = {0};
+                                        getNearestPointIndex(p_temp, 6380, dist_nearest_point, index_nearest_point);
 
                                         //Point is closer than a threshold
-                                        if ( (index_nearest[0] >= 0) && (dist_nearest[0] < threshold))
+                                        if ( (index_nearest_point[0] >= 0) && (dist_nearest_point[0] < threshold))
                                         {
                                                 //Index is different from the current nearest point
-                                                if ( MainApplication.index_nearest != index_nearest[0])
+                                                if ( index_nearest[0] != index_nearest_point[0])
                                                 {
                                                         //Do not assign -1 as the previous nearest
-                                                        if (MainApplication.index_nearest != -1)
-                                                                MainApplication.index_nearest_prev = MainApplication.index_nearest;
+                                                        if (index_nearest[0] != -1)
+                                                                index_nearest_prev[0] = index_nearest[0];
 
                                                         //Assign the nearest point
-                                                        MainApplication.index_nearest = index_nearest[0];
+                                                        index_nearest[0] = index_nearest_point[0];
                                                 }
                                         }   
 
-                                        //Cursor is too far from the nearest point
+                                        //Cursor is too far from the nearest point 
                                         else 
                                         {
                                                 //Do not assign -1 as the previous nearest point
-                                                if (MainApplication.index_nearest != -1)
-                                                        MainApplication.index_nearest_prev = MainApplication.index_nearest;
+                                                if (index_nearest[0] != -1)
+                                                        index_nearest_prev[0] = index_nearest[0];
 
                                                 //There is no nearest point closer than a threshold
-                                                MainApplication.index_nearest = -1;
+                                                index_nearest[0] = -1;
                                         }
 
                                         //Repaint both maps
@@ -265,7 +292,7 @@ public class Map extends JMapViewer {
                                 if (SwingUtilities.isLeftMouseButton(e))
                                 {
                                         //Did we find a nerest point closer than a threshold?
-                                        if (MainApplication.index_nearest != -1)
+                                        if (index_nearest[0] != -1)
                                         {
                                                 //Get point and its geographic position
                                                 //Lon must be reduced, OSM longitude in [-2PI, 2PI]
@@ -274,14 +301,14 @@ public class Map extends JMapViewer {
                                                 final double lon = CartTransformation.redLon0(map.getPosition(pcur).getLon(), 0);
 
                                                 //Change coordinates lat, lon of the shifted item
-                                                Point3DGeographic p = reference_points.get(MainApplication.index_nearest);
+                                                Point3DGeographic p = reference_points.get(index_nearest[0]);
                                                 p.setLat(lat);
                                                 p.setLon(lon);
                                                 
                                                 //Change the corresponding marker coordinates lat, lon
                                                 List <MapMarker> markers = map.getMapMarkerList();
-                                                markers.get(MainApplication.index_nearest).setLat(lat);
-                                                markers.get(MainApplication.index_nearest).setLon(lon);
+                                                markers.get(index_nearest[0]).setLat(lat);
+                                                markers.get(index_nearest[0]).setLon(lon);
                                         }
                                 }
                                 
@@ -304,6 +331,7 @@ public class Map extends JMapViewer {
         
         public void setEarlyMap (EarlyMap early_map_) {early_map = early_map_;}
         
+        
         public void setControlPointsForm(final ControlPointsForm control_points_form_) {control_points_form = control_points_form_;}
         
         
@@ -318,7 +346,7 @@ public class Map extends JMapViewer {
                         return;
                 }
                 
-                //Sort points
+                //Sort points according to the distance from the given point
                 Point3DGeographic p_nearest = Collections.min(reference_points, new SortByDistGeo(point, R));
                 
                 //Get spherical distance to the nerest point
@@ -332,10 +360,10 @@ public class Map extends JMapViewer {
         public void deleteNearestPoint()
         {
                 //Delete nearest point
-                if ((MainApplication.index_nearest >= 0) && (reference_points.size() > MainApplication.index_nearest))
+                if ((index_nearest[0] >= 0) && (reference_points.size() > index_nearest[0]))
                 {
                         //Remove the nearest reference point
-                        deletePoint(MainApplication.index_nearest);
+                        deletePoint(index_nearest[0]);
                 }
         }
         
@@ -366,20 +394,20 @@ public class Map extends JMapViewer {
                 double lat = 0, lon = 0;
                 
                 //A point is highlighted
-                if ((reference_points.size() > MainApplication.index_nearest) && (MainApplication.index_nearest >= 0))
+                if ((reference_points.size() > index_nearest[0]) && (index_nearest[0] >= 0))
                 {
                         //Get list of map markers
                         MapMarkerCircle m =null;
                         List <MapMarker> markers = this.getMapMarkerList(); 
                 
                         //Get the nearest mark
-                        m = (MapMarkerCircle)markers.get(MainApplication.index_nearest);
+                        m = (MapMarkerCircle)markers.get(index_nearest[0]);
                         
                         //Get coordinates of the point
                         lat = m.getLat();
                         lon = m.getLon();
                         
-                        point_num_text = String.format(Locale.ROOT, "%3d", MainApplication.index_nearest + 1) + " : ";
+                        point_num_text = String.format(Locale.ROOT, "%3d", index_nearest[0] + 1) + " : ";
                 }
                 
                 //Get position of a cursor     
@@ -405,10 +433,10 @@ public class Map extends JMapViewer {
                 List <MapMarker> markers = this.getMapMarkerList();                
                
                 //Set unhighlighted map marker
-                if ((reference_points.size() > MainApplication.index_nearest_prev) && (MainApplication.index_nearest_prev >= 0))
+                if ((reference_points.size() > index_nearest_prev[0]) && (index_nearest_prev[0] >= 0))
                 {
                         //Get the previous nearest mark
-                        m = (MapMarkerCircle)markers.get(MainApplication.index_nearest_prev);
+                        m = (MapMarkerCircle)markers.get(index_nearest_prev[0]);
 
                         //Set color
                         m.setBackColor(Color.YELLOW);
@@ -416,10 +444,10 @@ public class Map extends JMapViewer {
                 }  
                 
                 //Set highlighted map marker
-                if ((reference_points.size() > MainApplication.index_nearest) && (MainApplication.index_nearest >= 0))
+                if ((reference_points.size() > index_nearest[0]) && (index_nearest[0] >= 0))
                 {
                         //Get the nearest map mark
-                        m = (MapMarkerCircle)markers.get(MainApplication.index_nearest);
+                        m = (MapMarkerCircle)markers.get(index_nearest[0]);
 
                         //Set color
                         m.setBackColor(Color.MAGENTA);

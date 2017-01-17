@@ -51,6 +51,8 @@ import java.awt.dnd.DropTargetListener;
 import detectprojv2j.types.TAnalysisMethod;
 import detectprojv2j.types.TInterval;
 import detectprojv2j.types.TResult;
+import detectprojv2j.types.IPoint3DFeatures;
+import detectprojv2j.types.TTransformedLongitudeDirection;
 
 import detectprojv2j.structures.point.Point3DCartesian;
 import detectprojv2j.structures.point.Point3DGeographic;
@@ -61,6 +63,9 @@ import detectprojv2j.structures.graticule.Parallel;
 
 import static detectprojv2j.consts.Consts.MAX_LON;
 import static detectprojv2j.consts.Consts.MIN_LON;
+import detectprojv2j.consts.Consts;
+import static detectprojv2j.consts.Consts.MAX_LAT;
+import static detectprojv2j.consts.Consts.MIN_LAT;
 
 import detectprojv2j.comparators.SortByLat;
 import detectprojv2j.comparators.SortByLon;
@@ -68,42 +73,59 @@ import detectprojv2j.comparators.SortByLon;
 import detectprojv2j.algorithms.cartanalysis.CartAnalysisMT;
 import detectprojv2j.algorithms.carttransformation.CartTransformation;
 import detectprojv2j.algorithms.graticule2.Graticule2;
-import detectprojv2j.consts.Consts;
 
 import detectprojv2j.io.DXFExport;
 import detectprojv2j.io.IO;
-import detectprojv2j.types.IPoint3DFeatures;
 
 
 public class MainApplication extends javax.swing.JFrame  {
 
-        private final EarlyMap early_map;                                               //Early map prepresentation
-        private final Map map;                                                          //Reference map prepresentation (OSM)
-        private final List <Point3DCartesian> test_points;                              //List of test points
-        private final List <Point3DGeographic> reference_points;                        //List of reference points
-        private BufferedImage img;                                                      //Early map image
-        private int index_method;                                                       //Index of the method from combo box
-        private int index_optimization;                                                 //Index of the optimization from combo box
-        private final short n_results;                                                  //Displayed results
-        private TAnalysisMethod method;                                                 //Method of the analysis
-        private final TreeMap <Double, TResult> results;                                //Map storing the results
-        private final ControlPointsForm control_points_form;                            //List of control points
-        private final ResultsForm results_form;                                         //List of results
-        private final AboutBox about_form;                                              //About box
+        private final EarlyMap early_map;                                                     //Early map prepresentation
+        private final Map map;                                                                //Reference map prepresentation (OSM)
+        private final List <Point3DCartesian> test_points;                                    //List of test points
+        private final List <Point3DGeographic> reference_points;                              //List of reference points
+        private final List <Projection> projections;                                          //List of the analyzed projections
+        private BufferedImage img;                                                            //Uploaded early map image
+        private int index_method;                                                             //Index of the method from combo box
+        private int index_optimization;                                                       //Index of the optimization from combo box
+        private final short n_results;                                                        //Displayed amount of candidate projections (results)
         
-        //Static variables
-        public static boolean add_test_point = true;                                    //Control point may be added to the early map
-        public static boolean add_reference_point = true;                               //Control point may be added to the reference (OSM) map
-        public static boolean enable_add_control_points = false;                        //Enable add control points, if a pushbutton is selected
-        public static boolean enable_zoom_in_lm = false;                                //Enable zoom-in operation using the left mouse
-        public static boolean enable_zoom_out_lm = false;                               //Enable zoom-out operation using the left mouse
-        public static boolean enable_zoom_fit_all_lm = false;                           //Enable zoom fit all operation using the left mouse
-        public static boolean computation_in_progress;                                  //Test, whether a computation is in progress
+        private final TTransformedLongitudeDirection [] default_lon_dir;                      //Default transformed longitude direction mode (modes M1-M4)
+        private final boolean [] analyze_lon0;                                                //Enable/disable lon0_trans analysis 
+                
+        private final boolean [] add_test_point;                                              //Control point may be added to the early map
+        private final boolean [] add_reference_point;                                         //Control point may be added to the reference (OSM) map
+        private final boolean [] enable_add_control_points;                                   //Enable add control points, if a pushbutton is selected
+        private final boolean [] enable_zoom_in_lm;                                           //Enable zoom-in operation using the left mouse
+        private final boolean [] enable_zoom_out_lm;                                          //Enable zoom-out operation using the left mouse
+        private final boolean [] enable_zoom_fit_all_lm;                                      //Enable zoom fit all operation using the left mouse
+        private final boolean [] computation_in_progress;                                     //Test, whether a computation is in progress
+                
+        private final int [] index_nearest;                                                   //Index of the point nearest to the cursor position
+        private final int [] index_nearest_prev;                                              //Index of the previous point nearest to the cursor position
+        
+        private final boolean [] create_entire_graticule;                                     //Graticule: Generate graticule over the entire analyzed territory
+        private final double [] lat1_step;                                                    //Graticule: latitude step between parallels, territory extent > 20 deg
+        private final double [] lat2_step;                                                    //Graticule: latitude step between parallels, territory extent < 20 deg
+        private final double [] lat3_step;                                                    //Graticule: latitude step between parallels, territory extent < 2 deg
+        private final double [] lon1_step;                                                    //Graticule: longitude step between parallels, territory extent > 20 deg
+        private final double [] lon2_step;                                                    //Graticule: longitude step between parallels, territory extent < 20 deg
+        private final double [] lon3_step;                                                    //Graticule: longitude step between parallels, territory extent < 2 deg
+        private final double [] lat_incr;                                                     //Graticule: latitude sampling step (increment) for a parallel
+        private final double [] lon_incr;                                                     //Graticule: longitude sampling step (increment) for a meridian
+        
+        private final TInterval lat_interval;                                                 //Geographic extent of the analyzed territory in the latitudinal direction
+        private final TInterval lon_interval;                                                 //Geographic extent of the analyzed territory in the longitudinal direction
+        
+        private TAnalysisMethod method;                                                       //Method of the projection analysis
+        private final TreeMap <Double, TResult> results;                                      //Dynmamic structure (tree map) storing the results [fx, x]
+        
+        private final ControlPointsForm control_points_form;                                  //Form displaying control points on the analyzed/reference maps
+        private final ResultsForm results_form;                                               //Form displaying results, the determined projections
+        private final AboutBox about_form;                                                    //Form, about box
+        private final Settings settings_form;                                                 //Form, settings parameters of detectproj
+        
 
-        public static int index_nearest;                                                //Index of the point nearest to the cursor position
-        public static int index_nearest_prev;                                           //Index of the previous point nearest to the cursor position
-        
-        
         public MainApplication() {
                 
                 //Change look and feel
@@ -128,10 +150,46 @@ public class MainApplication extends javax.swing.JFrame  {
                 //Create lists
                 test_points = new ArrayList<>();
                 reference_points = new ArrayList<>();
+                projections = new ArrayList<>();
+                
+                //Parameters of the detection
+                default_lon_dir = new TTransformedLongitudeDirection [] {TTransformedLongitudeDirection.NormalDirection}; 
+                analyze_lon0 = new boolean[]{false};
+ 
+                //Boolean indicators
+                add_test_point = new boolean[]{true};  
+                add_reference_point = new boolean[]{true};
+                enable_add_control_points = new boolean[]{false};
+                enable_zoom_in_lm = new boolean[]{false};
+                enable_zoom_out_lm = new boolean[]{false};
+                enable_zoom_fit_all_lm = new boolean[]{false}; 
+                computation_in_progress = new boolean[]{false};
+
+                //Parameters of the graticule
+                create_entire_graticule = new boolean[]{false};
+                lat1_step = new double [] {10.0};
+                lat2_step = new double [] {1.0};
+                lat3_step = new double [] {0.1};
+                lon1_step = new double [] {10.0};
+                lon2_step = new double [] {1.0};
+                lon3_step = new double [] {0.1};
+                lat_incr = new double [] {0.1 * lat1_step[0]};
+                lon_incr = new double [] {0.1 * lon1_step[0]};
+
+                //Set index of the nearest and previous point
+                index_nearest = new int[]{-1};
+                index_nearest_prev = new int[]{-1}; 
+                
+                //Create intervals representing the latitude/longitude extent
+                lat_interval = new TInterval(MIN_LAT, MAX_LAT);
+                lon_interval = new TInterval(MIN_LON, MAX_LON);
                 
                 //Create early and OSM maps
-                early_map = new EarlyMap(test_points, null, null);
-                map = new Map(reference_points, early_map, null);
+                early_map = new EarlyMap(test_points, null, null, add_test_point, add_reference_point, enable_add_control_points, enable_zoom_in_lm, 
+                        enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress[0], index_nearest, index_nearest_prev);
+                map = new Map(reference_points, early_map, null, add_test_point, add_reference_point, enable_add_control_points, enable_zoom_in_lm, 
+                        enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress[0], index_nearest, index_nearest_prev);
+                
                 early_map.setMap(map);
     
                 //Add maps to the jPanels
@@ -142,13 +200,9 @@ public class MainApplication extends javax.swing.JFrame  {
                 index_method = 1;
                 index_optimization = 20;
                 
-                //Set index of the nearest and previous point
-                index_nearest = -1;
-                index_nearest_prev = -1; 
-                
                 //Amount of printed results
-                n_results = 20;
-                     
+                n_results = 20;              
+
                 //Initialize ComboBox items
                 selectDetectionMethodComboBox.setSelectedIndex(index_method - 1);
                 selectOptimizationTechniqueComboBox.setSelectedIndex(index_optimization / 10 - 1);
@@ -158,11 +212,12 @@ public class MainApplication extends javax.swing.JFrame  {
                 results = new TreeMap<> ();
                 
                 //Create forms with points, results and about box
-                control_points_form = new ControlPointsForm(early_map, map);
+                control_points_form = new ControlPointsForm(early_map, map, add_test_point, add_reference_point, computation_in_progress[0], index_nearest, index_nearest_prev);
                 results_form = new ResultsForm(early_map, results, n_results, this);
                 about_form = new AboutBox();
+                settings_form = new Settings(reference_points, default_lon_dir, analyze_lon0, create_entire_graticule, lat1_step, lat2_step, lat3_step, lon1_step, lon2_step, lon3_step, lat_incr, lon_incr, lat_interval, lon_interval, projections);
                 
-                //Set form
+                //Set form properties
                 early_map.setControlPointsForm(control_points_form);
                 map.setControlPointsForm(control_points_form);
                 
@@ -302,6 +357,8 @@ public class MainApplication extends javax.swing.JFrame  {
                 jSeparator9 = new javax.swing.JToolBar.Separator();
                 clearAllButton = new javax.swing.JButton();
                 jSeparator6 = new javax.swing.JToolBar.Separator();
+                settingsButton = new javax.swing.JButton();
+                jSeparator16 = new javax.swing.JToolBar.Separator();
                 analyzeButton = new javax.swing.JToggleButton();
                 splitPanels = new javax.swing.JSplitPane();
                 earlyMapPanel = new javax.swing.JPanel();
@@ -341,6 +398,8 @@ public class MainApplication extends javax.swing.JFrame  {
                 clearResultsMenuItem = new javax.swing.JMenuItem();
                 jSeparator10 = new javax.swing.JPopupMenu.Separator();
                 clearAllMenuItem = new javax.swing.JMenuItem();
+                jSeparator15 = new javax.swing.JPopupMenu.Separator();
+                settingsMenuItem = new javax.swing.JMenuItem();
                 helpMenu = new javax.swing.JMenu();
                 jMenuItem1 = new javax.swing.JMenuItem();
                 aboutMenuItem = new javax.swing.JMenuItem();
@@ -391,8 +450,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 fileToolBar.setRequestFocusEnabled(false);
 
                 importMapButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/open.png"))); // NOI18N
-                importMapButton.setToolTipText("Import early map.");
-                importMapButton.setBorder(null);
+                importMapButton.setToolTipText("Import early map from image.");
                 importMapButton.setBorderPainted(false);
                 importMapButton.setFocusable(false);
                 importMapButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -408,7 +466,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 fileToolBar.add(importMapButton);
 
                 exportGraticuleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/save.png"))); // NOI18N
-                exportGraticuleButton.setToolTipText("Export reconstructed graticule.");
+                exportGraticuleButton.setToolTipText("Export reconstructed graticule to DXF file.");
                 exportGraticuleButton.setFocusable(false);
                 exportGraticuleButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 exportGraticuleButton.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -431,7 +489,7 @@ public class MainApplication extends javax.swing.JFrame  {
 
                 zoomGroup.add(zoomInToggleButton);
                 zoomInToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/zoom_in.png"))); // NOI18N
-                zoomInToggleButton.setToolTipText("Zoom in");
+                zoomInToggleButton.setToolTipText("Zoom in.");
                 zoomInToggleButton.setDoubleBuffered(true);
                 zoomInToggleButton.setFocusable(false);
                 zoomInToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -448,7 +506,7 @@ public class MainApplication extends javax.swing.JFrame  {
 
                 zoomGroup.add(zoomOutToggleButton);
                 zoomOutToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/zoom_out.png"))); // NOI18N
-                zoomOutToggleButton.setToolTipText("Zoom out");
+                zoomOutToggleButton.setToolTipText("Zoom out.");
                 zoomOutToggleButton.setFocusable(false);
                 zoomOutToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 zoomOutToggleButton.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -464,7 +522,7 @@ public class MainApplication extends javax.swing.JFrame  {
 
                 zoomGroup.add(viewAllToggleButton);
                 viewAllToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/fit_all.png"))); // NOI18N
-                viewAllToggleButton.setToolTipText("View all");
+                viewAllToggleButton.setToolTipText("View all.");
                 viewAllToggleButton.setFocusable(false);
                 viewAllToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 viewAllToggleButton.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -507,7 +565,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 controlPointsToolBar.add(jSeparator2);
 
                 importTestPointsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/input_test.png"))); // NOI18N
-                importTestPointsButton.setToolTipText("Import test points.");
+                importTestPointsButton.setToolTipText("Import control points to the analyzed map.");
                 importTestPointsButton.setFocusable(false);
                 importTestPointsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 importTestPointsButton.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -528,7 +586,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 controlPointsToolBar.add(jSeparator11);
 
                 importReferencePointsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/input_reference.png"))); // NOI18N
-                importReferencePointsButton.setToolTipText("Import reference points.");
+                importReferencePointsButton.setToolTipText("Import control points to the reference map.");
                 importReferencePointsButton.setFocusable(false);
                 importReferencePointsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 importReferencePointsButton.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -548,7 +606,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 controlPointsToolBar.add(jSeparator8);
 
                 showControlPointsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/show_control_points.png"))); // NOI18N
-                showControlPointsButton.setToolTipText("Show control points");
+                showControlPointsButton.setToolTipText("Show list of control points on analyzed/reference maps.");
                 showControlPointsButton.setFocusable(false);
                 showControlPointsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 showControlPointsButton.setMaximumSize(new java.awt.Dimension(26, 26));
@@ -567,7 +625,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 controlPointsToolBar.add(jSeparator14);
 
                 exportTestPointsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/output_test.png"))); // NOI18N
-                exportTestPointsButton.setToolTipText("Export test points.");
+                exportTestPointsButton.setToolTipText("Export control points from the analyzed map.");
                 exportTestPointsButton.setFocusable(false);
                 exportTestPointsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 exportTestPointsButton.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -587,7 +645,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 controlPointsToolBar.add(jSeparator12);
 
                 exportReferencePointsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/output_reference.png"))); // NOI18N
-                exportReferencePointsButton.setToolTipText("Export reference points.");
+                exportReferencePointsButton.setToolTipText("Export control points from the reference map.");
                 exportReferencePointsButton.setFocusable(false);
                 exportReferencePointsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 exportReferencePointsButton.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -606,7 +664,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 analyzeToolBar.setRollover(true);
 
                 showResultsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/table.png"))); // NOI18N
-                showResultsButton.setToolTipText("Show results: list of projections.");
+                showResultsButton.setToolTipText("Show results: list of the detected projections.");
                 showResultsButton.setFocusable(false);
                 showResultsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 showResultsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -618,7 +676,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 analyzeToolBar.add(showResultsButton);
 
                 clearResultsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/table_clear.png"))); // NOI18N
-                clearResultsButton.setToolTipText("Clear results.");
+                clearResultsButton.setToolTipText("Clear results: list of detected projections.");
                 clearResultsButton.setFocusable(false);
                 clearResultsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 clearResultsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -633,7 +691,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 analyzeToolBar.add(jSeparator9);
 
                 clearAllButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/clear_all.png"))); // NOI18N
-                clearAllButton.setToolTipText("Clear all points, results and reconstructed graticule,");
+                clearAllButton.setToolTipText("Clear all points, results and reconstructed graticules.");
                 clearAllButton.setFocusable(false);
                 clearAllButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 clearAllButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -647,10 +705,31 @@ public class MainApplication extends javax.swing.JFrame  {
                 jSeparator6.setSeparatorSize(new java.awt.Dimension(20, 24));
                 analyzeToolBar.add(jSeparator6);
 
+                settingsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/settings.png"))); // NOI18N
+                settingsButton.setToolTipText("Setting parameters of detectproj.");
+                settingsButton.setFocusable(false);
+                settingsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                settingsButton.setMaximumSize(new java.awt.Dimension(24, 24));
+                settingsButton.setMinimumSize(new java.awt.Dimension(24, 24));
+                settingsButton.setPreferredSize(new java.awt.Dimension(24, 24));
+                settingsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                settingsButton.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                settingsButtonActionPerformed(evt);
+                        }
+                });
+                analyzeToolBar.add(settingsButton);
+
+                jSeparator16.setMaximumSize(new java.awt.Dimension(20, 24));
+                jSeparator16.setMinimumSize(new java.awt.Dimension(20, 24));
+                jSeparator16.setPreferredSize(new java.awt.Dimension(20, 24));
+                jSeparator16.setRequestFocusEnabled(false);
+                analyzeToolBar.add(jSeparator16);
+
                 analyzeButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
                 analyzeButton.setText("Analyze map");
                 analyzeButton.setToolTipText("Start analysis.");
-                analyzeButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+                analyzeButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
                 analyzeButton.setFocusable(false);
                 analyzeButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 analyzeButton.setMaximumSize(new java.awt.Dimension(140, 26));
@@ -910,6 +989,16 @@ public class MainApplication extends javax.swing.JFrame  {
                         }
                 });
                 analysisMenu.add(clearAllMenuItem);
+                analysisMenu.add(jSeparator15);
+
+                settingsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/settings.png"))); // NOI18N
+                settingsMenuItem.setText("Settings...");
+                settingsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                settingsMenuItemActionPerformed(evt);
+                        }
+                });
+                analysisMenu.add(settingsMenuItem);
 
                 menuBar.add(analysisMenu);
 
@@ -964,7 +1053,7 @@ public class MainApplication extends javax.swing.JFrame  {
     
         private void analyzeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeButtonActionPerformed
                 // Analyze early map
-                if (!computation_in_progress)
+                if (!computation_in_progress[0])
                 {
                         analyzeMapMenuItem.setEnabled(false);
 
@@ -1015,7 +1104,7 @@ public class MainApplication extends javax.swing.JFrame  {
         
         private void clearAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearAllButtonActionPerformed
                 //Clear all constrol points and results
-                if (!computation_in_progress)
+                if (!computation_in_progress[0])
                 {
                         zoomGroup.clearSelection();
                         addControlPointsToggleButton.setSelected(false);
@@ -1038,12 +1127,12 @@ public class MainApplication extends javax.swing.JFrame  {
                                         map.repaint();
 
                                         //Enable add points
-                                        add_test_point = true;
-                                        add_reference_point = true;
+                                        add_test_point[0] = true;
+                                        add_reference_point[0] = true;
 
                                         //There are no nearest points
-                                        index_nearest = -1;                        
-                                        index_nearest_prev = -1; 
+                                        index_nearest[0] = -1;                        
+                                        index_nearest_prev[0] = -1; 
                                }
                         }
                 }
@@ -1064,7 +1153,7 @@ public class MainApplication extends javax.swing.JFrame  {
         
         private void clearResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearResultsButtonActionPerformed
                 //Clear all results
-                if (!computation_in_progress)
+                if (!computation_in_progress[0])
                 {
                         zoomGroup.clearSelection();
                         addControlPointsToggleButton.setSelected(false);
@@ -1093,14 +1182,14 @@ public class MainApplication extends javax.swing.JFrame  {
                 // Enable, disable left mouse zoom-in
                 if (zoomInToggleButton.isSelected())
                 {
-                        enable_zoom_in_lm = true;
+                        enable_zoom_in_lm[0] = true;
                         addControlPointsToggleButton.setSelected(false);
                 }      
                 
                 //Disable zoom in
                 else
                 {
-                        enable_zoom_in_lm = false;
+                        enable_zoom_in_lm[0] = false;
                 }
                         
         }//GEN-LAST:event_zoomInToggleButtonStateChanged
@@ -1110,14 +1199,14 @@ public class MainApplication extends javax.swing.JFrame  {
                  // Enable, disable left mouse zoom-out
                 if (zoomOutToggleButton.isSelected())
                 {
-                        enable_zoom_out_lm = true;
+                        enable_zoom_out_lm[0] = true;
                         addControlPointsToggleButton.setSelected(false);
                 }      
                 
                 //Disable zoom out
                 else
                 {
-                        enable_zoom_out_lm = false;
+                        enable_zoom_out_lm[0] = false;
                 }
         }//GEN-LAST:event_zoomOutToggleButtonStateChanged
 
@@ -1126,14 +1215,14 @@ public class MainApplication extends javax.swing.JFrame  {
                 // Enable, disable left mouse zoom-in
                 if (viewAllToggleButton.isSelected())
                 {
-                        enable_zoom_fit_all_lm = true;
+                        enable_zoom_fit_all_lm[0] = true;
                         addControlPointsToggleButton.setSelected(false);
                 }      
                 
                 //Disable zoom fit all
                 else
                 {
-                        enable_zoom_fit_all_lm = false;
+                        enable_zoom_fit_all_lm[0] = false;
                 }
         }//GEN-LAST:event_viewAllToggleButtonStateChanged
 
@@ -1149,12 +1238,12 @@ public class MainApplication extends javax.swing.JFrame  {
         
         private void addControlPointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addControlPointButtonActionPerformed
                 // Enable/disable control points collection
-                if (!computation_in_progress)
+                if (!computation_in_progress[0])
                 {
-                        enable_add_control_points = !enable_add_control_points;
+                        enable_add_control_points[0] = !enable_add_control_points[0];
 
                         //Set button status
-                        addControlPointsToggleButton.setSelected(enable_add_control_points); 
+                        addControlPointsToggleButton.setSelected(enable_add_control_points[0]); 
 
                         zoomGroup.clearSelection();
                 }
@@ -1163,7 +1252,7 @@ public class MainApplication extends javax.swing.JFrame  {
         
         private void importTestPointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importTestPointsButtonActionPerformed
                 // Import test points
-                if (!computation_in_progress)
+                if (!computation_in_progress[0])
                 {
                         zoomGroup.clearSelection();
                         addControlPointsToggleButton.setSelected(false);
@@ -1182,7 +1271,7 @@ public class MainApplication extends javax.swing.JFrame  {
         
         private void importReferencePointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importReferencePointsButtonActionPerformed
                 // Import reference points
-                if (!computation_in_progress)
+                if (!computation_in_progress[0])
                 {
                         zoomGroup.clearSelection();
                         addControlPointsToggleButton.setSelected(false);
@@ -1214,27 +1303,27 @@ public class MainApplication extends javax.swing.JFrame  {
 
         private void zoomInMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomInMenuItemActionPerformed
                 // Zoom in
-                enable_zoom_in_lm = true;
-                enable_zoom_out_lm = false;
-                enable_zoom_fit_all_lm = false;
+                enable_zoom_in_lm[0] = true;
+                enable_zoom_out_lm[0] = false;
+                enable_zoom_fit_all_lm[0] = false;
                 addControlPointsToggleButton.setSelected(false);
         }//GEN-LAST:event_zoomInMenuItemActionPerformed
 
         
         private void viewAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAllMenuItemActionPerformed
                 // View all
-                enable_zoom_fit_all_lm = true;
-                enable_zoom_in_lm = false;
-                enable_zoom_out_lm = false;
+                enable_zoom_fit_all_lm[0] = true;
+                enable_zoom_in_lm[0] = false;
+                enable_zoom_out_lm[0] = false;
                 addControlPointsToggleButton.setSelected(false);
         }//GEN-LAST:event_viewAllMenuItemActionPerformed
 
         
         private void zoomOutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomOutMenuItemActionPerformed
                 // Zoom out
-                enable_zoom_out_lm = true;
-                enable_zoom_in_lm = false;
-                enable_zoom_fit_all_lm = false;
+                enable_zoom_out_lm[0] = true;
+                enable_zoom_in_lm[0] = false;
+                enable_zoom_fit_all_lm[0] = false;
                 addControlPointsToggleButton.setSelected(false);
         }//GEN-LAST:event_zoomOutMenuItemActionPerformed
 
@@ -1346,17 +1435,17 @@ public class MainApplication extends javax.swing.JFrame  {
         
         private void addControlPointsToggleButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_addControlPointsToggleButtonStateChanged
                 // Enable adding control point
-                if (!computation_in_progress)
+                if (!computation_in_progress[0])
                 {
                         if (addControlPointsToggleButton.isSelected())
                         {
-                                enable_add_control_points = true;
+                                enable_add_control_points[0] = true;
                                 zoomGroup.clearSelection();
                         }
                         
                         else
                         {
-                                enable_add_control_points = false;
+                                enable_add_control_points[0] = false;
                         }
                 }   
         }//GEN-LAST:event_addControlPointsToggleButtonStateChanged
@@ -1378,6 +1467,18 @@ public class MainApplication extends javax.swing.JFrame  {
                 }
         }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void settingsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsMenuItemActionPerformed
+            //Show settings dialog
+            settings_form.setVisible(true);
+    }//GEN-LAST:event_settingsMenuItemActionPerformed
+
+    
+        private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
+                //Show settings dialog
+                settings_form.setVisible(true);
+        }//GEN-LAST:event_settingsButtonActionPerformed
+
+        
         public void closeApplication()
         {
                 //Show prompt before closing the application
@@ -1397,182 +1498,191 @@ public class MainApplication extends javax.swing.JFrame  {
         {
                 //Analyze all projections
                 final int n_test = test_points.size(), n_reference = reference_points.size();
-                List <Projection> projections = new ArrayList<> ();
-                Projections.init(projections);
                 
-				//The previous analysis has been finished
-				if (!computation_in_progress)
-				{
-					//Clear results
-					clearResults();
-					
-					//Set detection and optimization methods
-					switch (index_method + index_optimization)
-					{
-							case 11: method = TAnalysisMethod.NLSM7;
-									 break;
-							case 12: method = TAnalysisMethod.NLSM8;
-									 break;
-							case 21: method = TAnalysisMethod.NMM7;
-									 break;
-							case 22: method = TAnalysisMethod.NMM8;
-									 break;
-							case 31: method = TAnalysisMethod.DEM7;
-									 break;
-							case 32: method = TAnalysisMethod.DEM8;
-									 break;         
-					}
-					
-					//Different amount of points (1 omitted point)
-					if (abs(n_test - n_reference) == 1)
-					{
-							//Show warning
-							final Object[] options = {"Delete point", "Cancel"};
-							final int response = JOptionPane.showOptionDialog(null, "Different amount of control points (1 point is missing). The analysis cannot be computed. Delete LAST collected point?", "Warning",
-									JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
-						  
-							//Delete last control point
-							if (response == 0)
-							{
-									//Delete a control point on the test map
-									if (n_test > n_reference)
-											test_points.remove(n_test - 1);
-									
-									//Delete a control point on the reference map
-									else
-											map.deletePoint(n_reference - 1);
-									
-									//Repaint maps
-									early_map.repaint();
-									map.repaintMap();
-									
-									//Enable adding points
-									add_test_point = true;
-									add_reference_point = true;
-							}
-					}
-					
-					//Different amount of points (more than 1 omitted point, wrong data!)
-					else if (abs(n_test - n_reference) > 1)
-					{
-							//Show warning
-							final Object[] options = {"Delete points", "Cancel"};
-							final int response = JOptionPane.showOptionDialog(null, "Wrong data, " + abs(n_test - n_reference) + " poins are missing! " + "The analysis cannot be computed. Delete ALL collected points?", "Warning",
-									JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
-						  
-							//Clear all control points
-							if (response == 0)
-							{
-									clearAll();
-							}
-							
-							return;
-					}
+                //The previous analysis has been finished
+                if (!computation_in_progress[0])
+                {
+                        //Clear results
+                        clearResults();
+                        
+                        //Create list of projections
+                        Projections.init(projections, default_lon_dir[0]);
 
-					//Not enough points
-					if (n_test < 5)
-							return;
+                        //Set detection and optimization methods
+                        switch (index_method + index_optimization)
+                        {
+                                        case 11: method = TAnalysisMethod.NLSM7;
+                                                         break;
+                                        case 12: method = TAnalysisMethod.NLSM8;
+                                                         break;
+                                        case 21: method = TAnalysisMethod.NMM7;
+                                                         break;
+                                        case 22: method = TAnalysisMethod.NMM8;
+                                                         break;
+                                        case 31: method = TAnalysisMethod.DEM7;
+                                                         break;
+                                        case 32: method = TAnalysisMethod.DEM8;
+                                                         break;         
+                        }
 
-					//Analyze map projection in new thread
-					CartAnalysisMT ca = new CartAnalysisMT(test_points, reference_points, projections, results, method, System.out, analyzeButton, new Runnable() 
-					{
-							@Override
-							public void run() 
-							{
-									//Print results: all operation performed after the thread has been finished
-									results_form.printResult(n_results);
+                        //Different amount of points (1 omitted point)
+                        if (abs(n_test - n_reference) == 1)
+                        {
+                                        //Show warning
+                                        final Object[] options = {"Delete point", "Cancel"};
+                                        final int response = JOptionPane.showOptionDialog(null, "Different amount of control points (1 point is missing). The analysis cannot be computed. Delete LAST collected point?", "Warning",
+                                                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 
-									// Geographic extent of the analyzed territory   
-									double lat_min = (Collections.min(reference_points, new SortByLat())).getLat();
-									double lat_max = (Collections.max(reference_points, new SortByLat())).getLat();
-									double lon_min = (Collections.min(reference_points, new SortByLon())).getLon();
-									double lon_max = (Collections.max(reference_points, new SortByLon())).getLon();
-									double lat_aver = 0.5 * (lat_min + lat_max), lon_aver = 0.5 * (lon_min + lon_max);
+                                        //Delete last control point
+                                        if (response == 0)
+                                        {
+                                                        //Delete a control point on the test map
+                                                        if (n_test > n_reference)
+                                                                        test_points.remove(n_test - 1);
 
-									//Get limits; stretch over the whole planishere, if necessarry
-									if (((lon_min < MIN_LON + 40) || (lon_max > MAX_LON - 40)) && (lon_max - lon_min > 200))
-									{
-											lon_min = MIN_LON;
-											lon_max = MAX_LON;
-									}
+                                                        //Delete a control point on the reference map
+                                                        else
+                                                                        map.deletePoint(n_reference - 1);
 
-									TInterval lat_interval = new TInterval (lat_min, lat_max);
-									TInterval lon_interval = new TInterval ( lon_min, lon_max);
-									
-									//Change step of  meridians/parallels
-									final double dlat = lat_max - lat_min;
-									final double dlon = lon_max - lon_min;
-									final double lat_step = ( dlat < 20.0 ? (dlat < 2.0 ? 0.1 : 1.0) : 10.0);
-									final double lon_step = ( dlon < 20.0 ? (dlon < 2.0 ? 0.1 : 1.0) : 10.0);
-											
-									//Create and store graticules
-									int index = 0;
-									for (java.util.Map.Entry<Double, TResult> entry : results.entrySet())
-									{
-											//Create lists of meridians/parallels
-											List <Meridian> meridians = new ArrayList<>();
-											List <Parallel> parallels = new ArrayList<>();
-											List <List<Point3DCartesian> > meridians_proj = new ArrayList<>();
-											List <List<Point3DCartesian> > parallels_proj = new ArrayList<>();
+                                                        //Repaint maps
+                                                        early_map.repaint();
+                                                        map.repaintMap();
 
-											//Set font height      
-											Double key = entry.getKey();
-											TResult value = entry.getValue();
+                                                        //Enable adding points
+                                                        add_test_point[0] = true;
+                                                        add_reference_point[0] = true;
+                                        }
+                        }
 
-											 //Get map rotation
-											final double alpha = value.map_rotation;
+                        //Different amount of points (more than 1 omitted point, wrong data!)
+                        else if (abs(n_test - n_reference) > 1)
+                        {
+                                        //Show warning
+                                        final Object[] options = {"Delete points", "Cancel"};
+                                        final int response = JOptionPane.showOptionDialog(null, "Wrong data, " + abs(n_test - n_reference) + " poins are missing! " + "The analysis cannot be computed. Delete ALL collected points?", "Warning",
+                                                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 
-											//Compute projected points
-											List <Point3DCartesian> points_proj = new ArrayList<>();
-											CartTransformation.latsLonstoXY (reference_points, value.proj, alpha, points_proj);
+                                        //Clear all control points
+                                        if (response == 0)
+                                        {
+                                                        clearAll();
+                                        }
 
-											//Create graticule 
-											Graticule2.createGraticule(value.proj, lat_interval, lon_interval, lat_step, lon_step, 0.1 * lat_step, 0.1 * lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj);
+                                        return;
+                        }
 
-											//Store meridians/parallels, reconstructed points, meridians/paralleles 
-											value.meridians = meridians;
-											value.parallels = parallels;
-											value.points_proj = points_proj;
-											value.meridians_proj= meridians_proj;
-											value.parallels_proj = parallels_proj;
+                        //Not enough points
+                        if (n_test < 5)
+                                        return;
 
-											//Increment index
-											index ++;
-									}
+                        //Analyze map projection in new thread
+                        CartAnalysisMT ca = new CartAnalysisMT(test_points, reference_points, projections, results, method, analyze_lon0[0], System.out, analyzeButton, new Runnable() 
+                        {
+                                        @Override
+                                        public void run() 
+                                        {
+                                                        //Print results: all operation performed after the thread has been finished
+                                                        results_form.printResult(n_results);
 
-									//Display results of the best fit projection: set meridians/paralells
-									TResult result_first = results.firstEntry().getValue();
-									early_map.setMeridians(result_first.meridians);
-									early_map.setParallels(result_first.parallels);
+                                                        //Geographic extent of the analyzed territory   
+                                                        double lat_min = (create_entire_graticule[0] ? -89.0 : (Collections.min(reference_points, new SortByLat())).getLat());
+                                                        double lat_max = (create_entire_graticule[0] ? 89.0 : (Collections.max(reference_points, new SortByLat())).getLat());
+                                                        double lon_min = (create_entire_graticule[0] ? -180.0 : (Collections.min(reference_points, new SortByLon())).getLon());
+                                                        double lon_max = (create_entire_graticule[0] ? 180.0 : (Collections.max(reference_points, new SortByLon())).getLon());
 
-									//Display results of the best fit projection: set projected points, projected meridians/parallels
-									early_map.setProjection(result_first.proj);
-									early_map.setProjectedMeridians(result_first.meridians_proj);
-									early_map.setProjectedParallels(result_first.parallels_proj);
-									early_map.setProjectedPoints(result_first.points_proj);
-									
-									//Update main window title
-									MainApplication.this.setTitle("Map projection analysis: " + result_first.proj.getName() + " projection");
+                                                        double lat_aver = 0.5 * (lat_min + lat_max), lon_aver = 0.5 * (lon_min + lon_max);
 
-									//Update early map
-									early_map.repaint();
+                                                        //Get limits; stretch over the whole planishere, if necessarry
+                                                        if (((lon_min < MIN_LON + 40) || (lon_max > MAX_LON - 40)) && (lon_max - lon_min > 200))
+                                                        {
+                                                                lon_min = MIN_LON;
+                                                                lon_max = MAX_LON;
+                                                        }
 
-									//Show window with results
-									results_form.setVisible(true);
-									
-									//Enable change buttons
-									computation_in_progress = false;
-							}
-					});
-					
-					//Disable change buttons
-					computation_in_progress = true;
-					
-					//Create new thread and run
-					Thread t = new Thread(ca);
-					t.start(); 
-				}
-				
+                                                        //Change lat/lon intervals depending on the analyzed territory size
+                                                        lat_interval.min_value = lat_min;
+                                                        lat_interval.max_value = lat_max;
+                                                        lon_interval.min_value = lon_min;
+                                                        lon_interval.max_value = lon_max;
+                                                        
+                                                        //Correct steps to avoid slow graticule construction
+                                                        final double dlat = lat_max - lat_min;
+                                                        final double dlon = lon_max - lon_min;
+
+                                                        final double lat_step = ( dlat < 20.0 ? (dlat < 2.0 ? (lat3_step[0] = max(lat3_step[0], dlat/50)) : (lat2_step[0] = max(lat2_step[0], dlat/50))) : (lat1_step[0] = max(lat1_step[0], dlat/50)));
+                                                        final double lon_step = ( dlon < 20.0 ? (dlon < 2.0 ? (lon3_step[0] = max(lon3_step[0], dlon/50)) : (lon2_step[0] = max(lon2_step[0], dlon/50))) : (lon1_step[0] = max(lon1_step[0], dlon/50)));
+                                                        
+                                                        lat_incr[0] = max(lat_incr[0], dlat / 20000.0 * lat_step);
+                                                        lon_incr[0] = max(lon_incr[0], dlon / 40000.0 * lon_step);
+                                                        
+                                                        //Create and store graticules
+                                                        int index = 0;
+                                                        for (java.util.Map.Entry<Double, TResult> entry : results.entrySet())
+                                                        {
+                                                                //Create lists of meridians/parallels
+                                                                List <Meridian> meridians = new ArrayList<>();
+                                                                List <Parallel> parallels = new ArrayList<>();
+                                                                List <List<Point3DCartesian> > meridians_proj = new ArrayList<>();
+                                                                List <List<Point3DCartesian> > parallels_proj = new ArrayList<>();
+
+                                                                //Set font height      
+                                                                Double key = entry.getKey();
+                                                                TResult value = entry.getValue();
+
+                                                                 //Get map rotation
+                                                                final double alpha = value.map_rotation;
+
+                                                                //Compute projected points
+                                                                List <Point3DCartesian> points_proj = new ArrayList<>();
+                                                                CartTransformation.latsLonstoXY (reference_points, value.proj, alpha, points_proj);
+
+                                                                //Create graticule 
+                                                                //System.out.println(value.proj.getName());
+                                                                Graticule2.createGraticule(value.proj, lat_interval, lon_interval, lat_step, lon_step, lat_incr[0], lon_incr[0], alpha, meridians, meridians_proj, parallels, parallels_proj);
+
+                                                                //Store meridians/parallels, reconstructed points, meridians/paralleles 
+                                                                value.meridians = meridians;
+                                                                value.parallels = parallels;
+                                                                value.points_proj = points_proj;
+                                                                value.meridians_proj= meridians_proj;
+                                                                value.parallels_proj = parallels_proj;
+
+                                                                //Increment index
+                                                                index ++;
+                                                        }
+
+                                                        //Display results of the best fit projection: set meridians/paralells
+                                                        TResult result_first = results.firstEntry().getValue();
+                                                        early_map.setMeridians(result_first.meridians);
+                                                        early_map.setParallels(result_first.parallels);
+
+                                                        //Display results of the best fit projection: set projected points, projected meridians/parallels
+                                                        early_map.setProjection(result_first.proj);
+                                                        early_map.setProjectedMeridians(result_first.meridians_proj);
+                                                        early_map.setProjectedParallels(result_first.parallels_proj);
+                                                        early_map.setProjectedPoints(result_first.points_proj);
+
+                                                        //Update main window title
+                                                        MainApplication.this.setTitle("Map projection analysis: " + result_first.proj.getName() + " projection");
+
+                                                        //Update early map
+                                                        early_map.repaint();
+
+                                                        //Show window with results
+                                                        results_form.setVisible(true);
+
+                                                        //Enable change buttons
+                                                        computation_in_progress[0] = false;
+                                        }
+                        });
+
+                        //Disable change buttons
+                        computation_in_progress[0] = true;
+
+                        //Create new thread and run
+                        Thread t = new Thread(ca);
+                        t.start(); 
+                }
         }
        
         
@@ -1810,6 +1920,9 @@ public class MainApplication extends javax.swing.JFrame  {
                 // Clear computed results
                 results.clear();
                 
+                //Clear list of projections
+                projections.clear();
+                
                 //Reset pasrameters
                 early_map.setMeridians(null);
                 early_map.setParallels(null);
@@ -1896,6 +2009,8 @@ public class MainApplication extends javax.swing.JFrame  {
         private javax.swing.JToolBar.Separator jSeparator12;
         private javax.swing.JPopupMenu.Separator jSeparator13;
         private javax.swing.JToolBar.Separator jSeparator14;
+        private javax.swing.JPopupMenu.Separator jSeparator15;
+        private javax.swing.JToolBar.Separator jSeparator16;
         private javax.swing.JToolBar.Separator jSeparator2;
         private javax.swing.JPopupMenu.Separator jSeparator3;
         private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -1921,6 +2036,8 @@ public class MainApplication extends javax.swing.JFrame  {
         private javax.swing.JComboBox<String> selectDetectionMethodComboBox;
         private javax.swing.JPanel selectOptimizationPanel;
         private javax.swing.JComboBox<String> selectOptimizationTechniqueComboBox;
+        private javax.swing.JButton settingsButton;
+        private javax.swing.JMenuItem settingsMenuItem;
         private javax.swing.JButton showControlPointsButton;
         private javax.swing.JButton showResultsButton;
         private javax.swing.JMenuItem showResultsMenuItem;

@@ -58,6 +58,7 @@ import detectprojv2j.algorithms.numderivative.FJM7;
 import detectprojv2j.algorithms.numderivative.FJM8;
 import detectprojv2j.algorithms.transformation.HelmertTransformation2D;
 import detectprojv2j.algorithms.simplexmethod.*;
+import detectprojv2j.forms.MainApplication;
 
 public class CartAnalysisMT implements Runnable
 {
@@ -66,18 +67,20 @@ public class CartAnalysisMT implements Runnable
 	private final List <Projection> projections;
         private final TreeMap<Double, TResult> results;
         private final TAnalysisMethod method;
+        private final boolean analyze_lon0;
         private final PrintStream s;
         private final JToggleButton button;
         private final Runnable f_callback;
         
         public CartAnalysisMT(final List<Point3DCartesian> test_points_, final List <Point3DGeographic> reference_points_, List <Projection> projections_, 
-                TreeMap<Double, TResult> results_, final TAnalysisMethod method_, final PrintStream s_, final JToggleButton button_, final Runnable f_callback_)
+                TreeMap<Double, TResult> results_, final TAnalysisMethod method_, final boolean analyze_lon0_, final PrintStream s_, final JToggleButton button_, final Runnable f_callback_)
         {
                 test_points = test_points_;
                 reference_points = reference_points_;
                 projections = projections_;
                 results = results_;
                 method = method_;
+                analyze_lon0 = analyze_lon0_;
                 s = s_;  
                 f_callback = f_callback_;
                 button = button_;
@@ -338,7 +341,7 @@ public class CartAnalysisMT implements Runnable
                 A.items[2][0] = -180.0;
                 A.items[3][0] = proj.getLat1Interval().min_value;
                 A.items[4][0] = proj.getLat1Interval().min_value;
-                A.items[5][0] = -180;
+                A.items[5][0] = (analyze_lon0 ? -180 : 0.0);
                 A.items[6][0] = 0;
 
                 return A;
@@ -355,7 +358,7 @@ public class CartAnalysisMT implements Runnable
                 B.items[2][0] = 180.0;
                 B.items[3][0] = proj.getLat1Interval().max_value;
                 B.items[4][0] = proj.getLat1Interval().max_value;
-                B.items[5][0] = 180.0;
+                B.items[5][0] = (analyze_lon0 ? 180.0 : 0.0);
                 B.items[6][0] = 100.0;
 
                 return B;
@@ -373,7 +376,7 @@ public class CartAnalysisMT implements Runnable
                 A.items[1][0] = -180.0;
                 A.items[2][0] = proj.getLat1Interval().min_value;
                 A.items[3][0] = proj.getLat1Interval().min_value;
-                A.items[4][0] = -180.0;
+                A.items[4][0] = (analyze_lon0 ? -180.0 : 0.0);
                 A.items[5][0] = 0.0;
 
                 return A;
@@ -390,7 +393,7 @@ public class CartAnalysisMT implements Runnable
                 B.items[1][0] = 180.0;
                 B.items[2][0] = proj.getLat1Interval().max_value;
                 B.items[3][0] = proj.getLat1Interval().max_value;
-                B.items[4][0] = 180.0;
+                B.items[4][0] = (analyze_lon0 ? 180.0 : 0.0);
                 B.items[5][0] = 100.0;
                 
                 return B;

@@ -138,14 +138,20 @@ public class CartTransformation
                         return MAX_LAT;
                 }
                 
-                //Reversed direction 2
+                //Reversed direction 2 (Mode M4)
+                //lon_trans is measured from the meridian arc(i.e., from its part north of K) of the base system passing the new pole K
+                //in the counterclockwise direction
                 double lon_trans2 = lon_trans;
 
-                //Normal direction 2
+                //Normal direction 2 (Mode M3), DEFAULT
+                //lon_trans is measured from the meridian arc(i.e., from its part north of K) of the base system passing the new pole K
+                //in the counterclockwise direction.
                 if (lon_direction == NormalDirection2)
                         lon_trans2 = -lon_trans;
 
-                //Reversed direction (JTSK)
+                //Reversed direction (Mode M2)
+                //lon_trans is measured from the “extended” meridian arc(i.e., from its part south of K) of the base system passing the new pole K
+                //in the clockwise direction, which represents the new prime meridian.
                 else if (lon_direction == ReversedDirection)
                 {
                         if (lon_trans < 0)
@@ -154,7 +160,9 @@ public class CartTransformation
                                 lon_trans2 = lon_trans + 180;
                 }
 
-                //Normal direction
+                //Normal direction (Mode M1)
+                //lon_trans is measured from the “extended” meridian arc(i.e., from its part south of K) of the base system passing the new pole K
+                //in the counterclockwise direction.
                 else if (lon_direction == NormalDirection)
                 {
                         if (lon_trans < 0)
@@ -257,14 +265,20 @@ public class CartTransformation
                         return lonp + lon_trans;
                 }
                 
-                //Reversed direction 2
+                //Reversed direction 2 (Mode M4)
+                //lon_trans is measured from the meridian arc(i.e., from its part north of K) of the base system passing the new pole K
+                //in the counterclockwise direction
                 double lon_trans2 = lon_trans;
 
-                //Normal direction 2
+                //Normal direction 2 (Mode M3), DEFAULT
+                //lon_trans is measured from the meridian arc(i.e., from its part north of K) of the base system passing the new pole K
+                //in the counterclockwise direction.
                 if (lon_direction == NormalDirection2)
                         lon_trans2 = -lon_trans;
 
-                //Reversed direction (JTSK)
+                //Reversed direction (Mode M2)
+                //lon_trans is measured from the “extended” meridian arc(i.e., from its part south of K) of the base system passing the new pole K
+                //in the clockwise direction, which represents the new prime meridian.
                 else if (lon_direction == ReversedDirection)
                 {
                         if (lon_trans < 0)
@@ -273,7 +287,9 @@ public class CartTransformation
                                 lon_trans2 = lon_trans + 180;
                 }
 
-                //Normal direction
+                //Normal direction (Mode M1)
+                //lon_trans is measured from the “extended” meridian arc(i.e., from its part south of K) of the base system passing the new pole K
+                //in the counterclockwise direction.
                 else if (lon_direction == NormalDirection)
                 {
                         if (lon_trans < 0)
@@ -282,7 +298,7 @@ public class CartTransformation
                                 lon_trans2 = 180 - lon_trans;
                 }
 
-                //Compute lon_trans: Reversed direction 2
+                //Compute dlon
                 double dlon = atan2(cos(lat_trans * PI / 180) * sin(lon_trans2 * PI / 180),  sin(lat_trans * PI / 180) * cos(latp * PI / 180) - cos(lon_trans2 * PI / 180) * sin(latp * PI / 180) * cos(lat_trans * PI / 180)) * 180 / PI;
 
                 return lonp + dlon;

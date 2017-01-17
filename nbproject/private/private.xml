@@ -19,11 +19,10 @@
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/Detectprojv2j.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/cartanalysis/CartAnalysisMT.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/MainApplication.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/tilesources/OsmTileSource.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/ProjectionConic.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/ControlPointsForm.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/Map.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/graticule2/Graticule2.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/consts/Consts.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/greatcircleintersection/GreatCircleIntersection.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/ResultsForm.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/carttransformation/CartTransformation.java</file>
         </group>
     </open-files>

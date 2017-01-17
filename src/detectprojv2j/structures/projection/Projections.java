@@ -32,125 +32,125 @@ import static detectprojv2j.consts.Consts.*;
 import detectprojv2j.exceptions.*;
 
 import detectprojv2j.algorithms.carttransformation.CartTransformation;
+import detectprojv2j.forms.MainApplication;
 
 
 public class Projections {
         
-        public static void init (List <Projection> projections)
+        public static void init (final List <Projection> projections, final TTransformedLongitudeDirection default_lon_dir)
         {
                 //Initialize all supported projections and add them to the list
-                ProjectionConic aea = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_aea, Projections::Y_aea, "aea");
-                ProjectionAzimuthal aeqd = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_aeqd, Projections::Y_aeqd, "aeqd");
-                ProjectionPseudoAzimuthal aitoff = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_aitoff, Projections::Y_aitoff, "aitoff");
-                ProjectionMiscellaneous api = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_api, Projections::Y_api, "api");
-                ProjectionMiscellaneous apiel = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_apiel, Projections::Y_apiel, "apiel");
-                ProjectionMiscellaneous armad = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_armad, Projections::Y_armad, "armad");
-                ProjectionMiscellaneous august = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_august, Projections::Y_august, "august");
-                ProjectionMiscellaneous bacon = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_bacon, Projections::Y_bacon, "bacon");
-                ProjectionPseudoCylindrical boggs = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_boggs, Projections::Y_boggs, "boggs");
-                ProjectionPseudoConic bonne = new ProjectionPseudoConic (R0, 90.0, 0.0, 40.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_bonne, Projections::Y_bonne, "bonne");
+                ProjectionConic aea = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aea, Projections::Y_aea, "aea");
+                ProjectionAzimuthal aeqd = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aeqd, Projections::Y_aeqd, "aeqd");
+                ProjectionPseudoAzimuthal aitoff = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aitoff, Projections::Y_aitoff, "aitoff");
+                ProjectionMiscellaneous api = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_api, Projections::Y_api, "api");
+                ProjectionMiscellaneous apiel = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_apiel, Projections::Y_apiel, "apiel");
+                ProjectionMiscellaneous armad = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_armad, Projections::Y_armad, "armad");
+                ProjectionMiscellaneous august = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_august, Projections::Y_august, "august");
+                ProjectionMiscellaneous bacon = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_bacon, Projections::Y_bacon, "bacon");
+                ProjectionPseudoCylindrical boggs = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_boggs, Projections::Y_boggs, "boggs");
+                ProjectionPseudoConic bonne = new ProjectionPseudoConic (R0, 90.0, 0.0, 40.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_bonne, Projections::Y_bonne, "bonne");
                
-                ProjectionAzimuthal breus = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_breus, Projections::Y_breus, "breus");
-                ProjectionCylindrical cc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_cc, Projections::Y_cc, "cc");
-                ProjectionCylindrical cea = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_cea, Projections::Y_cea, "cea");
-                ProjectionAzimuthal clar = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_clar, Projections::Y_clar, "breus");
-                ProjectionMiscellaneous collg = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_collg, Projections::Y_collg, "collg");
-                ProjectionMiscellaneous crast = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_crast, Projections::Y_crast, "crast");
-                ProjectionPseudoCylindrical denoy = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_denoy, Projections::Y_denoy, "denoy");
-                ProjectionPseudoCylindrical eck1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eck1, Projections::Y_eck1, "eck1");
-                ProjectionPseudoCylindrical eck2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eck2, Projections::Y_eck2, "eck2");
-                ProjectionPseudoCylindrical eck3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eck3, Projections::Y_eck3, "eck3");
+                ProjectionAzimuthal breus = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_breus, Projections::Y_breus, "breus");
+                ProjectionCylindrical cc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cc, Projections::Y_cc, "cc");
+                ProjectionCylindrical cea = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cea, Projections::Y_cea, "cea");
+                ProjectionAzimuthal clar = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_clar, Projections::Y_clar, "breus");
+                ProjectionMiscellaneous collg = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_collg, Projections::Y_collg, "collg");
+                ProjectionMiscellaneous crast = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_crast, Projections::Y_crast, "crast");
+                ProjectionPseudoCylindrical denoy = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_denoy, Projections::Y_denoy, "denoy");
+                ProjectionPseudoCylindrical eck1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck1, Projections::Y_eck1, "eck1");
+                ProjectionPseudoCylindrical eck2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck2, Projections::Y_eck2, "eck2");
+                ProjectionPseudoCylindrical eck3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck3, Projections::Y_eck3, "eck3");
                 
-                ProjectionPseudoCylindrical eck4 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eck4, Projections::Y_eck4, "eck4");
-                ProjectionPseudoCylindrical eck5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eck5, Projections::Y_eck5, "eck5");
-                ProjectionPseudoCylindrical eck6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eck6, Projections::Y_eck6, "eck6");
-                ProjectionMiscellaneous eisen = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eisen, Projections::Y_eisen, "eisen");
-                ProjectionCylindrical eqc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eqc, Projections::Y_eqc, "eqc");
-                ProjectionConic eqdc = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc, Projections::Y_eqdc, "eqdc");
-                ProjectionConic eqdc2 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc2, Projections::Y_eqdc2, "eqdc2");
-                ProjectionConic eqdc3 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc3, Projections::Y_eqdc3, "eqdc3");
-                ProjectionPseudoCylindrical fahey = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_fahey, Projections::Y_fahey, "fahey");
-                ProjectionPseudoCylindrical fouc = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_fouc, Projections::Y_fouc, "fouc");
+                ProjectionPseudoCylindrical eck4 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck4, Projections::Y_eck4, "eck4");
+                ProjectionPseudoCylindrical eck5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck5, Projections::Y_eck5, "eck5");
+                ProjectionPseudoCylindrical eck6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck6, Projections::Y_eck6, "eck6");
+                ProjectionMiscellaneous eisen = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eisen, Projections::Y_eisen, "eisen");
+                ProjectionCylindrical eqc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqc, Projections::Y_eqc, "eqc");
+                ProjectionConic eqdc = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc, Projections::Y_eqdc, "eqdc");
+                ProjectionConic eqdc2 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc2, Projections::Y_eqdc2, "eqdc2");
+                ProjectionConic eqdc3 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc3, Projections::Y_eqdc3, "eqdc3");
+                ProjectionPseudoCylindrical fahey = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fahey, Projections::Y_fahey, "fahey");
+                ProjectionPseudoCylindrical fouc = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fouc, Projections::Y_fouc, "fouc");
                 
-                ProjectionPseudoCylindrical fouc_s = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_fouc_s, Projections::Y_fouc_s, "fouc_s");
-                ProjectionMiscellaneous fourn = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_fourn, Projections::Y_fourn, "fourn");
-                ProjectionMiscellaneous fourn2 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_fourn2, Projections::Y_fourn2, "fourn2");
-                ProjectionCylindrical gall = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_gall, Projections::Y_gall, "gall");
-                ProjectionPseudoCylindrical gins8 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_gins8, Projections::Y_gins8, "gins8");
-                ProjectionAzimuthal gnom = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_gnom, Projections::Y_gnom, "gnom");
-                ProjectionPseudoCylindrical goode = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_goode, Projections::Y_goode, "goode");
-                ProjectionPseudoAzimuthal hammer = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_hammer, Projections::Y_hammer, "hammer");
-                ProjectionPseudoCylindrical hataea = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_hataea, Projections::Y_hataea, "hataea");
-                ProjectionAzimuthal hire = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_hire, Projections::Y_hire, "hire");
+                ProjectionPseudoCylindrical fouc_s = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fouc_s, Projections::Y_fouc_s, "fouc_s");
+                ProjectionMiscellaneous fourn = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fourn, Projections::Y_fourn, "fourn");
+                ProjectionMiscellaneous fourn2 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fourn2, Projections::Y_fourn2, "fourn2");
+                ProjectionCylindrical gall = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gall, Projections::Y_gall, "gall");
+                ProjectionPseudoCylindrical gins8 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gins8, Projections::Y_gins8, "gins8");
+                ProjectionAzimuthal gnom = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gnom, Projections::Y_gnom, "gnom");
+                ProjectionPseudoCylindrical goode = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_goode, Projections::Y_goode, "goode");
+                ProjectionPseudoAzimuthal hammer = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hammer, Projections::Y_hammer, "hammer");
+                ProjectionPseudoCylindrical hataea = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hataea, Projections::Y_hataea, "hataea");
+                ProjectionAzimuthal hire = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hire, Projections::Y_hire, "hire");
                 
-                ProjectionAzimuthal jam = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_jam, Projections::Y_jam, "jam");
-                ProjectionPseudoCylindrical kav5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_kav5, Projections::Y_kav5, "kav5");
-                ProjectionPseudoCylindrical kav7 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_kav7, Projections::Y_kav7, "kav7");
-                ProjectionAzimuthal laea = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_laea, Projections::Y_laea, "laea");
-                ProjectionMiscellaneous larr = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_larr, Projections::Y_larr , "larr");
-                ProjectionMiscellaneous lagrng = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_lagrng, Projections::Y_lagrng, "lagrng");
-                ProjectionPseudoCylindrical lask = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_lask, Projections::Y_lask, "lask");
-                ProjectionConic lcc = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_lcc, Projections::Y_lcc, "lcc");
-                ProjectionConic leac = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_leac, Projections::Y_leac, "leac");
-                ProjectionConic leac2 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_leac2, Projections::Y_leac2, "leac2");
+                ProjectionAzimuthal jam = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_jam, Projections::Y_jam, "jam");
+                ProjectionPseudoCylindrical kav5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_kav5, Projections::Y_kav5, "kav5");
+                ProjectionPseudoCylindrical kav7 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_kav7, Projections::Y_kav7, "kav7");
+                ProjectionAzimuthal laea = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_laea, Projections::Y_laea, "laea");
+                ProjectionMiscellaneous larr = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_larr, Projections::Y_larr , "larr");
+                ProjectionMiscellaneous lagrng = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lagrng, Projections::Y_lagrng, "lagrng");
+                ProjectionPseudoCylindrical lask = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lask, Projections::Y_lask, "lask");
+                ProjectionConic lcc = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lcc, Projections::Y_lcc, "lcc");
+                ProjectionConic leac = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_leac, Projections::Y_leac, "leac");
+                ProjectionConic leac2 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_leac2, Projections::Y_leac2, "leac2");
                 
                 //Littrow
                 
-                ProjectionPseudoCylindrical loxim = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_loxim, Projections::Y_loxim, "loxim");
-                ProjectionPseudoCylindrical mbt_s = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_mbt_s, Projections::Y_mbt_s, "mbt_s");
-                ProjectionPseudoCylindrical mbt_s3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_mbt_s3, Projections::Y_mbt_s3, "mbt_s3");
-                ProjectionPseudoCylindrical mbtfpq = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_mbtfpq, Projections::Y_mbtfpq, "mbtfpq");
-                ProjectionPseudoCylindrical mbtfps = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_mbtfps, Projections::Y_mbtfps, "mbtfps");
-                ProjectionCylindrical merc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_merc, Projections::Y_merc, "merc");
-                ProjectionPseudoCylindrical mill = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_mill, Projections::Y_mill, "mill"); 
-                ProjectionPseudoCylindrical moll = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_moll, Projections::Y_moll, "moll");
-                ProjectionPseudoCylindrical nell = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_nell, Projections::Y_nell, "nell");
-                ProjectionPseudoCylindrical nell_h = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_nell_h, Projections::Y_nell_h, "nell_h");
+                ProjectionPseudoCylindrical loxim = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_loxim, Projections::Y_loxim, "loxim");
+                ProjectionPseudoCylindrical mbt_s = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbt_s, Projections::Y_mbt_s, "mbt_s");
+                ProjectionPseudoCylindrical mbt_s3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbt_s3, Projections::Y_mbt_s3, "mbt_s3");
+                ProjectionPseudoCylindrical mbtfpq = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbtfpq, Projections::Y_mbtfpq, "mbtfpq");
+                ProjectionPseudoCylindrical mbtfps = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbtfps, Projections::Y_mbtfps, "mbtfps");
+                ProjectionCylindrical merc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_merc, Projections::Y_merc, "merc");
+                ProjectionPseudoCylindrical mill = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mill, Projections::Y_mill, "mill"); 
+                ProjectionPseudoCylindrical moll = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_moll, Projections::Y_moll, "moll");
+                ProjectionPseudoCylindrical nell = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nell, Projections::Y_nell, "nell");
+                ProjectionPseudoCylindrical nell_h = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nell_h, Projections::Y_nell_h, "nell_h");
                 
-                ProjectionMiscellaneous nicol = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_nicol, Projections::Y_nicol, "nicol");
-                ProjectionPseudoCylindrical ortel = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_ortel, Projections::Y_ortel, "ortel");
-                ProjectionAzimuthal ortho = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_ortho, Projections::Y_ortho, "ortho");
-                ProjectionPseudoCylindrical parab = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_parab, Projections::Y_parab, "parab");
-                ProjectionAzimuthal pers = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_pers, Projections::Y_pers, "pers");
-                ProjectionAzimuthal persf = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_persf, Projections::Y_persf, "persf");
-                ProjectionAzimuthal persn = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_persn, Projections::Y_persn, "persn");
-                ProjectionPolyConic poly = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_poly, Projections::Y_poly, "poly");
-                ProjectionPseudoCylindrical putp1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_putp1, Projections::Y_putp1, "putp1");
-                ProjectionPseudoCylindrical putp2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_putp2, Projections::Y_putp2, "putp2");
+                ProjectionMiscellaneous nicol = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nicol, Projections::Y_nicol, "nicol");
+                ProjectionPseudoCylindrical ortel = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_ortel, Projections::Y_ortel, "ortel");
+                ProjectionAzimuthal ortho = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_ortho, Projections::Y_ortho, "ortho");
+                ProjectionPseudoCylindrical parab = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_parab, Projections::Y_parab, "parab");
+                ProjectionAzimuthal pers = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_pers, Projections::Y_pers, "pers");
+                ProjectionAzimuthal persf = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_persf, Projections::Y_persf, "persf");
+                ProjectionAzimuthal persn = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_persn, Projections::Y_persn, "persn");
+                ProjectionPolyConic poly = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_poly, Projections::Y_poly, "poly");
+                ProjectionPseudoCylindrical putp1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp1, Projections::Y_putp1, "putp1");
+                ProjectionPseudoCylindrical putp2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp2, Projections::Y_putp2, "putp2");
                
-                ProjectionPseudoCylindrical putp3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_putp3, Projections::Y_putp3, "putp3");
-                ProjectionPseudoCylindrical putp3p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_putp3p, Projections::Y_putp3p, "putp3p");
-                ProjectionPseudoCylindrical putp4p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_putp4p, Projections::Y_putp4p, "putp4p");
-                ProjectionPseudoCylindrical putp5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_putp5, Projections::Y_putp5, "putp5");
-                ProjectionPseudoCylindrical putp5p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_putp5p, Projections::Y_putp5p, "putp5p");         
-                ProjectionPseudoCylindrical putp6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_putp6, Projections::Y_putp6, "putp6");
-                ProjectionPseudoCylindrical putp6p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_putp6p, Projections::Y_putp6p, "putp6p");         
-                ProjectionPseudoCylindrical qua_aut = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_qua_aut, Projections::Y_qua_aut, "qua_aut");
-                ProjectionPseudoCylindrical rpoly = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_rpoly, Projections::Y_rpoly, "rpoly");
-                ProjectionPseudoCylindrical sinu = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_sinu, Projections::Y_sinu, "sinu");     
+                ProjectionPseudoCylindrical putp3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp3, Projections::Y_putp3, "putp3");
+                ProjectionPseudoCylindrical putp3p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp3p, Projections::Y_putp3p, "putp3p");
+                ProjectionPseudoCylindrical putp4p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp4p, Projections::Y_putp4p, "putp4p");
+                ProjectionPseudoCylindrical putp5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp5, Projections::Y_putp5, "putp5");
+                ProjectionPseudoCylindrical putp5p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp5p, Projections::Y_putp5p, "putp5p");         
+                ProjectionPseudoCylindrical putp6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp6, Projections::Y_putp6, "putp6");
+                ProjectionPseudoCylindrical putp6p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp6p, Projections::Y_putp6p, "putp6p");         
+                ProjectionPseudoCylindrical qua_aut = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_qua_aut, Projections::Y_qua_aut, "qua_aut");
+                ProjectionPseudoCylindrical rpoly = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_rpoly, Projections::Y_rpoly, "rpoly");
+                ProjectionPseudoCylindrical sinu = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_sinu, Projections::Y_sinu, "sinu");     
                 
-                ProjectionAzimuthal solo = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_solo, Projections::Y_solo, "solo");
-                ProjectionAzimuthal stere = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_stere, Projections::Y_stere, "stere");
-                ProjectionAzimuthal twi = new ProjectionAzimuthal (R0, 90.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_twi, Projections::Y_twi, "twi");
-                ProjectionPseudoCylindrical urm5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_urm5, Projections::Y_urm5, "urm5");
-                ProjectionPolyConic vandg = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg, Projections::Y_vandg, "vandg");
-                ProjectionPolyConic vandg2 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg2, Projections::Y_vandg2, "vandg2");
-                ProjectionPolyConic vandg3 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg3, Projections::Y_vandg3, "vandg3");
-                ProjectionPolyConic vandg4 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg4, Projections::Y_vandg4, "vandg4");
-                ProjectionPseudoCylindrical wag1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_wag1, Projections::Y_wag1, "wag1");
-                ProjectionPseudoCylindrical wag2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_wag2, Projections::Y_wag2, "wag2");                
+                ProjectionAzimuthal solo = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_solo, Projections::Y_solo, "solo");
+                ProjectionAzimuthal stere = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_stere, Projections::Y_stere, "stere");
+                ProjectionAzimuthal twi = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_twi, Projections::Y_twi, "twi");
+                ProjectionPseudoCylindrical urm5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_urm5, Projections::Y_urm5, "urm5");
+                ProjectionPolyConic vandg = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg, Projections::Y_vandg, "vandg");
+                ProjectionPolyConic vandg2 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg2, Projections::Y_vandg2, "vandg2");
+                ProjectionPolyConic vandg3 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg3, Projections::Y_vandg3, "vandg3");
+                ProjectionPolyConic vandg4 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg4, Projections::Y_vandg4, "vandg4");
+                ProjectionPseudoCylindrical wag1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag1, Projections::Y_wag1, "wag1");
+                ProjectionPseudoCylindrical wag2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag2, Projections::Y_wag2, "wag2");                
                 
-                ProjectionPseudoCylindrical wag3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_wag3, Projections::Y_wag3, "wag3");
-                ProjectionPseudoCylindrical wag4 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_wag4, Projections::Y_wag4, "wag4");
-                ProjectionPseudoCylindrical wag6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_wag6, Projections::Y_wag6, "wag6");
-                ProjectionPseudoCylindrical wag7 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_wag7, Projections::Y_wag7, "wag7");
-                ProjectionPseudoAzimuthal wer = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_wer, Projections::Y_wer, "wer");
-                ProjectionPseudoCylindrical weren = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_weren, Projections::Y_weren, "weren");
-                ProjectionPseudoCylindrical wink1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_wink1, Projections::Y_wink1, "wink1");
-                ProjectionPseudoCylindrical wink2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_wink2, Projections::Y_wink2, "wink2");
-                ProjectionPseudoAzimuthal wintri = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_wintri, Projections::Y_wintri, "wintri");
+                ProjectionPseudoCylindrical wag3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag3, Projections::Y_wag3, "wag3");
+                ProjectionPseudoCylindrical wag4 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag4, Projections::Y_wag4, "wag4");
+                ProjectionPseudoCylindrical wag6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag6, Projections::Y_wag6, "wag6");
+                ProjectionPseudoCylindrical wag7 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag7, Projections::Y_wag7, "wag7");
+                ProjectionPseudoAzimuthal wer = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wer, Projections::Y_wer, "wer");
+                ProjectionPseudoCylindrical weren = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_weren, Projections::Y_weren, "weren");
+                ProjectionPseudoCylindrical wink1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wink1, Projections::Y_wink1, "wink1");
+                ProjectionPseudoCylindrical wink2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wink2, Projections::Y_wink2, "wink2");
+                ProjectionPseudoAzimuthal wintri = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wintri, Projections::Y_wintri, "wintri");
 
-                
                 //Add projections to the list
                 projections.add(aea);
                 projections.add(aeqd);
@@ -260,7 +260,7 @@ public class Projections {
                 projections.add(wink1);
                 projections.add(wink2);
                 projections.add(wintri);
-
+        
         }
         
         public static double X_def(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
