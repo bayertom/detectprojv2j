@@ -55,8 +55,9 @@ import detectprojv2j.structures.graticule.Parallel;
 import detectprojv2j.structures.point.Point3DCartesian;
 import detectprojv2j.structures.projection.Projection;
 
-import detectprojv2j.comparators.SortByDistCart;
 import detectprojv2j.consts.Consts;
+
+import detectprojv2j.comparators.SortByDistCart;
 
 
 
@@ -218,6 +219,7 @@ public class EarlyMap extends JPanel
                         }
                 });
                 
+                //Add item to pop-up menu
                 pop_up_menu.add(deleteItem);
                 
                 //Mouse wheel rotation
