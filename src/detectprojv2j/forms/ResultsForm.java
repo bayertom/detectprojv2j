@@ -102,9 +102,7 @@ public class ResultsForm extends javax.swing.JFrame {
                 jLabel1 = new javax.swing.JLabel();
 
                 setTitle("List of detected projections and their properties");
-                setAlwaysOnTop(true);
                 setLocation(new java.awt.Point(50, 500));
-                setPreferredSize(new java.awt.Dimension(1800, 400));
                 setType(java.awt.Window.Type.UTILITY);
 
                 resultsTable.setModel(new javax.swing.table.DefaultTableModel(

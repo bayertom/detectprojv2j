@@ -298,7 +298,7 @@ public class Settings extends javax.swing.JDialog {
 
                 cartographicParametersPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Cartographic parameters"));
 
-                longitudeDirectionLabel.setText("Transformed ongitude direction");
+                longitudeDirectionLabel.setText("Transformed longitude direction");
 
                 longitudeDirectionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mode M1 (Normal Direction)", "Mode M2 (Reversed Direction)", "Mode M3 (Normal Direction 2)", "Mode M4  (Reversed Direction 2)" }));
                 longitudeDirectionComboBox.addItemListener(new java.awt.event.ItemListener() {
@@ -346,7 +346,7 @@ public class Settings extends javax.swing.JDialog {
 
                 latitudeOffsetLabel.setText("Latitude interval");
 
-                latitudeExtentComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">20 deg", ">2 deg", "<2 deg", " " }));
+                latitudeExtentComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">20 deg", ">2 deg", "<2 deg" }));
                 latitudeExtentComboBox.addItemListener(new java.awt.event.ItemListener() {
                         public void itemStateChanged(java.awt.event.ItemEvent evt) {
                                 latitudeExtentComboBoxItemStateChanged(evt);
@@ -425,7 +425,7 @@ public class Settings extends javax.swing.JDialog {
 
                 longitudeExtentLabel.setText("Longitude extent of territory");
 
-                longitudeExtentComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">20 deg", ">2 deg", "<2 deg", " " }));
+                longitudeExtentComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">20 deg", ">2 deg", "<2 deg" }));
                 longitudeExtentComboBox.addItemListener(new java.awt.event.ItemListener() {
                         public void itemStateChanged(java.awt.event.ItemEvent evt) {
                                 longitudeExtentComboBoxItemStateChanged(evt);
@@ -553,7 +553,7 @@ public class Settings extends javax.swing.JDialog {
                                                 .addComponent(additionalParametersPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addContainerGap())
                         .addGroup(layout.createSequentialGroup()
-                                .addGap(153, 153, 153)
+                                .addGap(163, 163, 163)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
@@ -570,9 +570,9 @@ public class Settings extends javax.swing.JDialog {
                                 .addComponent(SamplingStepsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(additionalParametersPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(27, 27, 27)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(22, 22, 22))
+                                .addContainerGap())
                 );
 
                 pack();

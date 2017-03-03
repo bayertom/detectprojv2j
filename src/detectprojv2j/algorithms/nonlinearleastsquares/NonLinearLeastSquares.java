@@ -50,12 +50,11 @@ public class NonLinearLeastSquares {
 
                 //Compute initial V matrix (residuals)
                 function_v.f(X, Y, V, W);
-                //X.print();
 
                 //Compute initial J matrix
                 function_j.f(X, J);
 
-                //Compute matrices
+                //Compute gradient G and square of residuals fx = trans(V) * V
                 Matrix  H = ((J.trans()).mult(W)).mult(J);
                 Matrix  G = ((J.trans()).mult(W)).mult(V);
                 H_new.copy(H);
@@ -74,29 +73,24 @@ public class NonLinearLeastSquares {
                         //Increment iterations
                         iterations[0]++;
 
-                        //Compute new dX
+                        //Compute new step dX
                         dX = (H.pinv()).mult(G).mult(-1.0);
-                        //if (iterations[0] == 16)
-                        //{
-                        //        H.print();
-                        //        G.print();
-                        //        H.pinv().print();
-                        //}
-                        //Too long step, reduction
+
+                        //Too long step dX, reduction
                         final double ndX = dX.norm();
                         if (ndX > MAX_NLS_STEP_LENGTH) 
                                 dX = dX.mult(100 / ndX);
 
-                        //Compute new trial X
+                        //Compute new trial solution X2
                         Matrix  X2 = X.plus(dX);
 
-                        //Reflection into the search space
+                        //Reflection of X2 into the search space
                         reflection(X2, A, B);
 
-                        //Compute new trial V matrix (residuals)
+                        //Compute new trial matrix residuals V2 of the reflected solution
                         function_v.f(X2, Y2, V2, W);
 
-                        //Apply back-step using a bisection
+                        //Apply line search strategy
                         final double t_min = 1.0e-10;
                         double t = 1.0;
 
@@ -105,42 +99,39 @@ public class NonLinearLeastSquares {
                                 //Step t bisection
                                 t /= 2;
 
-                                //Compute new X2
+                                //Compute new trial X2
                                 X2 = X.plus(dX.mult(t));
 
-                                //Reflection into the search space
+                                //Reflection of trial X2 into the search space
                                 reflection(X2, A, B);
 
-                                //Compute new V matrix: do not change parameters in one iteration step
+                                //Compute new  matrix of residuals X2 from a trial X2
                                 function_v.f(X2, Y2, V2, W);
                         }
 
-                        //Compute new X using back-step method
+                        //Compute new X using the line search method
                         X.copy(X.plus(dX.mult(t)));
 
-                        //Reflection into the search space
+                        //Reflection of X into the search space
                         reflection(X, A, B);
 
-                        //Compute new V matrix and residual matrix V
+                        //Compute new matrix of residuals V
                         function_v.f(X, Y, V, W);
 
-                        //Compute new J matrix
+                        //Compute new Jacobian matrix J
                         function_j.f(X, J);
 
-                        //std::cout << iterations;
-                        //X.print();
-
-                        //Compute new residuals and gradient
+                        //Compute new gradient G and square of residuals fx = trans(V) * V
                         G_new = ((J.trans()).mult(W)).mult(V);
                         fx_new = (((V.trans()).mult(W)).mult(V)).norm();
 
-                        //Terminal condition
+                        //Check the terminal condition
                         if ((G.norm() < max_error) /*|| (fabs(fx_new - fx) < 1.0 * max_diff * std::min(1.0, fx))*/ || (fx < max_error) || ( dX.norm() < 1.0e-10 ) )
                         {
                                 break;
                         }
 
-                        //Compute selection criterium
+                        //Compute selection criterium to switch between first/second order method
                         final double df = (fx - fx_new) / fx;
 
                         //Compute Hessian matrix as H=J*W*J (Gauss-Newton)
@@ -149,7 +140,7 @@ public class NonLinearLeastSquares {
                                 H_new = ((J.trans()).mult(W)).mult(J);
                         }
 
-                        //Compute Hessian matrix from BFGS
+                        //Compute Hessian matrix from BFGS update
                         else
                         {
                                 //Compute solution difference
@@ -162,7 +153,7 @@ public class NonLinearLeastSquares {
                                 final double ys = ((y.trans()).mult(s)).sum();
                                 final double shs = (((s.trans()).mult(H)).mult(s)).sum();
 
-                                //Compute update, if y * s > 0 (symmetric positive definite update)
+                                //Compute update, if trans(y) * s > 0 (symmetric positive definite update)
                                 if (ys > 0)
                                 {
                                         Matrix dH = new Matrix (n, n);
@@ -178,7 +169,7 @@ public class NonLinearLeastSquares {
                                         H_new = (((J.trans()).mult(W)).mult(J)).plus(dH);
                                 }
 
-                                //Do not update, if y * s < = 0
+                                //Do not update, if trans(y) * s < = 0
                                 else
                                         H_new = ((J.trans()).mult(W)).mult(J);
                         }
@@ -187,13 +178,6 @@ public class NonLinearLeastSquares {
                         H = H_new;
                         G = G_new;
                         fx = fx_new;
-
-                        //X.print(); 
-                        //dX.print(output);
-                        //dX.print();
-                        //RES.print(output);*/
-                        //*output << dx << '\n';
-                        //*output << RES(0, 0) << '\n';
                 }
 
                 //Compute final values in V
@@ -201,8 +185,6 @@ public class NonLinearLeastSquares {
 
                 //Evaluate minimum
                 final double fxmin = (((V.trans()).mult(W)).mult(V)).norm();
-
-                //System.out.print(" [" + iterations[0] + " it., fmin = " + fxmin + "]" + '\n');
 
                 return fxmin;
         }
@@ -240,6 +222,4 @@ public class NonLinearLeastSquares {
                         }
                 }
         }
-
-        
 }

@@ -54,7 +54,7 @@
               <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="153" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="163" max="-2" attributes="0"/>
               <Component id="jButton1" min="-2" pref="95" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -73,9 +73,9 @@
               <Component id="SamplingStepsPanel" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="additionalParametersPanel" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Component id="jButton1" min="-2" pref="33" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -133,7 +133,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="longitudeDirectionLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Transformed ongitude direction"/>
+            <Property name="text" type="java.lang.String" value="Transformed longitude direction"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="longitudeDirectionComboBox">
@@ -228,11 +228,10 @@
         <Component class="javax.swing.JComboBox" name="latitudeExtentComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
+              <StringArray count="3">
                 <StringItem index="0" value="&gt;20 deg"/>
                 <StringItem index="1" value="&gt;2 deg"/>
                 <StringItem index="2" value="&lt;2 deg"/>
-                <StringItem index="3" value=" "/>
               </StringArray>
             </Property>
           </Properties>
@@ -357,11 +356,10 @@
         <Component class="javax.swing.JComboBox" name="longitudeExtentComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
+              <StringArray count="3">
                 <StringItem index="0" value="&gt;20 deg"/>
                 <StringItem index="1" value="&gt;2 deg"/>
                 <StringItem index="2" value="&lt;2 deg"/>
-                <StringItem index="3" value=" "/>
               </StringArray>
             </Property>
           </Properties>

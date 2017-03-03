@@ -149,7 +149,6 @@ public class ControlPointsForm extends javax.swing.JFrame {
                 controlPointsTable = new javax.swing.JTable();
 
                 setTitle("List of control points and residuals");
-                setAlwaysOnTop(true);
                 setLocation(new java.awt.Point(200, 500));
                 setType(java.awt.Window.Type.UTILITY);
 

@@ -188,10 +188,10 @@ public class Map extends JMapViewer
                                         else if (add_reference_point[0] && enable_add_control_points[0])
                                         {
                                                 //Get geographic position of the cursor
-                                                //Lon must be reduced, OSM longitude in [-2PI, 2PI]
+                                                //Lon must be reduced, OSM longitude not inside [-PI, PI]
                                                 Point pcur = e.getPoint();
                                                 final double lat = map.getPosition(pcur).getLat();
-                                                final double lon = CartTransformation.redLon0(map.getPosition(pcur).getLon(), 0);
+                                                final double lon = CartTransformation.redLon0(map.getPosition(pcur).getLon()%360.0, 0);
 
                                                 //Add reference point to the list
                                                 Point3DGeographic pg = new Point3DGeographic(lat, lon, 0);
@@ -241,11 +241,11 @@ public class Map extends JMapViewer
                                         final double threshold = 0.02 * map.getMeterPerPixel();
 
                                         //Get geographic position of the cursor
-                                        //Lon must be reduced, OSM longitude in [-2PI, 2PI]
+                                        //Lon must be reduced, OSM longitude not inside [-PI, PI]
                                         Point pcur = e.getPoint();
                                         final double lat = map.getPosition(pcur).getLat();
-                                        final double lon = CartTransformation.redLon0(map.getPosition(pcur).getLon(), 0);
-
+                                        final double lon = CartTransformation.redLon0(map.getPosition(pcur).getLon()%360.0, 0);
+                                        
                                         //Create temporary point at the cursor position
                                         Point3DGeographic p_temp = new Point3DGeographic(lat, lon, 0);
 
@@ -295,10 +295,10 @@ public class Map extends JMapViewer
                                         if (index_nearest[0] != -1)
                                         {
                                                 //Get point and its geographic position
-                                                //Lon must be reduced, OSM longitude in [-2PI, 2PI]
+                                                //Lon must be reduced, OSM longitude not inside [-PI, PI]
                                                 Point pcur = e.getPoint();
                                                 final double lat = map.getPosition(pcur).getLat();
-                                                final double lon = CartTransformation.redLon0(map.getPosition(pcur).getLon(), 0);
+                                                final double lon = CartTransformation.redLon0(map.getPosition(pcur).getLon()%360.0, 0);
 
                                                 //Change coordinates lat, lon of the shifted item
                                                 Point3DGeographic p = reference_points.get(index_nearest[0]);
@@ -416,9 +416,9 @@ public class Map extends JMapViewer
                         //Get cursor position
                         Point pcur = e.getPoint();
                         
-                        //Lon must be reduced, OSM longitude in [-2PI, 2PI]
+                        //Lon must be reduced, OSM longitude not inside [-PI, PI]
                         lat = this.getPosition(pcur).getLat();
-                        lon = CartTransformation.redLon0(this.getPosition(pcur).getLon(), 0);
+                        lon = CartTransformation.redLon0(this.getPosition(pcur).getLon()%360.0, 0);
                 }
                 
                 //Return string: new tooltip

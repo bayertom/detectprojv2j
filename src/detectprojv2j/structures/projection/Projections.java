@@ -32,6 +32,7 @@ import static detectprojv2j.consts.Consts.*;
 import detectprojv2j.exceptions.*;
 
 import detectprojv2j.algorithms.carttransformation.CartTransformation;
+import detectprojv2j.algorithms.numintegration.NumIntegration;
 import detectprojv2j.forms.MainApplication;
 
 
@@ -40,6 +41,9 @@ public class Projections {
         public static void init (final List <Projection> projections, final TTransformedLongitudeDirection default_lon_dir)
         {
                 //Initialize all supported projections and add them to the list
+                ProjectionMiscellaneous adamh = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_adamh, Projections::Y_adamh, "adamh");
+                ProjectionMiscellaneous adams1 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_adams1, Projections::Y_adams1, "adams1");
+                ProjectionMiscellaneous adams2 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_adams2, Projections::Y_adams2, "adams2");
                 ProjectionConic aea = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aea, Projections::Y_aea, "aea");
                 ProjectionAzimuthal aeqd = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aeqd, Projections::Y_aeqd, "aeqd");
                 ProjectionPseudoAzimuthal aitoff = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aitoff, Projections::Y_aitoff, "aitoff");
@@ -47,81 +51,84 @@ public class Projections {
                 ProjectionMiscellaneous apiel = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_apiel, Projections::Y_apiel, "apiel");
                 ProjectionMiscellaneous armad = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_armad, Projections::Y_armad, "armad");
                 ProjectionMiscellaneous august = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_august, Projections::Y_august, "august");
+                
                 ProjectionMiscellaneous bacon = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_bacon, Projections::Y_bacon, "bacon");
                 ProjectionPseudoCylindrical boggs = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_boggs, Projections::Y_boggs, "boggs");
                 ProjectionPseudoConic bonne = new ProjectionPseudoConic (R0, 90.0, 0.0, 40.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_bonne, Projections::Y_bonne, "bonne");
-               
                 ProjectionAzimuthal breus = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_breus, Projections::Y_breus, "breus");
                 ProjectionCylindrical cc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cc, Projections::Y_cc, "cc");
                 ProjectionCylindrical cea = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cea, Projections::Y_cea, "cea");
                 ProjectionAzimuthal clar = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_clar, Projections::Y_clar, "breus");
                 ProjectionMiscellaneous collg = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_collg, Projections::Y_collg, "collg");
                 ProjectionMiscellaneous crast = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_crast, Projections::Y_crast, "crast");
+                ProjectionMiscellaneous cwe = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cwe, Projections::Y_cwe, "cwe");
+                
                 ProjectionPseudoCylindrical denoy = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_denoy, Projections::Y_denoy, "denoy");
                 ProjectionPseudoCylindrical eck1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck1, Projections::Y_eck1, "eck1");
                 ProjectionPseudoCylindrical eck2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck2, Projections::Y_eck2, "eck2");
                 ProjectionPseudoCylindrical eck3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck3, Projections::Y_eck3, "eck3");
-                
                 ProjectionPseudoCylindrical eck4 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck4, Projections::Y_eck4, "eck4");
                 ProjectionPseudoCylindrical eck5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck5, Projections::Y_eck5, "eck5");
                 ProjectionPseudoCylindrical eck6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck6, Projections::Y_eck6, "eck6");
                 ProjectionMiscellaneous eisen = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eisen, Projections::Y_eisen, "eisen");
                 ProjectionCylindrical eqc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqc, Projections::Y_eqc, "eqc");
                 ProjectionConic eqdc = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc, Projections::Y_eqdc, "eqdc");
+                
                 ProjectionConic eqdc2 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc2, Projections::Y_eqdc2, "eqdc2");
                 ProjectionConic eqdc3 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc3, Projections::Y_eqdc3, "eqdc3");
                 ProjectionPseudoCylindrical fahey = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fahey, Projections::Y_fahey, "fahey");
                 ProjectionPseudoCylindrical fouc = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fouc, Projections::Y_fouc, "fouc");
-                
                 ProjectionPseudoCylindrical fouc_s = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fouc_s, Projections::Y_fouc_s, "fouc_s");
                 ProjectionMiscellaneous fourn = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fourn, Projections::Y_fourn, "fourn");
                 ProjectionMiscellaneous fourn2 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fourn2, Projections::Y_fourn2, "fourn2");
                 ProjectionCylindrical gall = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gall, Projections::Y_gall, "gall");
                 ProjectionPseudoCylindrical gins8 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gins8, Projections::Y_gins8, "gins8");
                 ProjectionAzimuthal gnom = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gnom, Projections::Y_gnom, "gnom");
+                
                 ProjectionPseudoCylindrical goode = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_goode, Projections::Y_goode, "goode");
+                ProjectionMiscellaneous guyou = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_guyou, Projections::Y_guyou, "guyou");
                 ProjectionPseudoAzimuthal hammer = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hammer, Projections::Y_hammer, "hammer");
                 ProjectionPseudoCylindrical hataea = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hataea, Projections::Y_hataea, "hataea");
-                ProjectionAzimuthal hire = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hire, Projections::Y_hire, "hire");
-                
+                ProjectionAzimuthal hire = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hire, Projections::Y_hire, "hire");                
                 ProjectionAzimuthal jam = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_jam, Projections::Y_jam, "jam");
                 ProjectionPseudoCylindrical kav5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_kav5, Projections::Y_kav5, "kav5");
                 ProjectionPseudoCylindrical kav7 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_kav7, Projections::Y_kav7, "kav7");
                 ProjectionAzimuthal laea = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_laea, Projections::Y_laea, "laea");
                 ProjectionMiscellaneous larr = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_larr, Projections::Y_larr , "larr");
+                
                 ProjectionMiscellaneous lagrng = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lagrng, Projections::Y_lagrng, "lagrng");
                 ProjectionPseudoCylindrical lask = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lask, Projections::Y_lask, "lask");
                 ProjectionConic lcc = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lcc, Projections::Y_lcc, "lcc");
                 ProjectionConic leac = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_leac, Projections::Y_leac, "leac");
                 ProjectionConic leac2 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_leac2, Projections::Y_leac2, "leac2");
-                
-                //Littrow
-                
+                ProjectionMiscellaneous litt = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_litt, Projections::Y_litt, "litt");
                 ProjectionPseudoCylindrical loxim = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_loxim, Projections::Y_loxim, "loxim");
                 ProjectionPseudoCylindrical mbt_s = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbt_s, Projections::Y_mbt_s, "mbt_s");
                 ProjectionPseudoCylindrical mbt_s3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbt_s3, Projections::Y_mbt_s3, "mbt_s3");
                 ProjectionPseudoCylindrical mbtfpq = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbtfpq, Projections::Y_mbtfpq, "mbtfpq");
+                
                 ProjectionPseudoCylindrical mbtfps = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbtfps, Projections::Y_mbtfps, "mbtfps");
                 ProjectionCylindrical merc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_merc, Projections::Y_merc, "merc");
                 ProjectionPseudoCylindrical mill = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mill, Projections::Y_mill, "mill"); 
                 ProjectionPseudoCylindrical moll = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_moll, Projections::Y_moll, "moll");
                 ProjectionPseudoCylindrical nell = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nell, Projections::Y_nell, "nell");
-                ProjectionPseudoCylindrical nell_h = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nell_h, Projections::Y_nell_h, "nell_h");
-                
+                ProjectionPseudoCylindrical nell_h = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nell_h, Projections::Y_nell_h, "nell_h");    
                 ProjectionMiscellaneous nicol = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nicol, Projections::Y_nicol, "nicol");
                 ProjectionPseudoCylindrical ortel = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_ortel, Projections::Y_ortel, "ortel");
                 ProjectionAzimuthal ortho = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_ortho, Projections::Y_ortho, "ortho");
                 ProjectionPseudoCylindrical parab = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_parab, Projections::Y_parab, "parab");
+                
+                ProjectionMiscellaneous peiq = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_peiq, Projections::Y_peiq, "peiq");
                 ProjectionAzimuthal pers = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_pers, Projections::Y_pers, "pers");
                 ProjectionAzimuthal persf = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_persf, Projections::Y_persf, "persf");
                 ProjectionAzimuthal persn = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_persn, Projections::Y_persn, "persn");
                 ProjectionPolyConic poly = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_poly, Projections::Y_poly, "poly");
                 ProjectionPseudoCylindrical putp1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp1, Projections::Y_putp1, "putp1");
                 ProjectionPseudoCylindrical putp2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp2, Projections::Y_putp2, "putp2");
-               
                 ProjectionPseudoCylindrical putp3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp3, Projections::Y_putp3, "putp3");
                 ProjectionPseudoCylindrical putp3p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp3p, Projections::Y_putp3p, "putp3p");
                 ProjectionPseudoCylindrical putp4p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp4p, Projections::Y_putp4p, "putp4p");
+                
                 ProjectionPseudoCylindrical putp5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp5, Projections::Y_putp5, "putp5");
                 ProjectionPseudoCylindrical putp5p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp5p, Projections::Y_putp5p, "putp5p");         
                 ProjectionPseudoCylindrical putp6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp6, Projections::Y_putp6, "putp6");
@@ -129,10 +136,10 @@ public class Projections {
                 ProjectionPseudoCylindrical qua_aut = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_qua_aut, Projections::Y_qua_aut, "qua_aut");
                 ProjectionPseudoCylindrical rpoly = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_rpoly, Projections::Y_rpoly, "rpoly");
                 ProjectionPseudoCylindrical sinu = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_sinu, Projections::Y_sinu, "sinu");     
-                
                 ProjectionAzimuthal solo = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_solo, Projections::Y_solo, "solo");
                 ProjectionAzimuthal stere = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_stere, Projections::Y_stere, "stere");
                 ProjectionAzimuthal twi = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_twi, Projections::Y_twi, "twi");
+                
                 ProjectionPseudoCylindrical urm5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_urm5, Projections::Y_urm5, "urm5");
                 ProjectionPolyConic vandg = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg, Projections::Y_vandg, "vandg");
                 ProjectionPolyConic vandg2 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg2, Projections::Y_vandg2, "vandg2");
@@ -140,10 +147,10 @@ public class Projections {
                 ProjectionPolyConic vandg4 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg4, Projections::Y_vandg4, "vandg4");
                 ProjectionPseudoCylindrical wag1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag1, Projections::Y_wag1, "wag1");
                 ProjectionPseudoCylindrical wag2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag2, Projections::Y_wag2, "wag2");                
-                
                 ProjectionPseudoCylindrical wag3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag3, Projections::Y_wag3, "wag3");
                 ProjectionPseudoCylindrical wag4 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag4, Projections::Y_wag4, "wag4");
                 ProjectionPseudoCylindrical wag6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag6, Projections::Y_wag6, "wag6");
+                
                 ProjectionPseudoCylindrical wag7 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag7, Projections::Y_wag7, "wag7");
                 ProjectionPseudoAzimuthal wer = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wer, Projections::Y_wer, "wer");
                 ProjectionPseudoCylindrical weren = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_weren, Projections::Y_weren, "weren");
@@ -152,6 +159,9 @@ public class Projections {
                 ProjectionPseudoAzimuthal wintri = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wintri, Projections::Y_wintri, "wintri");
 
                 //Add projections to the list
+                projections.add(adamh);
+                projections.add(adams1);
+                projections.add(adams2);
                 projections.add(aea);
                 projections.add(aeqd);
                 projections.add(aitoff);
@@ -159,79 +169,84 @@ public class Projections {
                 projections.add(apiel);
                 projections.add(armad);
                 projections.add(august);
+                
                 projections.add(bacon);
                 projections.add(boggs);
                 projections.add(bonne);
-                       
                 projections.add(breus);
                 projections.add(cc);
                 projections.add(cea);
                 projections.add(clar);
                 projections.add(collg);
                 projections.add(crast);
+                projections.add(cwe);
+                
                 projections.add(denoy);
                 projections.add(eck1);
                 projections.add(eck2);
                 projections.add(eck3);
-               
                 projections.add(eck4);
                 projections.add(eck5);
                 projections.add(eck6);
                 projections.add(eisen);    
                 projections.add(eqc);
                 projections.add(eqdc);
+                
                 projections.add(eqdc2);
                 projections.add(eqdc3);
                 projections.add(fahey);          
                 projections.add(fouc);
-                
                 projections.add(fouc_s);
                 projections.add(fourn);
                 projections.add(fourn2);
                 projections.add(gall);
                 projections.add(gins8);
                 projections.add(gnom);
+                
                 projections.add(goode);
+                projections.add(guyou);
                 projections.add(hammer);
                 projections.add(hataea);
                 projections.add(hire);
-
                 projections.add(jam);
                 projections.add(kav5);
                 projections.add(kav7);
                 projections.add(laea);
                 projections.add(lagrng);
+                
                 projections.add(larr);
                 projections.add(lask);
                 projections.add(lcc);
                 projections.add(leac);
                 projections.add(leac2);
-                
+                projections.add(litt);
                 projections.add(loxim);
                 projections.add(mbt_s);
                 projections.add(mbt_s3);
                 projections.add(mbtfpq);
+                
                 projections.add(mbtfps);
                 projections.add(merc);
                 projections.add(mill);
                 projections.add(moll);
                 projections.add(nell);
                 projections.add(nell_h);
-                
                 projections.add(nicol); 
                 projections.add(ortel);
                 projections.add(ortho);
                 projections.add(parab);
+                
+                projections.add(peiq);
                 projections.add(pers);
                 projections.add(persf);
                 projections.add(persn);
                 projections.add(poly);
                 projections.add(putp1);
                 projections.add(putp2);
-                
                 projections.add(putp3);
                 projections.add(putp3p);
                 projections.add(putp4p);
+                
                 projections.add(putp5);
                 projections.add(putp5p);
                 projections.add(putp6);
@@ -239,10 +254,10 @@ public class Projections {
                 projections.add(qua_aut);
                 projections.add(rpoly);
                 projections.add(sinu);
-                
                 projections.add(solo);
                 projections.add(stere);
                 projections.add(twi);
+                
                 projections.add(urm5);
                 projections.add(vandg);
                 projections.add(vandg2);
@@ -250,10 +265,10 @@ public class Projections {
                 projections.add(vandg4);
                 projections.add(wag1);
                 projections.add(wag2);
-                
                 projections.add(wag3);
                 projections.add(wag4);
                 projections.add(wag6);
+                
                 projections.add(wag7);
                 projections.add(wer);
                 projections.add(weren);
@@ -271,6 +286,298 @@ public class Projections {
         public static double  Y_def(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
         {
                 return lon / RO;
+        }
+        
+        
+        //Adams Hemisphere in a square
+        public static double X_adamh(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+
+                final double a = cos(lat / RO) * sin(lonr / RO);
+
+                //Throw exception
+                if (abs(a) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(a) in X_adamh coordinate function, ", "abs(a) > 1: ", a);
+
+                final double A = acos(a);
+                final double B = 0.5 * PI - lat / RO;
+                final double v = 0.5 * (A - B);
+                double m = sqrt(2) * sin(v);
+
+                //Throw exception
+                if (m > 1.0 + ARGUMENT_ROUND_ERROR || m < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(m) in X_adamh coordinate function, ", "abs(m) > 1: ", m);
+
+                //Correct m
+                if (m > 1.0) m = 1.0;
+                else if (m < -1.0) m = -1.0;
+
+                final double  M = asin(m);
+                final double u = 0.5 * (A + B);
+                double n = sqrt(2) * cos(u);
+
+                //Throw exception
+                if (n > 1.0 + ARGUMENT_ROUND_ERROR || n < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(n) in X_adamh coordinate function, ", "abs(n) > 1: ", n);
+
+                //Correct n
+                if (n > 1.0) n = 1.0;
+                else if (n < -1.0) n = -1.0;
+
+                final double N = asin(n);
+                
+                //Compute elliptic integral of the first kind
+                final double Xe = NumIntegration.getInEllipticIntegral1(sqrt(0.5), M, 1.0e-14);
+                final double Ye = NumIntegration.getInEllipticIntegral1(sqrt(0.5), N, 1.0e-14);
+                double X =  R * 0.5 * (Ye - Xe) / sqrt(2) + dx;
+
+                //Throw exception
+                if (abs(X) > MAX_FLOAT)
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate X_adamh coordinate function, ", "X_adamh > MAX_FLOAT: ", X);
+
+                return X;
+        }
+
+        public static double Y_adamh(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+
+                final double a = cos(lat / RO) * sin(lonr / RO);
+
+                //Throw exception
+                if (abs(a) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(a) in Y_adamh coordinate function, ", "abs(a) > 1: ", a);
+
+                final double A = acos(a);
+                final double B = 0.5 * PI - lat / RO;
+                final double v = 0.5 * (A - B);
+                double m = sqrt(2) * sin(v);
+
+                //Throw exception
+                if (m > 1.0 + ARGUMENT_ROUND_ERROR || m < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(m) in Y_adamh coordinate function, ", "abs(m) > 1: ", m);
+
+                //Correct m
+                if (m > 1.0) m = 1.0;
+                else if (m < -1.0) m = -1.0;
+
+                final double  M = asin(m);
+                final double u = 0.5 * (A + B);
+                double n = sqrt(2) * cos(u);
+
+                //Throw exception
+                if (n > 1.0 + ARGUMENT_ROUND_ERROR || n < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(n) in Y_adamh coordinate function, ", "abs(n) > 1: ", n);
+
+                //Correct n
+                if (n > 1.0) n = 1.0;
+                else if (n < -1.0) n = -1.0;
+
+                final double N = asin(n);
+                
+                //Compute elliptic integral of the first kind
+                final double Xe = NumIntegration.getInEllipticIntegral1(sqrt(0.5), M, 1.0e-14);
+                final double Ye = NumIntegration.getInEllipticIntegral1(sqrt(0.5), N, 1.0e-14);
+                double Y =  R * 0.5 * (Ye + Xe) / sqrt(2) + dy;
+
+                //Throw exception
+                if (abs(Y) > MAX_FLOAT)
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate Y_adamh coordinate function, ", "Y_adamh > MAX_FLOAT: ", Y);
+
+                return Y;
+        }
+
+
+        //Adams World in a Square I
+        public static double X_adams1(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+
+                final double phi = asin(tan(0.5 * lat / RO));
+                final double a = (cos(phi) * sin(0.5 * lonr / RO) - sin(phi)) / sqrt(2.0);
+
+                //Throw exception
+                if (abs(a) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(a) in X_adams1 coordinate function, ", "abs(a) > 1: ", a);
+
+                final double A = acos(a);
+                final double b = (cos(phi) * sin(0.5 * lonr / RO) + sin(phi)) / sqrt(2.0);
+
+                //Throw exception
+                if (abs(b) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(b) in X_adams1 coordinate function, ", "abs(b) > 1: ", b);
+
+                final double B = acos(b);
+                final double u = 0.5 * (A + B);
+                double n = sqrt(2) * cos(u);
+
+                //Throw exception
+                if (n > 1.0 + ARGUMENT_ROUND_ERROR || n < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(n) in X_adams1 coordinate function, ", "abs(n) > 1: ", n);
+
+                //Correct n
+                if (n > 1.0) n = 1.0;
+                else if (n < -1.0) n = -1.0;
+
+                final double N = asin(n);
+                
+                //Compute elliptic integral of the first kind
+                final double Xe = NumIntegration.getInEllipticIntegral1(sqrt(0.5), N, 1.0e-14);
+                double X = R * Xe + dx;
+
+                //Throw exception
+                if (abs(X) > MAX_FLOAT)
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate X_adams1 coordinate function, ", "X_adams1 > MAX_FLOAT: ", X);
+
+                return X;
+        }
+
+        public static double Y_adams1(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+
+                final double phi = asin(tan(0.5 * lat / RO));
+                final double a = (cos(phi) * sin(0.5 * lonr / RO) - sin(phi)) / sqrt(2.0);
+
+                //Throw exception
+                if (abs(a) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(a) in Y_adams1 coordinate function, ", "abs(a) > 1: ", a);
+
+                final double A = acos(a);
+                final double b = (cos(phi) * sin(0.5 * lonr / RO) + sin(phi)) / sqrt(2.0);
+
+                //Throw exception
+                if (abs(b) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(b) in Y_adams1 coordinate function, ", "abs(b) > 1: ", b);
+
+                final double B = acos(b);
+                 final double  v = 0.5 * (A - B);
+                double m = sqrt(2) * sin(v);
+
+                //Throw exception
+                if (m > 1.0 + ARGUMENT_ROUND_ERROR || m < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(m) in Y_adams1 coordinate function, ", "abs(m) > 1: ", m);
+
+                //Correct m
+                if (m > 1.0) m = 1.0;
+                else if (m < -1.0) m = -1.0;
+
+                final double  M = asin(m);
+
+                //Compute elliptic integral of the first kind
+                final double Ye = NumIntegration.getInEllipticIntegral1(sqrt(0.5), M, 1.0e-14);
+                double Y = R * Ye + dy;
+
+                //Throw exception
+                if (abs(Y) > MAX_FLOAT)
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate Y_adams1 coordinate function, ", "Y_adams1 > MAX_FLOAT: ", Y);
+
+                return Y;
+        }
+
+
+        //Adams World in a Square II
+        public static double X_adams2(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+
+                final double phi = asin(tan(0.5 * lat / RO));
+                final double a = cos(phi) * sin(0.5 * lonr / RO) ;
+
+                //Throw exception
+                if (abs(a) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(a) in X_adams2 coordinate function, ", "abs(a) > 1: ", a);
+
+                final double A = acos(a);
+                final double b = sin(phi);
+                final double B = acos(b);
+                 final double v = 0.5 * (A - B);
+                double m = sqrt(2) * sin(v);
+
+                //Throw exception
+                if (m > 1.0 + ARGUMENT_ROUND_ERROR || m < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(m) in X_adams2 coordinate function, ", "abs(m) > 1: ", m);
+
+                //Correct m
+                if (m > 1.0) m = 1.0;
+                else if (m < -1.0) m = -1.0;
+
+                final double  M = asin(m);
+                final double u = 0.5 * (A + B);
+                double n = sqrt(2) * cos(u);
+
+                //Throw exception
+                if (n > 1.0 + ARGUMENT_ROUND_ERROR || n < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(n) in X_adams2 coordinate function, ", "abs(n) > 1: ", n);
+
+                //Correct n
+                if (n > 1.0) n = 1.0;
+                else if (n < -1.0) n = -1.0;
+
+                final double N = asin(n);
+                
+                //Compute elliptic integral of the first kind
+                final double Xe = NumIntegration.getInEllipticIntegral1(sqrt(0.5), M, 1.0e-14);
+                final double Ye = NumIntegration.getInEllipticIntegral1(sqrt(0.5), N, 1.0e-14);
+                double X =  R * 0.5 * (Ye - Xe) / sqrt(2) + dx;
+                
+                //Throw exception
+                if (abs(X) > MAX_FLOAT)
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate X_adams2 coordinate function, ", "X_adams2 > MAX_FLOAT: ", X);
+
+                return X;
+        }
+
+        public static double Y_adams2(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+
+                final double phi = asin(tan(0.5 * lat / RO));
+                final double a = cos(phi) * sin(0.5 * lonr / RO);
+
+                //Throw exception
+                if (abs(a) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(a) in Y_adams2 coordinate function, ", "abs(a) > 1: ", a);
+
+                final double A = acos(a);
+                final double b = sin(phi);
+                final double B = acos(b);
+                final double v = 0.5 * (A - B);
+                double m = sqrt(2) * sin(v);
+
+                //Throw exception
+                if (m > 1.0 + ARGUMENT_ROUND_ERROR || m < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(m) in Y_adams2 coordinate function, ", "abs(m) > 1: ", m);
+
+                //Correct m
+                if (m > 1.0) m = 1.0;
+                else if (m < -1.0) m = -1.0;
+
+                final double  M = asin(m);
+                final double u = 0.5 * (A + B);
+                double n = sqrt(2) * cos(u);
+
+                //Throw exception
+                if (n > 1.0 + ARGUMENT_ROUND_ERROR || n < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(n) in Y_adams2 coordinate function, ", "abs(n) > 1: ", n);
+
+                //Correct n
+                if (n > 1.0) n = 1.0;
+                else if (n < -1.0) n = -1.0;
+
+                final double N = asin(n);
+                
+                //Compute elliptic integral of the first kind
+                final double Xe = NumIntegration.getInEllipticIntegral1(sqrt(0.5), M, 1.0e-14);
+                final double Ye = NumIntegration.getInEllipticIntegral1(sqrt(0.5), N, 1.0e-14);
+                double Y =  R * 0.5 * (Ye + Xe) / sqrt(2) + dy;
+
+                //Throw exception
+                if (abs(Y) > MAX_FLOAT)
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate Y_adams2 coordinate function, ", "Y_adams2 > MAX_FLOAT: ", Y);
+
+                return Y;
         }
         
         
@@ -372,11 +679,15 @@ public class Projections {
                 else
                 {
                         final double C = sin(lat / RO) / sin(B);
-                        final double D = 1 - C * C;
+                        double D = 1 - C * C;
 
-                        if (D < 0)
+                        //Throw exception
+                        if (D < -ARGUMENT_ROUND_ERROR)
                                 throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(D) in X_aitoff coordinate function, ", "D < 0: ", D);
 
+                        //Correct D
+                        if (D < 0.0) D = 0.0;
+                      
                         X = 2.0 * R * B * signum(lonr) * sqrt(D) + dx;
                 }
 
@@ -595,11 +906,14 @@ public class Projections {
                 {
                         final double F = ((PI / 2) *(PI / 2) * RO / abs(lonr) + abs(lonr) / RO) / 2;
                         final double Y = R * PI / 2.0 * sin(lat / RO);
-                        final double G = F * F - Y * Y / (R * R);
+                        double G = F * F - Y * Y / (R * R);
 
                         //Throw exception
-                        if (G < 0)
+                        if (G < -ARGUMENT_ROUND_ERROR)
                                 throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(G) in X_bacon coordinate function, ", "G < 0: ", G);
+
+                        //Correct C2
+                        if (G < 0.0) G = 0.0;
 
                         X = R * signum(lonr) * (abs(lonr) / RO - F + sqrt(G)) + dx;
                 }
@@ -735,7 +1049,7 @@ public class Projections {
         }
 
 
-        //Breusign
+        //Breusignum
         public static double X_breus(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
         {
                 final double lonr = CartTransformation.redLon0(lon, lon0);
@@ -926,6 +1240,193 @@ public class Projections {
                 //Throw exception
                 if (abs(Y) > MAX_FLOAT)
                         throw new MathOverflowException("MathOverflowException: can not evaluate Y_crast coordinate function, ", "Y_crast > MAX_FLOAT: ", Y);
+
+                return Y;
+        }
+
+
+
+        //Conformal world in ellipse
+        public static double X_cwe(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+
+                final double theta = 23.8958;
+                final double ks = sin(theta / RO);
+                final double kc = cos(theta / RO);
+
+                //Compute elliptic integrals of the first kind
+                final double K = NumIntegration.getInEllipticIntegral1(kc, 0.5 * PI, 1.0e-14);
+
+                final double u1 = 2 * (1 - kc) * cos(lat / RO);
+                final double v1 = (1 + kc) * (1 + cos(lat / RO) * cos(lonr / RO));
+                final double A = ks * ks * (1 - cos(lat / RO) * cos(lonr / RO));
+                final double B = u1 - v1;
+                final double C = u1 + v1;
+                double D = A * A - 4 * kc * B * C;
+
+                //Throw exception
+                if (D < -ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(D) in X_cwe coordinate function, ", "D < 0: ", D);
+
+                //Correct D
+                if (D < 0.0) D = 0.0;
+
+                final double R1 = A - sqrt(D);
+
+                // Throw exception
+                if (abs(kc) < MIN_FLOAT)
+                        throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate X_cwe coordinate function, ", "1.0 / kc, kc = 0: ", kc);
+
+                // Throw exception
+                if (abs(C) < MIN_FLOAT)
+                        throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate X_cwe coordinate function, ", "1.0 / C, C = 0: ", C);
+
+                double R2 = R1 / (2 * C * kc);
+
+                //Throw exception
+                if (R2 > 1.0 + ARGUMENT_ROUND_ERROR || R2 < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(R2) in X_cwe coordinate function, ", "abs(R2) > 1: ", R2);
+
+                //Correct R2
+                if (R2 > 1.0) R2 = 1.0;
+                else if (R2 < -1.0) R2 = -1.0;
+
+                final double lambda = -asin(R2);
+
+                // Throw exception
+                if (abs(B) < MIN_FLOAT)
+                        throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate X_cwe coordinate function, ", "1.0 / B, B = 0: ", B);
+
+                double E = 1 - R1 * R1 / (4 * B * B);
+
+                //Throw exception
+                if (E < -ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(E) in X_cwe coordinate function, ", "E < 0: ", E);
+
+                //Correct m
+                if (E < 0.0) E = 0.0;
+
+                // Throw exception
+                if (abs(ks) < MIN_FLOAT)
+                        throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate X_cwe coordinate function, ", "1.0 / ks, ks = 0: ", ks);
+
+                double F = sqrt(E) / ks;
+
+                //Throw exception
+                if (F > 1.0 + ARGUMENT_ROUND_ERROR || F < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(F) in X_cwe coordinate function, ", "abs(F) > 1: ", F);
+
+                //Correct E
+                if (F > 1.0) F = 1.0;
+                else if (F < -1.0) F = -1.0;
+
+                final double phi = asin(F);
+
+                //Compute elliptic integrals of the first kind
+                final double u2 = NumIntegration.getInEllipticIntegral1(ks, phi, 1.0e-14);
+                final double v2 = K - NumIntegration.getInEllipticIntegral1(kc, lambda, 1.0e-14);
+
+                final double u3 = exp(PI * u2 / (4 * K));
+                final double v3 = PI * v2 / (4 * K);
+
+                final double X = R * signum(lonr) * 0.5 * (u3 + 1.0 / u3) * sin(v3) + dx;
+
+                //Throw exception
+                if (abs(X) > MAX_FLOAT)
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate X_cwe coordinate function, ", "X_cwe > MAX_FLOAT: ", X);
+
+                return X;
+        }
+
+        public static double Y_cwe(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+
+                final double theta = 23.8958;
+                final double ks = sin(theta / RO);
+                final double kc = cos(theta / RO);
+
+                //Compute elliptic integrals of the first kind
+                final double K = NumIntegration.getInEllipticIntegral1(kc, 0.5 * PI, 1.0e-14);
+
+                final double u1 = 2 * (1 - kc) * cos(lat / RO);
+                final double v1 = (1 + kc) * (1 + cos(lat / RO) * cos(lonr / RO));
+                final double A = ks * ks * (1 - cos(lat / RO) * cos(lonr / RO));
+                final double B = u1 - v1;
+                final double C = u1 + v1;
+                double D = A * A - 4 * kc * B * C;
+
+                //Throw exception
+                if (D < -ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(D) in Y_cwe coordinate function, ", "D < 0: ", D);
+
+                //Correct D
+                if (D < 0.0) D = 0.0;
+
+                final double R1 = A - sqrt(D);
+
+                // Throw exception
+                if (abs(kc) < MIN_FLOAT)
+                        throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate Y_cwe coordinate function, ", "1.0 / kc, kc = 0: ", kc);
+
+                // Throw exception
+                if (abs(C) < MIN_FLOAT)
+                        throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate Y_cwe coordinate function, ", "1.0 / C, C = 0: ", C);
+
+                double R2 = R1 / (2 * C * kc);
+
+                //Throw exception
+                if (R2 > 1.0 + ARGUMENT_ROUND_ERROR || R2 < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(R2) in Y_cwe coordinate function, ", "abs(R2) > 1: ", R2);
+
+                //Correct R2
+                if (R2 > 1.0) R2 = 1.0;
+                else if (R2 < -1.0) R2 = -1.0;
+
+                final double lambda = -asin(R2);
+
+                // Throw exception
+                if (abs(B) < MIN_FLOAT)
+                        throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate Y_cwe coordinate function, ", "1.0 / B, B = 0: ", B);
+
+                double E = 1 - R1 * R1 / (4 * B * B);
+
+                //Throw exception
+                if (E < -ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(E) in Y_cwe coordinate function, ", "E < 0: ", E);
+
+                //Correct m
+                if (E < 0.0) E = 0.0;
+
+                // Throw exception
+                if (abs(ks) < MIN_FLOAT)
+                        throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate Y_cwe coordinate function, ", "1.0 / ks, ks = 0: ", ks);
+
+                double F = sqrt(E) / ks;
+
+                //Throw exception
+                if (F > 1.0 + ARGUMENT_ROUND_ERROR || F < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(F) in Y_cwe coordinate function, ", "abs(F) > 1: ", F);
+
+                //Correct E
+                if (F > 1.0) F = 1.0;
+                else if (F < -1.0) F = -1.0;
+
+                final double phi = asin(F);
+
+                //Compute elliptic integrals of the first kind
+                final double u2 = NumIntegration.getInEllipticIntegral1(ks, phi, 1.0e-14);
+                final double v2 = K - NumIntegration.getInEllipticIntegral1(kc, lambda, 1.0e-14);
+
+                final double u3 = exp(PI * u2 / (4 * K));
+                final double v3 = PI * v2 / (4 * K);
+
+                final double Y = R * signum(lat) * 0.5 * (u3 - 1.0 / u3) * cos(v3) + dy;
+
+                //Throw exception
+                if (abs(Y) > MAX_FLOAT)
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate Y_cwe coordinate function, ", "Y_cwe > MAX_FLOAT: ", Y);
 
                 return Y;
         }
@@ -1529,12 +2030,15 @@ public class Projections {
                 {
                         //Call Y Fournier
                         final double Y = Y_fourn(R, lat1, lat2, lat, lon, lon0, dx, dy, c);
-                        final double N = 1 - (2.0 * Y / (PI  * R)) * (2.0 * Y / (PI  * R));
+                        double N = 1 - (2.0 * Y / (PI  * R)) * (2.0 * Y / (PI  * R));
 
                         //Throw exception
-                        if (N < 0)
+                        if (N < -ARGUMENT_ROUND_ERROR)
                                 throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(N) in X_fourn coordinate function, ", "N < 0: ", N);
 
+                        //Correct N
+                        if (N < 0.0) N = 0.0;
+                        
                         X = R * lonr / RO  * sqrt(N) + dx;
                 }
 
@@ -1584,16 +2088,15 @@ public class Projections {
                         if (abs(L) < MIN_FLOAT)
                                 throw new  MathZeroDevisionException ("MathDivisonByZeroException: can not evaluate Y_fourn coordinate function, ", "1 / L, L = 0.", L);
 
-                        final double M = F * F - L * (C - F * P - (lonr / RO) * (lonr / RO));
+                        double M = F * F - L * (C - F * P - (lonr / RO) * (lonr / RO));
 
                         //Throw exception
-                        if (M < 0)
+                        if (M < -ARGUMENT_ROUND_ERROR)
                                 throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(M) in Y_fourn coordinate function, ", "M < 0: ", M);
 
-                        // Throw exception
-                        if (abs(lat) == MIN_FLOAT)
-                                throw new  MathZeroDevisionException ("MathDivisonByZeroException: can not evaluate Y_fourn coordinate function, ", "1 / lat, lat = 0.", lat);
-
+                        //Correct M
+                        if (M < 0.0) M = 0.0;
+                        
                         Y = R / L  * signum(lat) * (sqrt(M) - F) + dy;
                 }
 
@@ -1775,7 +2278,114 @@ public class Projections {
                 return Y;
         }
 
+        
+        //Guyou
+        public static double X_guyou(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+                
+                double X = 0;
+                
+                if ( abs(abs(lat) - 90) < MAX_ANGULAR_DIFF)
+                {
+                        X = dx;
+                }
+                
+                else
+                {
+                        final double a = (cos (lat / RO) * sin (lonr / RO) - sin(lat / RO)) / sqrt(2.0); 
 
+                        //Throw exception
+                        if (abs(a) > 1.0)
+                                 throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(a) in X_guyou coordinate function, ", "abs(a) > 1: ", a);
+
+                        final double A = acos(a);
+                        final double b = (cos (lat / RO) * sin (lonr / RO) + sin(lat / RO)) / sqrt(2.0); 
+
+                        //Throw exception
+                        if (abs(b) > 1.0)
+                                 throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(b) in X_guyou coordinate function, ", "abs(b) > 1: ", b);
+
+                        final double B = acos(b);
+                                                final double u = 0.5 * (A + B);
+                        double n = sqrt(2) * cos(u);
+
+                        //Throw exception
+                        if (n > 1.0 + ARGUMENT_ROUND_ERROR || n < -1.0 - ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(n) in X_guyou coordinate function, ", "abs(n) > 1: ", n);
+
+                        //Correct n
+                        if (n > 1.0) n = 1.0;
+                        else if (n < -1.0) n = -1.0;
+
+                        final double N = asin(n);
+
+                        //Compute elliptic integral of the first kind
+                        final double Xe = NumIntegration.getInEllipticIntegral1(sqrt(0.5), N, 1.0e-14);
+                        X = R * Xe + dx; 
+                }
+                
+                //Throw exception
+                if (abs(X) > MAX_FLOAT)
+                        throw new MathOverflowException("MathOverflowException: can not evaluate X_guyou coordinate function, ", "X_guyou > MAX_FLOAT: ", X);
+
+                return X;
+        }
+
+        
+        public static double Y_guyou(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+                
+                double Y = 0;
+                
+                if ( abs(abs(lat) -90) < MAX_ANGULAR_DIFF)
+                {
+                        Y = signum(lat) * 1.85407 * R + dy;
+                }
+    
+                else
+                {
+                        final double a = (cos (lat / RO) * sin (lonr / RO) - sin(lat / RO)) / sqrt(2.0); 
+
+                        //Throw exception
+                        if (abs(a) > 1.0)
+                                 throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(a) in Y_guyou coordinate function, ", "abs(a) > 1: ", a);
+
+                        final double A = acos(a);
+                        final double b = (cos (lat / RO) * sin (lonr / RO) + sin(lat / RO)) / sqrt(2.0); 
+
+                        //Throw exception
+                        if (abs(b) > 1.0)
+                                 throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(b) in Y_guyou coordinate function, ", "abs(b) > 1: ", b);
+
+                        final double B = acos(b);
+                        final double  v = 0.5 * (A - B);
+                        double m = sqrt(2) * sin(v);
+
+                        //Throw exception
+                        if (m > 1.0 + ARGUMENT_ROUND_ERROR || m < -1.0 - ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(m) in Y_guyou coordinate function, ", "abs(m) > 1: ", m);
+
+                        //Correct m
+                        if (m > 1.0) m = 1.0;
+                        else if (m < -1.0) m = -1.0;
+
+                        final double  M = asin(m);
+                        
+                        //Compute elliptic integral of the first kind
+                        final double Ye = NumIntegration.getInEllipticIntegral1(sqrt(0.5), M, 1.0e-14);
+                        Y = R * Ye + dy; 
+                }
+                
+                //Throw exception
+                if (abs(Y) > MAX_FLOAT)
+                        throw new MathOverflowException("MathOverflowException: can not evaluate Y_guyou coordinate function, ", "Y_guyou > MAX_FLOAT: ", Y);
+
+                return Y;
+        }
+        
+        
         //Hammer
         public static double X_hammer(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
         {
@@ -2309,7 +2919,43 @@ public class Projections {
                         throw new MathOverflowException ("MathOverflowException: can not evaluate Y_leac2 coordinate function, ", "Y_leac2 > MAX_FLOAT: ", Y);
 
                 return Y;
+        }
+         
+          
+        //Littrow
+        public static double X_litt(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
 
+                //Throw exception
+                if (abs(lat) == MAX_LAT)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate tan(lat) in X_litt coordinate function, ", "lat = +-90: ", lat);
+                
+                final double X = R * sin(lonr / RO) / cos(lat / RO) + dx;
+
+                //Throw exception
+                if (abs(X) > MAX_FLOAT )
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate X_litt coordinate function, ", "X_litt > MAX_FLOAT: ", X);
+
+                return X;
+        }
+
+
+        public static double Y_litt(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+               final double lonr = CartTransformation.redLon0(lon, lon0);
+
+                //Throw exception
+                if (abs(lat) == MAX_LAT)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate tan(lat) in Y_litt coordinate function, ", "lat = +-90: ", lat);
+                
+                final double Y = R * tan(lat / RO) * cos(lonr / RO) + dy;
+
+                //Throw exception
+                if (abs(Y) > MAX_FLOAT )
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate Y_litt coordinate function, ", "Y_litt > MAX_FLOAT: ", Y);
+
+                return Y;
         }
         
         
@@ -2765,17 +3411,15 @@ public class Projections {
                                 throw new  MathZeroDevisionException ("MathDivisonByZeroException: can not evaluate X_nicol coordinate function, ", "1 / F, F = 0:", F);
 
                         final double M = (B * sin(lat / RO) / E - B / 2) / F;
-                        final double N = M * M + G * G / F;
+                        double N = M * M + G * G / F;
 
                         //Throw exception
-                        if (N < 0)
-                        {
-                                //Avoiding numerical imprecision
-                                //if (abs(N) < EPS)
-                                //	N = 0;
-                                //else
-                                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(N) in X_nicol coordinate function, ", "N < 0: ", N);
-                        }
+                        if (N < -ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(N) in X_nicol coordinate function, ", "N < 0: ", N);
+
+                        //Correct N
+                        if (N < 0.0) N = 0.0;
+                
                         X = R * PI / 2.0 * (M + signum(lonr) * sqrt(N)) + dx;
                 }
 
@@ -2834,17 +3478,13 @@ public class Projections {
                         double P = N * N - (E * E * G * G / (B * B) + E * G - 1.0) / F;
 
                         //Throw exception
-                        if (P < 0)
-                        {
-                                //Avoiding numerical imprecision
-                                if (abs(P) < EPS)
-                                        P = 0;
-                                else
-                                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(P) in X_nicol coordinate function, ", "P < 0: ", P);
-                        }
+                        if (P < -ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(P) in Y_nicol coordinate function, ", "P < 0: ", P);
+
+                        //Correct P
+                        if (P < 0.0) P = 0.0;
 
                         Y = R * PI / 2.0 * (N + signum(-lat) * sqrt(P)) + dy;
-
                 }
 
                 //Throw exception
@@ -2944,6 +3584,119 @@ public class Projections {
                 //Throw exception
                 if (abs(Y) > MAX_FLOAT )
                         throw new MathOverflowException ("MathOverflowException: can not evaluate Y_parab coordinate function, ", "Y_parab > MAX_FLOAT: ", Y);
+
+                return Y;
+        }
+        
+        
+        
+        //Peirce Quincuncial
+        public static double X_peiq(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+	
+               	final double a = cos(lat / RO) * ( cos(lonr / RO) - sin(lonr / RO)) / sqrt(2.0);
+
+                //Throw exception
+                if (abs(a) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(a) in X_peiq coordinate function, ", "abs(a) > 1: ", a);
+
+                final double A = acos(a);
+                final double b = cos(lat / RO) * ( sin(lonr / RO) + cos(lonr / RO)) / sqrt(2.0);
+
+                //Throw exception
+                if (abs(b) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(b) in X_peiq coordinate function, ", "abs(b) > 1: ", b);
+
+                final double B = acos(b);
+                final double  v = 0.5 * (A - B);
+                double m = sqrt(2) * sin(v);
+
+                //Throw exception
+                if (m > 1.0 + ARGUMENT_ROUND_ERROR || m < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(m) in X_peiq coordinate function, ", "abs(m) > 1: ", m);
+
+                //Correct m
+                if (m > 1.0) m = 1.0;
+                else if (m < -1.0) m = -1.0;
+
+                final double  M = asin(m);
+                final double u = 0.5 * (A + B);
+                double n = sqrt(2) * cos(u);
+
+                //Throw exception
+                if (n > 1.0 + ARGUMENT_ROUND_ERROR || n < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(n) in X_peiq coordinate function, ", "abs(n) > 1: ", n);
+
+                //Correct n
+                if (n > 1.0) n = 1.0;
+                else if (n < -1.0) n = -1.0;
+
+                final double N = asin(n);
+                
+                //Compute elliptic integral of the first kind
+                final double Xe = NumIntegration.getInEllipticIntegral1(sqrt(0.5), M, 1.0e-14);
+                final double Ye = NumIntegration.getInEllipticIntegral1(sqrt(0.5), N, 1.0e-14);
+                double X =  R * 0.5 * (Ye - Xe) / sqrt(2) + dx;
+
+                //Throw exception
+                if (abs(X) > MAX_FLOAT)
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate X_peiq coordinate function, ", "X_peiq > MAX_FLOAT: ", X);
+
+                return X;
+        }
+    
+        public static double Y_peiq(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+                
+                final double a = cos(lat / RO) * (cos(lonr / RO) - sin(lonr / RO)) / sqrt(2.0);
+
+                //Throw exception
+                if (abs(a) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(a) in Y_peiq coordinate function, ", "abs(a) > 1: ", a);
+
+                final double A = acos(a);
+                final double b = cos(lat / RO) * (sin(lonr / RO) + cos(lonr / RO)) / sqrt(2.0);
+
+                //Throw exception
+                if (abs(b) > 1.0)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(b) in Y_peiq coordinate function, ", "abs(b) > 1: ", b);
+
+                final double B = acos(b);
+                final double  v = 0.5 * (A - B);
+                double m = sqrt(2) * sin(v);
+
+                //Throw exception
+                if (m > 1.0 + ARGUMENT_ROUND_ERROR || m < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(m) in Y_peiq coordinate function, ", "abs(m) > 1: ", m);
+
+                //Correct m
+                if (m > 1.0) m = 1.0;
+                else if (m < -1.0) m = -1.0;
+
+                final double  M = asin(m);
+                final double u = 0.5 * (A + B);
+                double n = sqrt(2) * cos(u);
+
+                //Throw exception
+                if (n > 1.0 + ARGUMENT_ROUND_ERROR || n < -1.0 - ARGUMENT_ROUND_ERROR)
+                        throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate asin(n) in Y_peiq coordinate function, ", "abs(n) > 1: ", n);
+
+                //Correct n
+                if (n > 1.0) n = 1.0;
+                else if (n < -1.0) n = -1.0;
+
+                final double N = asin(n);
+                
+                //Compute elliptic integral of the first kind
+                final double Xe = NumIntegration.getInEllipticIntegral1(sqrt(0.5), M, 1.0e-14);
+                final double Ye = NumIntegration.getInEllipticIntegral1(sqrt(0.5), N, 1.0e-14);
+                double Y =  R * 0.5 * (Ye + Xe) / sqrt(2) + dy;
+                
+                //Throw exception
+                if (abs(Y) > MAX_FLOAT)
+                        throw new MathOverflowException("MathOverflowException: can not evaluate Y_peiq coordinate function, ", "Y_peiq > MAX_FLOAT: ", Y);
 
                 return Y;
         }
@@ -3752,11 +4505,14 @@ public class Projections {
                         final double Q = D + G;
                         final double S = P * P + D;
                         final double TT = G - P * P;
-                        final double U = A * A * TT * TT - S * (G * G - P * P);
+                        double U = A * A * TT * TT - S * (G * G - P * P);
 
                         //Throw exception
-                        if (U < 0)
-                                throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(U) in X_vandg coordinate function, ", "U < 0: ", U);
+                        if (U < -ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(m) in X_vandg coordinate function, ", "U < 0: ", U);
+
+                        //Correct U
+                        if (U < 0.0) U = 0.0;
 
                         //Throw exception
                         if (abs(S) < MIN_FLOAT)
@@ -3811,12 +4567,15 @@ public class Projections {
                         final double P = G * (2.0 / B - 1);
                         final double Q = D + G;
                         final double S = P * P + D;
-                        final double V = (A * A + 1) * S - Q * Q;
+                        double V = (A * A + 1) * S - Q * Q;
 
                         //Throw exception
-                        if (V < 0)
-                                throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(V) in Y_vandg coordinate function, ", "V < 0: ", V);
+                        if (V < -ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(m) in Y_vandg coordinate function, ", "V < 0: ", V);
 
+                        //Correct V
+                        if (V < 0.0) V = 0.0;
+                        
                         //Throw exception
                         if (abs(S) < MIN_FLOAT)
                                 throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate Y_vandg coordinate function, ", "1 / S, S = 0:", S);
@@ -4023,20 +4782,26 @@ public class Projections {
                 {
                         final double C = 0.5 * (B * (8.0 - B * (2.0 + B * B)) - 5) / (B * B * (B - 1));
                         final double C1 = 90 / lonr + lonr / 90;
-                        final double C2 = C1 * C1 - 4;
+                        double C2 = C1 * C1 - 4;
 
                         //Throw exception
-                        if (C2 < 0)
-                                throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(C2) in X_vandg4 coordinate function, ", "C2 < 0: ", C2);
+                        if (C2 < -ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(m) in X_vandg4 coordinate function, ", "C2 < 0: ", C2);
 
+                        //Correct C2
+                        if (C2 < 0.0) C2 = 0.0;
+                        
                         final double D = signum(abs(lonr) - 90) * sqrt(C2);
                         final double F1 = (B + C) * (B + C);
                         final double F2 = (B + 3.0 * C) * (B + 3.0 * C);
-                        final double F = F1 * (B * B + C * C * D * D - 1) + (1 - B * B) * (B * B * (F2 + 4.0 * C * C) + 12 * B * C * C * C + 4.0 * C * C * C * C);
+                        double F = F1 * (B * B + C * C * D * D - 1) + (1 - B * B) * (B * B * (F2 + 4.0 * C * C) + 12 * B * C * C * C + 4.0 * C * C * C * C);
 
                         //Throw exception
-                        if (F < 0)
-                                throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(F) in X_vandg4 coordinate function, ", "F < 0: ", F);
+                        if (F < -ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(m) in X_vandg4 coordinate function, ", "F < 0: ", F);
+
+                        //Correct C2
+                        if (F < 0.0) F = 0.0;
 
                         final double G = 4.0 * F1 + D * D;
 
@@ -4078,20 +4843,26 @@ public class Projections {
                 {
                         final double C = 0.5 * (B * (8.0 - B * (2.0 + B * B)) - 5) / (B * B * (B - 1));
                         final double C1 = 90 / lonr + lonr / 90;
-                        final double C2 = C1 * C1 - 4;
+                        double C2 = C1 * C1 - 4;
 
                         //Throw exception
-                        if (C2 < 0)
-                                throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(C2) in X_vandg4 coordinate function, ", "C2 < 0: ", C2);
+                        if (C2 < -ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(m) in X_vandg4 coordinate function, ", "C2 < 0: ", C2);
+
+                        //Correct C2
+                        if (C2 < 0.0) C2 = 0.0;
 
                         final double D = signum(abs(lonr) - 90) * sqrt(C2);
                         final double F1 = (B + C) * (B + C);
                         final double F2 = (B + 3.0 * C) * (B + 3.0 * C);
-                        final double F = F1 * (B * B + C * C * D * D - 1) + (1 - B * B) * (B * B * (F2 + 4.0 * C * C) + 12 * B * C * C * C + 4.0 * C * C * C * C);
+                        double F = F1 * (B * B + C * C * D * D - 1) + (1 - B * B) * (B * B * (F2 + 4.0 * C * C) + 12 * B * C * C * C + 4.0 * C * C * C * C);
 
                         //Throw exception
-                        if (F < 0)
-                                throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(F) in X_vandg4 coordinate function, ", "F < 0: ", F);
+                        if (F < -ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(m) in Y_vandg4 coordinate function, ", "F < 0: ", F);
+
+                        //Correct C2
+                        if (F < 0.0) F = 0.0;
 
                         final double G = 4.0 * F1 + D * D;
 

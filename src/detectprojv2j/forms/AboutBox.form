@@ -175,7 +175,7 @@
                   <Font name="Tahoma" size="13" style="1"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="C 2016, Tomas Bayer"/>
+                <Property name="text" type="java.lang.String" value="C 2016-17, Tomas Bayer"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="adressLabel">
