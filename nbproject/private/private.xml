@@ -12,14 +12,20 @@
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/EarlyMap.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/AboutBox.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/TInterval2D.java</file>
+<<<<<<< HEAD
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/io/IO.java</file>
+=======
+>>>>>>> b6d3179a2fc4696247fb786069215b7d475279ff
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/Projections.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/Detectprojv2j.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/cartanalysis/CartAnalysisMT.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/MainApplication.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/ControlPointsForm.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/graticule2/Graticule2.java</file>
+<<<<<<< HEAD
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/tilesources/AbstractOsmTileSource.java</file>
+=======
+>>>>>>> b6d3179a2fc4696247fb786069215b7d475279ff
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/numdifferentiation/FJM7.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/carttransformation/CartTransformation.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/numdifferentiation/FDiffM7.java</file>
@@ -32,7 +38,10 @@
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/numdifferentiation/FDiffM8.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/nonlinearleastsquares/NonLinearLeastSquares.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/numdifferentiation/FJM8.java</file>
+<<<<<<< HEAD
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/tilesources/OsmTileSource.java</file>
+=======
+>>>>>>> b6d3179a2fc4696247fb786069215b7d475279ff
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/Map.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/ResultsForm.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/point/Point3DCartesian.java</file>
