@@ -224,11 +224,6 @@ public class SimplexMethod {
 
                         //Increment iterations
                         iterations[0] ++;
-
-                        if ( iterations[0] % 100 == 0 )
-                        {
-                                System.out.print (".");
-                        }
                         
                 }
                 while ( ( iterations[0] < max_iterations ) && ( abs ( VV2.items[0][0] - VV2.items[n][0] ) > max_error ) );

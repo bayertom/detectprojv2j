@@ -76,6 +76,8 @@ import detectprojv2j.algorithms.graticule2.Graticule2;
 
 import detectprojv2j.io.DXFExport;
 import detectprojv2j.io.IO;
+import java.awt.event.MouseEvent;
+import org.openstreetmap.gui.jmapviewer.DefaultMapController;
 
 
 public class MainApplication extends javax.swing.JFrame  {
@@ -96,6 +98,7 @@ public class MainApplication extends javax.swing.JFrame  {
         private final boolean [] add_test_point;                                              //Control point may be added to the early map
         private final boolean [] add_reference_point;                                         //Control point may be added to the reference (OSM) map
         private final boolean [] enable_add_control_points;                                   //Enable add control points, if a pushbutton is selected
+        private final boolean [] enable_panning_lm;                                           //Enable panning operation using the left mouse
         private final boolean [] enable_zoom_in_lm;                                           //Enable zoom-in operation using the left mouse
         private final boolean [] enable_zoom_out_lm;                                          //Enable zoom-out operation using the left mouse
         private final boolean [] enable_zoom_fit_all_lm;                                      //Enable zoom fit all operation using the left mouse
@@ -160,6 +163,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 add_test_point = new boolean[]{true};  
                 add_reference_point = new boolean[]{true};
                 enable_add_control_points = new boolean[]{false};
+                enable_panning_lm = new boolean[]{false};
                 enable_zoom_in_lm = new boolean[]{false};
                 enable_zoom_out_lm = new boolean[]{false};
                 enable_zoom_fit_all_lm = new boolean[]{false}; 
@@ -185,10 +189,10 @@ public class MainApplication extends javax.swing.JFrame  {
                 lon_interval = new TInterval(MIN_LON, MAX_LON);
                 
                 //Create early and OSM maps
-                early_map = new EarlyMap(test_points, null, null, add_test_point, add_reference_point, enable_add_control_points, enable_zoom_in_lm, 
-                        enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress[0], index_nearest, index_nearest_prev);
-                map = new Map(reference_points, early_map, null, add_test_point, add_reference_point, enable_add_control_points, enable_zoom_in_lm, 
-                        enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress[0], index_nearest, index_nearest_prev);
+                early_map = new EarlyMap(test_points, null, null, add_test_point, add_reference_point, enable_add_control_points, enable_panning_lm,
+                        enable_zoom_in_lm, enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress[0], index_nearest, index_nearest_prev);
+                map = new Map(reference_points, early_map, null, add_test_point, add_reference_point, enable_add_control_points, enable_panning_lm,
+                        enable_zoom_in_lm, enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress[0], index_nearest, index_nearest_prev);
                 
                 early_map.setMap(map);
     
@@ -336,6 +340,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 importMapButton = new javax.swing.JButton();
                 exportGraticuleButton = new javax.swing.JButton();
                 zoomToolBar = new javax.swing.JToolBar();
+                panningToggleButton = new javax.swing.JToggleButton();
                 zoomInToggleButton = new javax.swing.JToggleButton();
                 zoomOutToggleButton = new javax.swing.JToggleButton();
                 viewAllToggleButton = new javax.swing.JToggleButton();
@@ -370,6 +375,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 jSeparator4 = new javax.swing.JPopupMenu.Separator();
                 exitMenuItem = new javax.swing.JMenuItem();
                 viewMenu = new javax.swing.JMenu();
+                panningMenuItem = new javax.swing.JMenuItem();
                 zoomInMenuItem = new javax.swing.JMenuItem();
                 zoomOutMenuItem = new javax.swing.JMenuItem();
                 viewAllMenuItem = new javax.swing.JMenuItem();
@@ -485,7 +491,23 @@ public class MainApplication extends javax.swing.JFrame  {
                 zoomToolBar.setRollover(true);
                 zoomToolBar.setMaximumSize(new java.awt.Dimension(90, 30));
                 zoomToolBar.setMinimumSize(new java.awt.Dimension(90, 30));
-                zoomToolBar.setPreferredSize(new java.awt.Dimension(90, 30));
+                zoomToolBar.setPreferredSize(new java.awt.Dimension(110, 30));
+
+                zoomGroup.add(panningToggleButton);
+                panningToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/panning_icon.png"))); // NOI18N
+                panningToggleButton.setToolTipText("Panning.");
+                panningToggleButton.setFocusable(false);
+                panningToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                panningToggleButton.setMaximumSize(new java.awt.Dimension(24, 24));
+                panningToggleButton.setMinimumSize(new java.awt.Dimension(24, 24));
+                panningToggleButton.setPreferredSize(new java.awt.Dimension(24, 24));
+                panningToggleButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                panningToggleButton.addChangeListener(new javax.swing.event.ChangeListener() {
+                        public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                                panningToggleButtonStateChanged(evt);
+                        }
+                });
+                zoomToolBar.add(panningToggleButton);
 
                 zoomGroup.add(zoomInToggleButton);
                 zoomInToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/zoom_in.png"))); // NOI18N
@@ -797,6 +819,15 @@ public class MainApplication extends javax.swing.JFrame  {
                 menuBar.add(mapMenu);
 
                 viewMenu.setText("View");
+
+                panningMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/panning_icon.png"))); // NOI18N
+                panningMenuItem.setText("Panning");
+                panningMenuItem.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                panningMenuItemActionPerformed(evt);
+                        }
+                });
+                viewMenu.add(panningMenuItem);
 
                 zoomInMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/detectprojv2j/resources/zoom_in.png"))); // NOI18N
                 zoomInMenuItem.setText("Zoom In");
@@ -1303,6 +1334,7 @@ public class MainApplication extends javax.swing.JFrame  {
 
         private void zoomInMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomInMenuItemActionPerformed
                 // Zoom in
+                enable_panning_lm[0] = false;
                 enable_zoom_in_lm[0] = true;
                 enable_zoom_out_lm[0] = false;
                 enable_zoom_fit_all_lm[0] = false;
@@ -1312,6 +1344,7 @@ public class MainApplication extends javax.swing.JFrame  {
         
         private void viewAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAllMenuItemActionPerformed
                 // View all
+                enable_panning_lm[0] = false;
                 enable_zoom_fit_all_lm[0] = true;
                 enable_zoom_in_lm[0] = false;
                 enable_zoom_out_lm[0] = false;
@@ -1321,6 +1354,7 @@ public class MainApplication extends javax.swing.JFrame  {
         
         private void zoomOutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomOutMenuItemActionPerformed
                 // Zoom out
+                enable_panning_lm[0] = false;
                 enable_zoom_out_lm[0] = true;
                 enable_zoom_in_lm[0] = false;
                 enable_zoom_fit_all_lm[0] = false;
@@ -1477,6 +1511,30 @@ public class MainApplication extends javax.swing.JFrame  {
                 //Show settings dialog
                 settings_form.setVisible(true);
         }//GEN-LAST:event_settingsButtonActionPerformed
+
+        private void panningToggleButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_panningToggleButtonStateChanged
+                // Enable, disable left mouse panning
+                if (panningToggleButton.isSelected())
+                {
+                        enable_panning_lm[0] = true;
+                        addControlPointsToggleButton.setSelected(false);
+                }      
+                
+                //Disable zoom in
+                else
+                {
+                        enable_panning_lm[0] = false;
+                }
+        }//GEN-LAST:event_panningToggleButtonStateChanged
+
+        private void panningMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_panningMenuItemActionPerformed
+                // Panning
+                enable_panning_lm[0] = true;
+                enable_zoom_in_lm[0] = false;
+                enable_zoom_out_lm[0] = false;
+                enable_zoom_fit_all_lm[0] = false;
+                addControlPointsToggleButton.setSelected(false);
+        }//GEN-LAST:event_panningMenuItemActionPerformed
 
         
         public void closeApplication()
@@ -2030,6 +2088,8 @@ public class MainApplication extends javax.swing.JFrame  {
         private javax.swing.ButtonGroup optimizationTechniqueGroup;
         private javax.swing.JMenu optimizationTechniqueMenu;
         private javax.swing.JPanel osmMapPanel;
+        private javax.swing.JMenuItem panningMenuItem;
+        private javax.swing.JToggleButton panningToggleButton;
         private javax.swing.JMenu pointsMenu;
         private javax.swing.ButtonGroup resultsGroup;
         private javax.swing.JMenuItem saveMenuItem;

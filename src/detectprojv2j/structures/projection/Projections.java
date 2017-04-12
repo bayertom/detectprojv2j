@@ -4665,12 +4665,15 @@ public class Projections {
                                 throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate Y_vandg2 coordinate function, ", "1 / D, D = 0:", D);
 
                         final double X1 = (C * sqrt(1 + A * A) - A * C * C) / D;
-                        final double E = 1 - X1 * X1 - 2.0 * A * X1;
+                        double E = 1 - X1 * X1 - 2.0 * A * X1;
 
                         //Throw exception
-                        if (E < 0)
+                        if (E < -ARGUMENT_ROUND_ERROR)
                                 throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(E) in Y_vandg2 coordinate function, ", "E < 0: ", E);
-
+                                              
+                        //Correct E
+                        if (E < 0.0) E = 0.0;  
+                        
                         Y = R * PI * signum(lat) * sqrt(E) + dy;
                 }
 
@@ -4705,11 +4708,14 @@ public class Projections {
                 {
                         final double A = 0.5 * abs(180.0 / lonr - lonr / 180.0);
                         final double Y1 = B / (1 + C);
-                        final double D = 1.0 + A * A - Y1 * Y1;
+                        double D = 1.0 + A * A - Y1 * Y1;
 
                         //Throw exception
-                        if (abs(D) < MIN_FLOAT)
-                                throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate X_vandg3 coordinate function, ", "1 / D, D = 0:", D);
+                        if (D < -ARGUMENT_ROUND_ERROR)
+                                 throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(D) in X_vandg3 coordinate function, ", "D < 0: ", D);
+
+                        //Correct D
+                        if (D < 0.0) D = 0.0;
 
                         X = R * PI * signum(lonr) * (sqrt(D) - A) + dx;
                 }
@@ -4871,12 +4877,14 @@ public class Projections {
                                 throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate X_vandg4 coordinate function, ", "1 / G, G = 0:", G);
 
                         final double X1 = (D * (F1 + C * C - 1) + 2.0 * sqrt(F)) / G;
-                        final double H = 1 + D * abs(X1) - X1 * X1;
+                        double H = 1 + D * abs(X1) - X1 * X1;
 
                         //Throw exception
-                        if (H < 0)
+                        if (H < -ARGUMENT_ROUND_ERROR)
                                 throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(H) in Y_vandg4 coordinate function, ", "H < 0: ", H);
-
+                        
+                        //Correct H
+                        if (H < 0.0) H = 0.0;
 
                         Y = R * PI * 0.5 * signum(lat) * sqrt(H) + dy;
                 }

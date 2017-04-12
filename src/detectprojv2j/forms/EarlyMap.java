@@ -88,6 +88,7 @@ public class EarlyMap extends JPanel
         private boolean [] add_test_point;                                      //Control point may be added to the early map
         private boolean [] add_reference_point;                                 //Control point may be added to the reference (OSM) map
         private boolean [] enable_add_control_points;                           //Enable add control points, if a pushbutton is selected
+        private boolean [] enable_panning_lm;                                   //Enable panning operation using the left mouse
         private boolean [] enable_zoom_in_lm;                                   //Enable zoom-in operation using the left mouse
         private boolean [] enable_zoom_out_lm;                                  //Enable zoom-out operation using the left mouse
         private boolean [] enable_zoom_fit_all_lm;                              //Enable zoom fit all operation using the left mouse
@@ -98,7 +99,7 @@ public class EarlyMap extends JPanel
         
         
         public EarlyMap(List <Point3DCartesian> test_points_, Map map_, final ControlPointsForm control_points_form_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] enable_add_control_points_,
-                boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
+                boolean [] enable_panning_lm_, boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
         {
                 //Initialize repaint
                 repaint_vector_data = true;
@@ -156,6 +157,7 @@ public class EarlyMap extends JPanel
                 add_test_point = add_test_point_;                                    
                 add_reference_point = add_reference_point_;
                 enable_add_control_points = enable_add_control_points_;
+                enable_panning_lm = enable_panning_lm_;
                 enable_zoom_in_lm = enable_zoom_in_lm_;
                 enable_zoom_out_lm = enable_zoom_out_lm_;
                 enable_zoom_fit_all_lm = enable_zoom_fit_all_lm_;
@@ -251,8 +253,9 @@ public class EarlyMap extends JPanel
                                 start = e.getPoint();
 
                                 //Add point to the list of test points
-                                if (SwingUtilities.isLeftMouseButton(e)) {
-
+                                if ((SwingUtilities.isLeftMouseButton(e)) && (!enable_panning_lm[0])) 
+                                {
+                                        
                                         //Enable zoom in
                                         if (enable_zoom_in_lm[0])
                                         {
@@ -329,7 +332,7 @@ public class EarlyMap extends JPanel
                                 start = e.getPoint();
 
                                 //Initial coordinats of the shift
-                                if (SwingUtilities.isMiddleMouseButton(e) || SwingUtilities.isRightMouseButton(e)) 
+                                if (SwingUtilities.isMiddleMouseButton(e) || SwingUtilities.isRightMouseButton(e) || enable_panning_lm[0]) 
                                 {
                                        end = start;
                                 } 
@@ -345,26 +348,23 @@ public class EarlyMap extends JPanel
                         public void mouseDragged(MouseEvent e) {
                                 
                                 //Move control point (LM button)
-                                if (SwingUtilities.isLeftMouseButton(e))
+                                //Did we find a nerest point closer than a threshold?
+                                if (SwingUtilities.isLeftMouseButton(e) && (index_nearest[0] != -1) && (index_nearest[0] < test_points.size())) 
                                 {
-                                        //Did we find a nerest point closer than a threshold?
-                                        if (index_nearest[0] != -1)
-                                        {
-                                                //Get transformed cursor position for the actual zoom level
-                                                Point pcur = e.getPoint();
-                                                final double xcur = (pcur.getX()- at.getTranslateX())/at.getScaleX();
-                                                final double ycur = (pcur.getY()- at.getTranslateY())/at.getScaleY();
-                                                
-                                                //Change coordinates x,y of the shifteditem
-                                                //Use -y due to the different axis orientation
-                                                Point3DCartesian p = test_points.get(index_nearest[0]);
-                                                p.setX(xcur);
-                                                p.setY(-ycur);
-                                        }
+                                        //Get transformed cursor position for the actual zoom level
+                                        Point pcur = e.getPoint();
+                                        final double xcur = (pcur.getX()- at.getTranslateX())/at.getScaleX();
+                                        final double ycur = (pcur.getY()- at.getTranslateY())/at.getScaleY();
+
+                                        //Change coordinates x,y of the shifteditem
+                                        //Use -y due to the different axis orientation
+                                        Point3DCartesian p = test_points.get(index_nearest[0]);
+                                        p.setX(xcur);
+                                        p.setY(-ycur);
                                 }
 
                                 //Move entire drawing by the vector (end - start)
-                                else {
+                                else if  (SwingUtilities.isRightMouseButton(e) ||enable_panning_lm[0] ) {
                                         //Remember old point
                                         start = end;
 

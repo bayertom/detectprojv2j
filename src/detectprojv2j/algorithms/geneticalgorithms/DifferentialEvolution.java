@@ -251,14 +251,6 @@ public class DifferentialEvolution {
                         {
                                 fx_min_old_100 = fx_min;
                         }
-
-                        /*
-                        //Print "." for every 50-th generation
-                        if (gener[0] % 50 == 0)
-                        {
-                                System.out.print(".");
-                        }
-                        */
                 }
 
                 //Actualize minimum argument

@@ -64,7 +64,6 @@ import org.openstreetmap.gui.jmapviewer.MapMarkerCircle;
 
 public class Map extends JMapViewer 
 {
-        
         public List<Point3DGeographic> reference_points;                        //List of reference points (public, more comfortable access)
         
         private EarlyMap early_map;                                             //Early map representation
@@ -74,6 +73,7 @@ public class Map extends JMapViewer
         private boolean [] add_test_point;                                      //Control point may be added to the early map
         private boolean [] add_reference_point;                                 //Control point may be added to the reference (OSM) map
         private boolean [] enable_add_control_points;                           //Enable add control points, if a pushbutton is selected
+        private boolean [] enable_panning_lm;                                   //Enable panning operation using the left mouse
         private boolean [] enable_zoom_in_lm;                                   //Enable zoom-in operation using the left mouse
         private boolean [] enable_zoom_out_lm;                                  //Enable zoom-out operation using the left mouse
         private boolean [] enable_zoom_fit_all_lm;                              //Enable zoom fit all operation using the left mouse
@@ -84,7 +84,7 @@ public class Map extends JMapViewer
    
         
         public Map(List<Point3DGeographic> reference_points_, EarlyMap early_map_, final ControlPointsForm control_points_form_,  boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] enable_add_control_points_,
-                boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
+                boolean [] enable_panning_lm_, boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
         {
                 //Assign points
                 reference_points = reference_points_;
@@ -99,6 +99,7 @@ public class Map extends JMapViewer
                 add_test_point = add_test_point_;                                    
                 add_reference_point = add_reference_point_;
                 enable_add_control_points = enable_add_control_points_;
+                enable_panning_lm = enable_panning_lm_;
                 enable_zoom_in_lm = enable_zoom_in_lm_;
                 enable_zoom_out_lm = enable_zoom_out_lm_;
                 enable_zoom_fit_all_lm = enable_zoom_fit_all_lm_;
@@ -114,7 +115,7 @@ public class Map extends JMapViewer
                 
                 //Create  pop up menu
                 pop_up_menu = new JPopupMenu();
-                JMenuItem deleteItem = new JMenuItem("Delete control point");
+                JMenuItem deleteItem = new JMenuItem("Delete control point.");
                 
                 //Click on the item
                 deleteItem.addActionListener(new ActionListener () 
@@ -160,12 +161,28 @@ public class Map extends JMapViewer
                 
                 //Add listener to get the coordinates
                 new DefaultMapController(this) {
-
+                        
                         @Override
-                        public void mouseClicked(MouseEvent e) {
+                        public void mousePressed(MouseEvent e) 
+                        {
+                                //If panning enabled assign panning also to the left mouse button, 
+                                if (enable_panning_lm[0])
+                                        this.setMovementMouseButton(MouseEvent.BUTTON1);
                                 
+                                //If panning disable assign panning to the right mouse button, 
+                                else
+                                        this.setMovementMouseButton(MouseEvent.BUTTON3);
+                                
+                                //Call parent method
+                                super.mousePressed(e);
+                        }
+                        
+              
+                        @Override
+                        public void mouseClicked(MouseEvent e) 
+                        {          
                                 if (SwingUtilities.isLeftMouseButton(e)) {
-                                        
+                                       
                                         //Enable zoom in
                                         if (enable_zoom_in_lm[0])
                                         {
@@ -231,8 +248,10 @@ public class Map extends JMapViewer
                                 
                                 //Repaint OSM
                                 repaintMap();
+                                
                         }  
                         
+                        @Override
                         public void mouseMoved(MouseEvent e)
                         {
                                 //Find nearest point and its index
@@ -286,14 +305,23 @@ public class Map extends JMapViewer
                                 }
                         }
                         
+                        
                         @Override
                         public void mouseDragged(MouseEvent e){
+                                
+                                //If left mouse button is not mapped for panning
+                                super.mouseDragged(e);
+                                       
                                 //Move identical point
                                 if (SwingUtilities.isLeftMouseButton(e))
                                 {
                                         //Did we find a nerest point closer than a threshold?
-                                        if (index_nearest[0] != -1)
+                                        if ((index_nearest[0] != -1) && (index_nearest[0] < reference_points.size()))
                                         {
+                                                //Change panning button to the right mouse button, left button is now used for moving a point
+                                                if (enable_panning_lm[0])
+                                                        this.setMovementMouseButton(MouseEvent.BUTTON3);
+
                                                 //Get point and its geographic position
                                                 //Lon must be reduced, OSM longitude not inside [-PI, PI]
                                                 Point pcur = e.getPoint();
@@ -304,17 +332,17 @@ public class Map extends JMapViewer
                                                 Point3DGeographic p = reference_points.get(index_nearest[0]);
                                                 p.setLat(lat);
                                                 p.setLon(lon);
-                                                
+
                                                 //Change the corresponding marker coordinates lat, lon
                                                 List <MapMarker> markers = map.getMapMarkerList();
                                                 markers.get(index_nearest[0]).setLat(lat);
                                                 markers.get(index_nearest[0]).setLon(lon);
                                         }
                                 }
-                                
+
                                 //Repaint OSM
                                 repaintMap();
-                        } 
+                        }
                 };
                 
                 //Create projection graticule
