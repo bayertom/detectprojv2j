@@ -77,14 +77,14 @@ public class Map extends JMapViewer
         private boolean [] enable_zoom_in_lm;                                   //Enable zoom-in operation using the left mouse
         private boolean [] enable_zoom_out_lm;                                  //Enable zoom-out operation using the left mouse
         private boolean [] enable_zoom_fit_all_lm;                              //Enable zoom fit all operation using the left mouse
-        private boolean computation_in_progress;                                //Test, whether a computation is in progress
+        private boolean [] computation_in_progress;                             //Test, whether a computation is in progress
         
         private int [] index_nearest;                                           //Index of the point nearest to the cursor position
         private int [] index_nearest_prev;                                      //Index of the previous point nearest to the cursor position
    
         
         public Map(List<Point3DGeographic> reference_points_, EarlyMap early_map_, final ControlPointsForm control_points_form_,  boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] enable_add_control_points_,
-                boolean [] enable_panning_lm_, boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
+                boolean [] enable_panning_lm_, boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean [] computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
         {
                 //Assign points
                 reference_points = reference_points_;
@@ -124,7 +124,7 @@ public class Map extends JMapViewer
                         public void actionPerformed(ActionEvent ae) 
                         {
                                 //Delete nearest point: analyzed map
-                                if (!computation_in_progress)
+                                if (!computation_in_progress[0])
                                 {
                                         //Is there any nearest point?
                                         if (index_nearest[0] >= 0)
@@ -495,10 +495,10 @@ public class Map extends JMapViewer
                 List <List<Point3DCartesian> > meridians_proj = new ArrayList<>();
                 List <List<Point3DCartesian> > parallels_proj = new ArrayList<>();
                 
-                //Set font height      
-                ProjectionCylindrical eqc = new ProjectionCylindrical (RO, 90.0, 0.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eqc, Projections::Y_eqc, "merc");
+                //Define equidistant cylindrical projection, normal aspect, R = 1
+                ProjectionCylindrical eqc = new ProjectionCylindrical (RO, 90.0, 0.0, 0.0, NormalDirection2, 0.0, 0.0, 0.0, 1.0, Projections::X_eqc, Projections::Y_eqc, "Equidistant","eqc");
 
-                //Create intervals
+                //Create graticule intervals
                 TInterval lat_interval = new TInterval (-80, 80);
                 TInterval lon_interval = new TInterval ( -180, 180);
                 
@@ -507,7 +507,7 @@ public class Map extends JMapViewer
                 final double lat_step = 10;
                 final double lon_step = 10;
                 
-                //Create graticule
+                //Create graticule in the equidistant cylindrical projection, X = lon, Y = lat
                 Graticule.createGraticule(eqc, lat_interval, lon_interval, lat_step, lon_step, 0.1 * lat_step, 0.1 * lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj);
                 
                 //Convert all meridians to OSM elements

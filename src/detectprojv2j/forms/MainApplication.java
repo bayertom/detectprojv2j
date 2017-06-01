@@ -145,7 +145,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 
                 //Init components
                 initComponents();
-                
+               
                 //Maximize window
                 splitPanels.setResizeWeight(.5d);
                 setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
@@ -190,9 +190,9 @@ public class MainApplication extends javax.swing.JFrame  {
                 
                 //Create early and OSM maps
                 early_map = new EarlyMap(test_points, null, null, add_test_point, add_reference_point, enable_add_control_points, enable_panning_lm,
-                        enable_zoom_in_lm, enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress[0], index_nearest, index_nearest_prev);
+                        enable_zoom_in_lm, enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress, index_nearest, index_nearest_prev);
                 map = new Map(reference_points, early_map, null, add_test_point, add_reference_point, enable_add_control_points, enable_panning_lm,
-                        enable_zoom_in_lm, enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress[0], index_nearest, index_nearest_prev);
+                        enable_zoom_in_lm, enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress, index_nearest, index_nearest_prev);
                 
                 early_map.setMap(map);
     
@@ -216,7 +216,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 results = new TreeMap<> ();
                 
                 //Create forms with points, results and about box
-                control_points_form = new ControlPointsForm(early_map, map, add_test_point, add_reference_point, computation_in_progress[0], index_nearest, index_nearest_prev);
+                control_points_form = new ControlPointsForm(early_map, map, add_test_point, add_reference_point, computation_in_progress, index_nearest, index_nearest_prev);
                 results_form = new ResultsForm(early_map, results, n_results, this);
                 about_form = new AboutBox();
                 settings_form = new Settings(reference_points, default_lon_dir, analyze_lon0, create_entire_graticule, lat1_step, lat2_step, lat3_step, lon1_step, lon2_step, lon3_step, lat_incr, lon_incr, lat_interval, lon_interval, projections);
@@ -412,7 +412,6 @@ public class MainApplication extends javax.swing.JFrame  {
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
                 setTitle("Map projection analysis: detectproj");
-                setPreferredSize(new java.awt.Dimension(1900, 1200));
                 setSize(new java.awt.Dimension(20, 24));
                 addWindowListener(new java.awt.event.WindowAdapter() {
                         public void windowClosing(java.awt.event.WindowEvent evt) {

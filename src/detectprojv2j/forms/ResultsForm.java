@@ -1,6 +1,6 @@
-// Description: List of resulted projections
+// Description: List of resulteds> sorted candidate projections
 
-// Copyright (c) 2015 - 2016
+// Copyright (c) 2015 - 2017
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -20,19 +20,33 @@
 
 package detectprojv2j.forms;
 
-import detectprojv2j.structures.projection.Projection;
-import javax.swing.SwingConstants;
+
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import java.util.TreeMap;
-import javax.swing.JFrame;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.table.JTableHeader;
+import javax.swing.JFrame;
+import javax.swing.SwingConstants;
+
+import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import detectprojv2j.types.TResult;
 
+import detectprojv2j.structures.projection.Projection;
+
+import detectprojv2j.comparators.sortJColumnByDouble;
+
+
+// List of resulteds> sorted candidate projections
 public class ResultsForm extends javax.swing.JFrame {
 
         private final EarlyMap early_map;                                       //Reference to the early map
@@ -66,13 +80,16 @@ public class ResultsForm extends javax.swing.JFrame {
                         public void valueChanged(ListSelectionEvent event) 
                         {
                                 //Index of the selected row
-                                int index = resultsTable.getSelectedRow();
+                                final int sel_index = resultsTable.getSelectedRow();
                                 
+                                //Recomputed index according to the sorted elements
+                                final int proj_index  = sel_index > -1 ? resultsTable.convertRowIndexToModel( sel_index ) : -1;
+
                                 //Test, whether amount of results < index
-                                if ((index < results.size()) && (index >= 0))
+                                if ((proj_index < results.size()) && (proj_index >= 0))
                                 {
                                         //Get item
-                                        TResult res = results.get(results.keySet().toArray()[index]);
+                                        TResult res = results.get(results.keySet().toArray()[proj_index]);
 
                                         //Set projection, projected points, meridians and parallels of the i-th result
                                         early_map.setProjection(res.proj);
@@ -105,6 +122,7 @@ public class ResultsForm extends javax.swing.JFrame {
                 setLocation(new java.awt.Point(50, 500));
                 setType(java.awt.Window.Type.UTILITY);
 
+                resultsTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
                 resultsTable.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
@@ -161,18 +179,41 @@ public class ResultsForm extends javax.swing.JFrame {
                 DefaultTableModel model = (DefaultTableModel)resultsTable.getModel();
                 model.setColumnIdentifiers(col_names);
                 
+                //Enable user-defined sorting by columns
+                TableRowSorter <TableModel> trs = new TableRowSorter<>(model); 
+                resultsTable.setRowSorter(trs);
+                for (int i = 0; i < col_names.length; i++)
+                        trs.setComparator(i, new sortJColumnByDouble());  
+                
                 //Set center alignment for the header
                 JTableHeader header = resultsTable.getTableHeader();
-                DefaultTableCellRenderer r_header = (DefaultTableCellRenderer)header.getDefaultRenderer();
-                r_header.setHorizontalAlignment(SwingConstants.CENTER);
+                DefaultTableCellRenderer r_header_center = (DefaultTableCellRenderer)header.getDefaultRenderer();
+                r_header_center.setHorizontalAlignment(SwingConstants.CENTER);
+                
+                //Set font size for header and table
+                header.setFont( header.getFont().deriveFont(12f) );
+                resultsTable.setFont(header.getFont().deriveFont(12f));
                 
                 //Create renderer for the remaining part  of the table
-                DefaultTableCellRenderer r_cells = new DefaultTableCellRenderer();
-                r_cells.setHorizontalAlignment(SwingConstants.CENTER);
+                DefaultTableCellRenderer r_cells_center = new DefaultTableCellRenderer();
+                DefaultTableCellRenderer r_cells_left = new DefaultTableCellRenderer();
+                r_cells_center.setHorizontalAlignment(SwingConstants.CENTER);
+                r_cells_left.setHorizontalAlignment(SwingConstants.LEFT);
                 
                 //Set center alignment for each column of the table
                 for (int i = 0; i < col_names.length; i++)
-                        resultsTable.getColumnModel().getColumn(i).setCellRenderer(r_cells);
+                        resultsTable.getColumnModel().getColumn(i).setCellRenderer(r_cells_center);
+                
+                //Set left alignment for columns 1,3
+                resultsTable.getColumnModel().getColumn(1).setCellRenderer(r_cells_left);
+                resultsTable.getColumnModel().getColumn(2).setCellRenderer(r_cells_left);
+                
+                //Get current column width
+                final int col_width = resultsTable.getColumnModel().getColumn(1).getPreferredWidth();
+                
+                //Resize columns 1, 3
+                resultsTable.getColumnModel().getColumn(0).setPreferredWidth(col_width / 3);
+                resultsTable.getColumnModel().getColumn(2).setPreferredWidth((int)(3.2 * col_width));
         }
         
         
@@ -181,9 +222,8 @@ public class ResultsForm extends javax.swing.JFrame {
                 //Print results to the table
                 clearTable();
                 
-                DefaultTableModel model = (DefaultTableModel)resultsTable.getModel();
-                
                 //Set amount of results
+                DefaultTableModel model = (DefaultTableModel)resultsTable.getModel();
                 model.setRowCount(results.size());
                   
                 //Print all candidates
@@ -212,8 +252,8 @@ public class ResultsForm extends javax.swing.JFrame {
 
                         //Print results
                         model.setValueAt(index + 1, index, 0);
-                        model.setValueAt(proj.getFamily(), index, 1);
-                        model.setValueAt(proj.getName(), index, 2);
+                        model.setValueAt("  " + proj.getFamily(), index, 1);
+                        model.setValueAt("  " + proj.getName(), index, 2);
                         model.setValueAt(fx_string, index, 3);
                         model.setValueAt(R_string, index, 4);
                         model.setValueAt(latp_string, index, 5);
@@ -228,6 +268,9 @@ public class ResultsForm extends javax.swing.JFrame {
                         
                         index++;
                 }
+
+                //Sort table by column 3: square of residuals
+                sortByColumn(3);                
         }
         
         
@@ -257,6 +300,20 @@ public class ResultsForm extends javax.swing.JFrame {
                         model.setValueAt("", index, 13);
                 }
         }
+        
+        
+        private void sortByColumn(final int col_index_sort)
+        {
+                //Sort table according to the specific column
+                TableRowSorter <TableModel> trs =(TableRowSorter) resultsTable.getRowSorter();
+               
+                List<RowSorter.SortKey> data = new ArrayList<>();
+                data.add(new RowSorter.SortKey(col_index_sort, SortOrder.ASCENDING));
+                trs.setSortKeys(data);
+                
+                trs.sort();   
+        }
+        
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JLabel jLabel1;

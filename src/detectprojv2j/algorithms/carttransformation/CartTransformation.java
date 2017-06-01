@@ -134,24 +134,18 @@ public class CartTransformation
                 }
 
                 //Same coordinates as the cartographic pole, singular point
-                if ((abs(lon_trans - lonp) < ANGLE_ROUND_ERROR) && (abs(lat_trans - latp) < ANGLE_ROUND_ERROR)) {
-                        return MAX_LAT;
+                if (abs(lat_trans - MAX_LAT) < ANGLE_ROUND_ERROR) {
+                        return latp;
                 }
                 
-                //Reversed direction 2 (Mode M4)
-                //lon_trans is measured from the meridian arc(i.e., from its part north of K) of the base system passing the new pole K
-                //in the counterclockwise direction
+                //Reversed direction 2
                 double lon_trans2 = lon_trans;
 
-                //Normal direction 2 (Mode M3), DEFAULT
-                //lon_trans is measured from the meridian arc(i.e., from its part north of K) of the base system passing the new pole K
-                //in the counterclockwise direction.
+                //Normal direction 2
                 if (lon_direction == NormalDirection2)
                         lon_trans2 = -lon_trans;
 
-                //Reversed direction (Mode M2)
-                //lon_trans is measured from the “extended” meridian arc(i.e., from its part south of K) of the base system passing the new pole K
-                //in the clockwise direction, which represents the new prime meridian.
+                //Reversed direction (JTSK)
                 else if (lon_direction == ReversedDirection)
                 {
                         if (lon_trans < 0)
@@ -160,9 +154,7 @@ public class CartTransformation
                                 lon_trans2 = lon_trans + 180;
                 }
 
-                //Normal direction (Mode M1)
-                //lon_trans is measured from the “extended” meridian arc(i.e., from its part south of K) of the base system passing the new pole K
-                //in the counterclockwise direction.
+                //Normal direction
                 else if (lon_direction == NormalDirection)
                 {
                         if (lon_trans < 0)
@@ -214,15 +206,21 @@ public class CartTransformation
                         return lon;
                 }
                 
-                //Compute lon_trans: Reversed direction 2
+                //Reversed direction 2 (Mode M4)
+                //lon_trans is measured from the meridian arc(i.e., from its part north of K) of the base system passing the new pole K
+                //in the clockwise direction
                 double lon_trans = atan2(cos(lat * PI / 180) * sin((lon - lonp) * PI / 180),  sin(lat * PI / 180) * cos(latp * PI / 180) - cos((lon - lonp) * PI / 180) * sin(latp * PI / 180) * cos(lat * PI / 180)) * 180 / PI;
 
-                //Normal direction 2
+                //Normal direction 2 (Mode M3), DEFAULT
+                //lon_trans is measured from the meridian arc(i.e., from its part north of K) of the base system passing the new pole K
+                //in the counterclockwise direction.
                 if (lon_direction == NormalDirection2) {
                         lon_trans = -lon_trans;
                 } 
 
-                //Reversed direction (JTSK)
+                //Reversed direction (Mode M2)
+                //lon_trans is measured from the “extended” meridian arc(i.e., from its part south of K) of the base system passing the new pole K
+                //in the clockwise direction, which represents the new prime meridian.
                 else if (lon_direction == ReversedDirection) {
                         if (lon_trans < 0) {
                                 lon_trans = lon_trans + 180;
@@ -231,7 +229,9 @@ public class CartTransformation
                         }
                 }
                 
-                //Normal direction
+                //Normal direction (Mode M1)
+                //lon_trans is measured from the “extended” meridian arc(i.e., from its part south of K) of the base system passing the new pole K
+                //in the counterclockwise direction.
                 else if (lon_direction == NormalDirection) {
                         if (lon_trans < 0) {
                                 lon_trans = -180 - lon_trans;
@@ -265,9 +265,15 @@ public class CartTransformation
                         return lonp + lon_trans;
                 }
                 
+                //Same coordinates as the cartographic pole: singular point
+                //if ((abs(lon_trans - lonp) < ANGLE_ROUND_ERROR) && (abs(lat_trans - latp) < ANGLE_ROUND_ERROR))
+                //{
+                //
+                //}
+                
                 //Reversed direction 2 (Mode M4)
                 //lon_trans is measured from the meridian arc(i.e., from its part north of K) of the base system passing the new pole K
-                //in the counterclockwise direction
+                //in the clockwise direction
                 double lon_trans2 = lon_trans;
 
                 //Normal direction 2 (Mode M3), DEFAULT
@@ -306,23 +312,23 @@ public class CartTransformation
         
         
         
-        public static void latLontoXY(final double lat, final double lon, final Projection proj, final double alpha, double [] X, double [] Y)
+        public static void latLontoXY(final double lat, final double lon, final Projection proj, final double alpha, double [] lat_trans, double [] lon_trans, double [] X, double [] Y)
         {
-                latLontoXY(proj.getR(), proj.getLat1(), proj.getLat2(), lat, lon, proj.getCartPole().getLat(), proj.getCartPole().getLon(), proj.getLonDir(), proj.getLon0(), proj.getDx(), proj.getDy(), proj.getC(), proj.getX(), proj.getY(), alpha, X, Y);
+                latLontoXY(proj.getR(), proj.getLat1(), proj.getLat2(), lat, lon, proj.getCartPole().getLat(), proj.getCartPole().getLon(), proj.getLonDir(), proj.getLon0(), proj.getDx(), proj.getDy(), proj.getC(), proj.getX(), proj.getY(), alpha, lat_trans, lon_trans, X, Y);
         }
         
         
-        public static void latLontoXY(final double R, final double lat1, final double lat2, final double lat, final double lon, final double latp, final double lonp, final TTransformedLongitudeDirection lon_dir, final double lon0, final double dx, final double dy, final double c, final ICoordFunctionProj getX, final ICoordFunctionProj getY, final double alpha, double [] X, double [] Y)
+        public static void latLontoXY(final double R, final double lat1, final double lat2, final double lat, final double lon, final double latp, final double lonp, final TTransformedLongitudeDirection lon_dir, final double lon0, final double dx, final double dy, final double c, final ICoordFunctionProj getX, final ICoordFunctionProj getY, final double alpha, double [] lat_trans, double [] lon_trans, double [] X, double [] Y)
         {
                 //Convert a geographic point to the Cartesian coordinates
 
                 //(lat, lon) -> (lat_trans, lon_trans)
-                final double lat_trans = CartTransformation.latToLatTrans(lat, lon, latp, lonp);
-                final double lon_trans = CartTransformation.lonToLonTrans(lat, lon, latp, lonp, lon_dir);
+                lat_trans[0] = CartTransformation.latToLatTrans(lat, lon, latp, lonp);
+                lon_trans[0] = CartTransformation.lonToLonTrans(lat, lon, latp, lonp, lon_dir);
                 
                 //(lat_trans, lon_trans) -> (X, Y)
-                final double Xr = getX.f(R, lat1, lat2, lat_trans, lon_trans, lon0, 0.0, 0.0, c);
-                final double Yr = getY.f(R, lat1, lat2, lat_trans, lon_trans, lon0, 0.0, 0.0, c);
+                final double Xr = getX.f(R, lat1, lat2, lat_trans[0], lon_trans[0], lon0, 0.0, 0.0, c);
+                final double Yr = getY.f(R, lat1, lat2, lat_trans[0], lon_trans[0], lon0, 0.0, 0.0, c);
 
                 //Compute Helmert transformation coefficients (for the M8 method)
                 final double q1 = cos(alpha * PI / 180);
@@ -341,8 +347,8 @@ public class CartTransformation
                 {
                         for (Point3DGeographic p:reference_points)
                         {
-                                double [] X = {0}, Y = {0};
-                                CartTransformation.latLontoXY(p.getLat(), p.getLon(), proj, alpha, X, Y);
+                                double [] X = {0.0}, Y = {0.0}, lat_trans = {0.0}, lon_trans = {0.0};
+                                CartTransformation.latLontoXY(p.getLat(), p.getLon(), proj, alpha,lat_trans, lon_trans, X, Y);
                                 projected_points.add(new Point3DCartesian(X[0], Y[0], 0));
                         }
                 }

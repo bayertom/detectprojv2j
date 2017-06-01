@@ -1,4 +1,4 @@
-// Description: List of collected control points
+// Description: List of collected control points and their residuals
 
 // Copyright (c) 2015 - 2016
 // Tomas Bayer
@@ -21,20 +21,23 @@
 package detectprojv2j.forms;
 
 import java.util.List;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Locale;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableRowSorter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import detectprojv2j.structures.point.Point3DCartesian;
+
+import detectprojv2j.comparators.sortJColumnByDouble;
 
 
 public class ControlPointsForm extends javax.swing.JFrame {
@@ -44,12 +47,12 @@ public class ControlPointsForm extends javax.swing.JFrame {
         private JPopupMenu pop_up_menu;                                                 //Pop-up menu (point deletition)
         private boolean [] add_test_point;                                              //Control point may be added to the early map
         private boolean [] add_reference_point;                                         //Control point may be added to the reference (OSM) map
-        private boolean computation_in_progress;                                        //Test, whether a computation is in progress
+        private boolean [] computation_in_progress;                                     //Test, whether a computation is in progress
         private int [] index_nearest;                                                   //Index of the point nearest to the cursor position
         private int [] index_nearest_prev;                                              //Index of the previous point nearest to the cursor position
 
         
-        public ControlPointsForm(EarlyMap early_map_, Map map_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_)
+        public ControlPointsForm(EarlyMap early_map_, Map map_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_)
         {
                 //Initialize parameters
                 initComponents();
@@ -82,7 +85,7 @@ public class ControlPointsForm extends javax.swing.JFrame {
                         public void actionPerformed(ActionEvent ae) 
                         {
                                 //Delete nearest point: analyzed map
-                                if (computation_in_progress)
+                                if (!computation_in_progress[0])
                                 {
                                         //Is there any nearest point?
                                         if (index_nearest[0] >= 0)
@@ -124,14 +127,17 @@ public class ControlPointsForm extends javax.swing.JFrame {
                         public void valueChanged(ListSelectionEvent event) 
                         {
                                 //Index of the selected row
-                                int index = controlPointsTable.getSelectedRow();
+                                int sel_index = controlPointsTable.getSelectedRow();
                                 
+                                //Recomputed index according to the sorted elements
+                                final int point_index  = sel_index > -1 ? controlPointsTable.convertRowIndexToModel( sel_index ) : -1;
+
                                 //Highlight selected control point
-                                if ((index < Math.max(early_map.test_points.size(), map.reference_points.size())) && (index >= 0))
+                                if ((point_index < Math.max(early_map.test_points.size(), map.reference_points.size())) && (point_index >= 0))
                                 {
                                         //Assign index
                                         index_nearest_prev[0] = index_nearest[0];
-                                        index_nearest[0] = index;
+                                        index_nearest[0] = point_index;
 
                                         //Repaint maps
                                         early_map.repaint();
@@ -214,7 +220,7 @@ public class ControlPointsForm extends javax.swing.JFrame {
 
         private void controlPointsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_controlPointsTableMouseClicked
                 
-                 //Delete control point frp, the table
+                 //Delete control point from the table
                 if (!SwingUtilities.isLeftMouseButton(evt)) 
                 {
                         //Show pop-up menu, remove test point, reference point, or a pair
@@ -231,10 +237,21 @@ public class ControlPointsForm extends javax.swing.JFrame {
                 DefaultTableModel model = (DefaultTableModel)controlPointsTable.getModel();
                 model.setColumnIdentifiers(col_names);
                 
+                 //Enable sorting by columns
+                TableRowSorter trs = new TableRowSorter(model);  
+                for (int i = 0; i < col_names.length; i++)
+                        trs.setComparator(i, new sortJColumnByDouble());
+
+                controlPointsTable.setRowSorter(trs);   
+                
                 //Set center alignment for the header
                 JTableHeader header = controlPointsTable.getTableHeader();
                 DefaultTableCellRenderer r_header = (DefaultTableCellRenderer)header.getDefaultRenderer();
                 r_header.setHorizontalAlignment(SwingConstants.CENTER);
+                
+                //Set font size for header and table
+                header.setFont( header.getFont().deriveFont(12f) );
+                controlPointsTable.setFont(header.getFont().deriveFont(12f));
                 
                 //Create renderer for the remaining part  of the table
                 DefaultTableCellRenderer r_cells = new DefaultTableCellRenderer();

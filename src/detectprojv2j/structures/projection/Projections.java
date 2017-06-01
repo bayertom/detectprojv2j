@@ -41,122 +41,124 @@ public class Projections {
         public static void init (final List <Projection> projections, final TTransformedLongitudeDirection default_lon_dir)
         {
                 //Initialize all supported projections and add them to the list
-                ProjectionMiscellaneous adamh = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_adamh, Projections::Y_adamh, "adamh");
-                ProjectionMiscellaneous adams1 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_adams1, Projections::Y_adams1, "adams1");
-                ProjectionMiscellaneous adams2 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_adams2, Projections::Y_adams2, "adams2");
-                ProjectionConic aea = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aea, Projections::Y_aea, "aea");
-                ProjectionAzimuthal aeqd = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aeqd, Projections::Y_aeqd, "aeqd");
-                ProjectionPseudoAzimuthal aitoff = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aitoff, Projections::Y_aitoff, "aitoff");
-                ProjectionMiscellaneous api = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_api, Projections::Y_api, "api");
-                ProjectionMiscellaneous apiel = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_apiel, Projections::Y_apiel, "apiel");
-                ProjectionMiscellaneous armad = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_armad, Projections::Y_armad, "armad");
-                ProjectionMiscellaneous august = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_august, Projections::Y_august, "august");
+                ProjectionMiscellaneous adamh = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_adamh, Projections::Y_adamh,"Adams, hemisphere in square", "adamh");
+                ProjectionMiscellaneous adams1 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_adams1, Projections::Y_adams1, "Adams, world in square I.", "adams1");
+                ProjectionMiscellaneous adams2 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_adams2, Projections::Y_adams2, "Adams, world in square II.", "adams2");
+                ProjectionConic aea = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aea, Projections::Y_aea, "Albers, equal area", "aea");
+                ProjectionAzimuthal aeqd = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aeqd, Projections::Y_aeqd, "Equidistant",  "aeqd");
+                ProjectionPseudoAzimuthal aitoff = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_aitoff, Projections::Y_aitoff, "Aitoff", "aitoff");
+                ProjectionMiscellaneous api = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_api, Projections::Y_api, "Apianus", "api");
+                ProjectionMiscellaneous apiel = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_apiel, Projections::Y_apiel, "Apianus, elliptic",  "apiel");
+                ProjectionMiscellaneous armad = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_armad, Projections::Y_armad, "Armadillo", "armad");
+                ProjectionMiscellaneous august = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_august, Projections::Y_august, "August, epicycloidal", "august");
                 
-                ProjectionMiscellaneous bacon = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_bacon, Projections::Y_bacon, "bacon");
-                ProjectionPseudoCylindrical boggs = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_boggs, Projections::Y_boggs, "boggs");
-                ProjectionPseudoConic bonne = new ProjectionPseudoConic (R0, 90.0, 0.0, 40.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_bonne, Projections::Y_bonne, "bonne");
-                ProjectionAzimuthal breus = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_breus, Projections::Y_breus, "breus");
-                ProjectionCylindrical cc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cc, Projections::Y_cc, "cc");
-                ProjectionCylindrical cea = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cea, Projections::Y_cea, "cea");
-                ProjectionAzimuthal clar = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_clar, Projections::Y_clar, "breus");
-                ProjectionMiscellaneous collg = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_collg, Projections::Y_collg, "collg");
-                ProjectionMiscellaneous crast = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_crast, Projections::Y_crast, "crast");
-                ProjectionMiscellaneous cwe = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cwe, Projections::Y_cwe, "cwe");
+                ProjectionMiscellaneous bacon = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_bacon, Projections::Y_bacon, "Bacon, globular", "bacon");
+                ProjectionCylindrical behr = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_behr, Projections::Y_behr, "Behrmann", "behr");
+                ProjectionPseudoCylindrical boggs = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_boggs, Projections::Y_boggs, "Boggs, eumorphic", "boggs");
+                ProjectionPseudoConic bonne = new ProjectionPseudoConic (R0, 90.0, 0.0, 40.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_bonne, Projections::Y_bonne, "Bonne", "bonne");
+                ProjectionAzimuthal breus = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_breus, Projections::Y_breus, "Breusign", "breus");
+                ProjectionCylindrical cc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cc, Projections::Y_cc, "Central, perspective", "cc");
+                ProjectionCylindrical cea = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cea, Projections::Y_cea, "Lambert, equal area", "cea");
+                ProjectionAzimuthal clar = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_clar, Projections::Y_clar, "Clark, perspective", "clar");
+                ProjectionMiscellaneous collg = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_collg, Projections::Y_collg, "Collignon", "collg");
+                ProjectionMiscellaneous crast = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_crast, Projections::Y_crast, "Craster, parabolic",  "crast");
                 
-                ProjectionPseudoCylindrical denoy = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_denoy, Projections::Y_denoy, "denoy");
-                ProjectionPseudoCylindrical eck1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck1, Projections::Y_eck1, "eck1");
-                ProjectionPseudoCylindrical eck2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck2, Projections::Y_eck2, "eck2");
-                ProjectionPseudoCylindrical eck3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck3, Projections::Y_eck3, "eck3");
-                ProjectionPseudoCylindrical eck4 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck4, Projections::Y_eck4, "eck4");
-                ProjectionPseudoCylindrical eck5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck5, Projections::Y_eck5, "eck5");
-                ProjectionPseudoCylindrical eck6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck6, Projections::Y_eck6, "eck6");
-                ProjectionMiscellaneous eisen = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eisen, Projections::Y_eisen, "eisen");
-                ProjectionCylindrical eqc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqc, Projections::Y_eqc, "eqc");
-                ProjectionConic eqdc = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc, Projections::Y_eqdc, "eqdc");
+                ProjectionMiscellaneous cwe = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_cwe, Projections::Y_cwe, "Conformal world in ellipse", "cwe");
+                ProjectionPseudoCylindrical denoy = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_denoy, Projections::Y_denoy, "Denoyer, semi-elliptical", "denoy");
+                ProjectionPseudoCylindrical eck1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck1, Projections::Y_eck1, "Eckert I.", "eck1");
+                ProjectionPseudoCylindrical eck2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck2, Projections::Y_eck2, "Eckert II.", "eck2");
+                ProjectionPseudoCylindrical eck3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck3, Projections::Y_eck3, "Eckert III.", "eck3");
+                ProjectionPseudoCylindrical eck4 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck4, Projections::Y_eck4, "Eckert IV.", "eck4");
+                ProjectionPseudoCylindrical eck5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck5, Projections::Y_eck5, "Eckert V.", "eck5");
+                ProjectionPseudoCylindrical eck6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eck6, Projections::Y_eck6, "Eckert VI.", "eck6");
+                ProjectionMiscellaneous eisen = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eisen, Projections::Y_eisen, "Eisenlohr", "eisen");
+                ProjectionCylindrical eqc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqc, Projections::Y_eqc, "Equidistant", "eqc");
                 
-                ProjectionConic eqdc2 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc2, Projections::Y_eqdc2, "eqdc2");
-                ProjectionConic eqdc3 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc3, Projections::Y_eqdc3, "eqdc3");
-                ProjectionPseudoCylindrical fahey = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fahey, Projections::Y_fahey, "fahey");
-                ProjectionPseudoCylindrical fouc = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fouc, Projections::Y_fouc, "fouc");
-                ProjectionPseudoCylindrical fouc_s = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fouc_s, Projections::Y_fouc_s, "fouc_s");
-                ProjectionMiscellaneous fourn = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fourn, Projections::Y_fourn, "fourn");
-                ProjectionMiscellaneous fourn2 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fourn2, Projections::Y_fourn2, "fourn2");
-                ProjectionCylindrical gall = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gall, Projections::Y_gall, "gall");
-                ProjectionPseudoCylindrical gins8 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gins8, Projections::Y_gins8, "gins8");
-                ProjectionAzimuthal gnom = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gnom, Projections::Y_gnom, "gnom");
+                ProjectionConic eqdc = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc, Projections::Y_eqdc, "Equidistant (true parallel lat1)", "eqdc"); 
+                ProjectionConic eqdc2 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc2, Projections::Y_eqdc2, "Equidistant (true parallels lat1, lat2)", "eqdc2");
+                ProjectionConic eqdc3 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_eqdc3, Projections::Y_eqdc3, "Equidistant (true parallel lat1, pole = point)", "eqdc3");
+                ProjectionPseudoCylindrical fahey = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fahey, Projections::Y_fahey, "Fahey", "fahey");
+                ProjectionPseudoCylindrical fouc = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fouc, Projections::Y_fouc, "Foucaut, sine-tangent",  "fouc");
+                ProjectionPseudoCylindrical fouc_s = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fouc_s, Projections::Y_fouc_s, "Foucaut, sinusoidal", "fouc_s");
+                ProjectionMiscellaneous fourn = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fourn, Projections::Y_fourn, "Fournier I., globular", "fourn");
+                ProjectionMiscellaneous fourn2 = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_fourn2, Projections::Y_fourn2, "Fournier II., elliptical", "fourn2");
+                ProjectionCylindrical gall = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gall, Projections::Y_gall, "Gall, stereographic", "gall");
+                ProjectionPseudoCylindrical gins8 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gins8, Projections::Y_gins8, "Ginsburg VIII. (TsNIIGAiK)", "gins8");
                 
-                ProjectionPseudoCylindrical goode = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_goode, Projections::Y_goode, "goode");
-                ProjectionMiscellaneous guyou = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_guyou, Projections::Y_guyou, "guyou");
-                ProjectionPseudoAzimuthal hammer = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hammer, Projections::Y_hammer, "hammer");
-                ProjectionPseudoCylindrical hataea = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hataea, Projections::Y_hataea, "hataea");
-                ProjectionAzimuthal hire = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hire, Projections::Y_hire, "hire");                
-                ProjectionAzimuthal jam = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_jam, Projections::Y_jam, "jam");
-                ProjectionPseudoCylindrical kav5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_kav5, Projections::Y_kav5, "kav5");
-                ProjectionPseudoCylindrical kav7 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_kav7, Projections::Y_kav7, "kav7");
-                ProjectionAzimuthal laea = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_laea, Projections::Y_laea, "laea");
-                ProjectionMiscellaneous larr = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_larr, Projections::Y_larr , "larr");
+                ProjectionAzimuthal gnom = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_gnom, Projections::Y_gnom, "Gnomonic", "gnom");
+                ProjectionPseudoCylindrical goode = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_goode, Projections::Y_goode, "Goode, homolosine", "goode");
+                ProjectionMiscellaneous guyou = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_guyou, Projections::Y_guyou, "Guyou", "guyou");
+                ProjectionPseudoAzimuthal hammer = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hammer, Projections::Y_hammer, "Hammer", "hammer");
+                ProjectionPseudoCylindrical hataea = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hataea, Projections::Y_hataea, "Hatano, asymmetrical, equal area", "hataea");
+                ProjectionAzimuthal hire = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_hire, Projections::Y_hire, "La Hire", "hire");                
+                ProjectionAzimuthal jam = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_jam, Projections::Y_jam, "James, perspective", "jam");
+                ProjectionPseudoCylindrical kav5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_kav5, Projections::Y_kav5, "Kavrayskiy V.", "kav5");
+                ProjectionPseudoCylindrical kav7 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_kav7, Projections::Y_kav7, "Kavrayskiy VII.", "kav7");
+                ProjectionAzimuthal laea = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_laea, Projections::Y_laea, "Lambert, equal area", "laea");
                 
-                ProjectionMiscellaneous lagrng = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lagrng, Projections::Y_lagrng, "lagrng");
-                ProjectionPseudoCylindrical lask = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lask, Projections::Y_lask, "lask");
-                ProjectionConic lcc = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lcc, Projections::Y_lcc, "lcc");
-                ProjectionConic leac = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_leac, Projections::Y_leac, "leac");
-                ProjectionConic leac2 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_leac2, Projections::Y_leac2, "leac2");
-                ProjectionMiscellaneous litt = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_litt, Projections::Y_litt, "litt");
-                ProjectionPseudoCylindrical loxim = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_loxim, Projections::Y_loxim, "loxim");
-                ProjectionPseudoCylindrical mbt_s = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbt_s, Projections::Y_mbt_s, "mbt_s");
-                ProjectionPseudoCylindrical mbt_s3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbt_s3, Projections::Y_mbt_s3, "mbt_s3");
-                ProjectionPseudoCylindrical mbtfpq = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbtfpq, Projections::Y_mbtfpq, "mbtfpq");
+                ProjectionMiscellaneous lagrng = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lagrng, Projections::Y_lagrng, "Lagrange, conformal", "lagrng");
+                ProjectionMiscellaneous larr = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_larr, Projections::Y_larr , "Larrivee", "larr");
+                ProjectionPseudoCylindrical lask = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lask, Projections::Y_lask, "Laskowski", "lask");
+                ProjectionConic lcc = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_lcc, Projections::Y_lcc, "Lambert, conformal", "lcc");
+                ProjectionConic leac = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_leac, Projections::Y_leac, "Lambert, equal area (standard parallel lat1)", "leac");
+                ProjectionConic leac2 = new ProjectionConic (R0, 90.0, 0.0, 40.0, 50.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_leac2, Projections::Y_leac2, "Lambert, equal area (standard parallels lat1, lat2)", "leac2");
+                ProjectionMiscellaneous litt = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_litt, Projections::Y_litt, "Littrow", "litt");
+                ProjectionPseudoCylindrical loxim = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_loxim, Projections::Y_loxim, "Loximuthal", "loxim");
+                ProjectionPseudoCylindrical mbt_s = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbt_s, Projections::Y_mbt_s, "McBryde-Thomas, sine I.", "mbt_s");
+                ProjectionPseudoCylindrical mbt_s3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbt_s3, Projections::Y_mbt_s3, "McBryde-Thomas, flat-pole sine III.", "mbt_s3");
                 
-                ProjectionPseudoCylindrical mbtfps = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbtfps, Projections::Y_mbtfps, "mbtfps");
-                ProjectionCylindrical merc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_merc, Projections::Y_merc, "merc");
-                ProjectionPseudoCylindrical mill = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mill, Projections::Y_mill, "mill"); 
-                ProjectionPseudoCylindrical moll = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_moll, Projections::Y_moll, "moll");
-                ProjectionPseudoCylindrical nell = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nell, Projections::Y_nell, "nell");
-                ProjectionPseudoCylindrical nell_h = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nell_h, Projections::Y_nell_h, "nell_h");    
-                ProjectionMiscellaneous nicol = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nicol, Projections::Y_nicol, "nicol");
-                ProjectionPseudoCylindrical ortel = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_ortel, Projections::Y_ortel, "ortel");
-                ProjectionAzimuthal ortho = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_ortho, Projections::Y_ortho, "ortho");
-                ProjectionPseudoCylindrical parab = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_parab, Projections::Y_parab, "parab");
+                ProjectionPseudoCylindrical mbtfpq = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbtfpq, Projections::Y_mbtfpq, "McBryde-Thomas, flat-pole quartic IV.", "mbtfpq");
+                ProjectionPseudoCylindrical mbtfps = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mbtfps, Projections::Y_mbtfps, "McBryde-Thomas, flat-pole sine II.", "mbtfps");
+                ProjectionCylindrical merc = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_merc, Projections::Y_merc, "Mercator", "merc");
+                ProjectionCylindrical mill = new ProjectionCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_mill, Projections::Y_mill, "Miller", "mill"); 
+                ProjectionPseudoCylindrical moll = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_moll, Projections::Y_moll, "Mollweide", "moll");
+                ProjectionPseudoCylindrical nell = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nell, Projections::Y_nell, "Nell", "nell");
+                ProjectionPseudoCylindrical nell_h = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nell_h, Projections::Y_nell_h, "Nell-Hammer", "nell_h");    
+                ProjectionMiscellaneous nicol = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_nicol, Projections::Y_nicol, "Nicolosi, globular", "nicol");
+                ProjectionPseudoCylindrical ortel = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_ortel, Projections::Y_ortel, "Ortelius", "ortel");
+                ProjectionAzimuthal ortho = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_ortho, Projections::Y_ortho, "Orthographic", "ortho");
                 
-                ProjectionMiscellaneous peiq = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_peiq, Projections::Y_peiq, "peiq");
-                ProjectionAzimuthal pers = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_pers, Projections::Y_pers, "pers");
-                ProjectionAzimuthal persf = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_persf, Projections::Y_persf, "persf");
-                ProjectionAzimuthal persn = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_persn, Projections::Y_persn, "persn");
-                ProjectionPolyConic poly = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_poly, Projections::Y_poly, "poly");
-                ProjectionPseudoCylindrical putp1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp1, Projections::Y_putp1, "putp1");
-                ProjectionPseudoCylindrical putp2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp2, Projections::Y_putp2, "putp2");
-                ProjectionPseudoCylindrical putp3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp3, Projections::Y_putp3, "putp3");
-                ProjectionPseudoCylindrical putp3p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp3p, Projections::Y_putp3p, "putp3p");
-                ProjectionPseudoCylindrical putp4p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp4p, Projections::Y_putp4p, "putp4p");
+                ProjectionPseudoCylindrical parab = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_parab, Projections::Y_parab, "Parabolic", "parab");
+                ProjectionMiscellaneous peiq = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_peiq, Projections::Y_peiq, "Peirce, quincuncial", "peiq");
+                ProjectionAzimuthal pers = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_pers, Projections::Y_pers, "Perspective", "pers");
+                ProjectionAzimuthal persf = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_persf, Projections::Y_persf, "Far-side, perspective", "persf");
+                ProjectionAzimuthal persn = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_persn, Projections::Y_persn, "Near-side, perspective", "persn");
+                ProjectionPolyConic poly = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_poly, Projections::Y_poly, "Hassler,  American, polyconic", "poly");
+                ProjectionPseudoCylindrical putp1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp1, Projections::Y_putp1, "Putnins P1", "putp1");
+                ProjectionPseudoCylindrical putp2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp2, Projections::Y_putp2, "Putnins P2", "putp2");
+                ProjectionPseudoCylindrical putp3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp3, Projections::Y_putp3, "Putnins P3", "putp3");
+                ProjectionPseudoCylindrical putp3p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp3p, Projections::Y_putp3p, "Putnins P3P", "putp3p");
                 
-                ProjectionPseudoCylindrical putp5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp5, Projections::Y_putp5, "putp5");
-                ProjectionPseudoCylindrical putp5p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp5p, Projections::Y_putp5p, "putp5p");         
-                ProjectionPseudoCylindrical putp6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp6, Projections::Y_putp6, "putp6");
-                ProjectionPseudoCylindrical putp6p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp6p, Projections::Y_putp6p, "putp6p");         
-                ProjectionPseudoCylindrical qua_aut = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_qua_aut, Projections::Y_qua_aut, "qua_aut");
-                ProjectionPseudoCylindrical rpoly = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_rpoly, Projections::Y_rpoly, "rpoly");
-                ProjectionPseudoCylindrical sinu = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_sinu, Projections::Y_sinu, "sinu");     
-                ProjectionAzimuthal solo = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_solo, Projections::Y_solo, "solo");
-                ProjectionAzimuthal stere = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_stere, Projections::Y_stere, "stere");
-                ProjectionAzimuthal twi = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_twi, Projections::Y_twi, "twi");
+                ProjectionPseudoCylindrical putp4p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp4p, Projections::Y_putp4p, "Putnins P4P", "putp4p");
+                ProjectionPseudoCylindrical putp5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp5, Projections::Y_putp5, "Putnins P5", "putp5");
+                ProjectionPseudoCylindrical putp5p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp5p, Projections::Y_putp5p, "Putnins P5P", "putp5p");         
+                ProjectionPseudoCylindrical putp6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp6, Projections::Y_putp6, "Putnins P6", "putp6");
+                ProjectionPseudoCylindrical putp6p = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_putp6p, Projections::Y_putp6p, "Putnins P6p", "putp6p");         
+                ProjectionPseudoCylindrical qua_aut = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_qua_aut, Projections::Y_qua_aut, "Quartic, authalic", "qua_aut");
+                ProjectionPseudoCylindrical rpoly = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_rpoly, Projections::Y_rpoly, "Rectangular, polyconic", "rpoly");
+                ProjectionPseudoCylindrical sinu = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_sinu, Projections::Y_sinu, "Sinusoidal", "sinu");     
+                ProjectionAzimuthal solo = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_solo, Projections::Y_solo, "Solovyev,azimuthal", "solo");
+                ProjectionAzimuthal stere = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_stere, Projections::Y_stere, "Stereographic", "stere");
                 
-                ProjectionPseudoCylindrical urm5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_urm5, Projections::Y_urm5, "urm5");
-                ProjectionPolyConic vandg = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg, Projections::Y_vandg, "vandg");
-                ProjectionPolyConic vandg2 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg2, Projections::Y_vandg2, "vandg2");
-                ProjectionPolyConic vandg3 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg3, Projections::Y_vandg3, "vandg3");
-                ProjectionPolyConic vandg4 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg4, Projections::Y_vandg4, "vandg4");
-                ProjectionPseudoCylindrical wag1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag1, Projections::Y_wag1, "wag1");
-                ProjectionPseudoCylindrical wag2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag2, Projections::Y_wag2, "wag2");                
-                ProjectionPseudoCylindrical wag3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag3, Projections::Y_wag3, "wag3");
-                ProjectionPseudoCylindrical wag4 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag4, Projections::Y_wag4, "wag4");
-                ProjectionPseudoCylindrical wag6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag6, Projections::Y_wag6, "wag6");
+                ProjectionAzimuthal twi = new ProjectionAzimuthal (R0, 90.0, 0.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_twi, Projections::Y_twi, "Twilight, general vertical perspective", "twi");
+                ProjectionPseudoCylindrical urm5 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_urm5, Projections::Y_urm5, "Urmaev V.", "urm5");
+                ProjectionPolyConic vandg = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg, Projections::Y_vandg, "Van der Grinten I.", "vandg");
+                ProjectionPolyConic vandg2 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg2, Projections::Y_vandg2, "Van der Grinten II.", "vandg2");
+                ProjectionPolyConic vandg3 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg3, Projections::Y_vandg3, "Van der Grinten III.", "vandg3");
+                ProjectionPolyConic vandg4 = new ProjectionPolyConic (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_vandg4, Projections::Y_vandg4, "Van der Grinten IV.", "vandg4");
+                ProjectionPseudoCylindrical wag1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag1, Projections::Y_wag1, "Wagner I.", "wag1");
+                ProjectionPseudoCylindrical wag2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag2, Projections::Y_wag2, "Wagner II.", "wag2");                
+                ProjectionPseudoCylindrical wag3 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag3, Projections::Y_wag3, "Wagner III.", "wag3");
+                ProjectionPseudoCylindrical wag4 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag4, Projections::Y_wag4, "Wagner IV.", "wag4");
                 
-                ProjectionPseudoCylindrical wag7 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag7, Projections::Y_wag7, "wag7");
-                ProjectionPseudoAzimuthal wer = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wer, Projections::Y_wer, "wer");
-                ProjectionPseudoCylindrical weren = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_weren, Projections::Y_weren, "weren");
-                ProjectionPseudoCylindrical wink1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wink1, Projections::Y_wink1, "wink1");
-                ProjectionPseudoCylindrical wink2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wink2, Projections::Y_wink2, "wink2");
-                ProjectionPseudoAzimuthal wintri = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wintri, Projections::Y_wintri, "wintri");
+                ProjectionPseudoCylindrical wag6 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag6, Projections::Y_wag6, "Wagner VI.", "wag6");
+                ProjectionPseudoCylindrical wag7 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wag7, Projections::Y_wag7, "Wagner VII.", "wag7");
+                ProjectionPseudoAzimuthal wer = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wer, Projections::Y_wer, "Werner-Staab", "wer");
+                ProjectionPseudoCylindrical weren = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_weren, Projections::Y_weren, "Werenskiold I.", "weren");
+                ProjectionPseudoAzimuthal wiech = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wiech, Projections::Y_wiech, "Wiechel", "wiech");
+                ProjectionPseudoCylindrical wink1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wink1, Projections::Y_wink1, "Winkel I.", "wink1");
+                ProjectionPseudoCylindrical wink2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wink2, Projections::Y_wink2, "Winkel II.", "wink2");
+                ProjectionPseudoAzimuthal wintri = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::X_wintri, Projections::Y_wintri, "Winkel, tripel", "wintri");
 
                 //Add projections to the list
                 projections.add(adamh);
@@ -171,6 +173,7 @@ public class Projections {
                 projections.add(august);
                 
                 projections.add(bacon);
+                projections.add(behr);
                 projections.add(boggs);
                 projections.add(bonne);
                 projections.add(breus);
@@ -179,8 +182,8 @@ public class Projections {
                 projections.add(clar);
                 projections.add(collg);
                 projections.add(crast);
-                projections.add(cwe);
                 
+                projections.add(cwe);
                 projections.add(denoy);
                 projections.add(eck1);
                 projections.add(eck2);
@@ -190,8 +193,8 @@ public class Projections {
                 projections.add(eck6);
                 projections.add(eisen);    
                 projections.add(eqc);
-                projections.add(eqdc);
                 
+                projections.add(eqdc);
                 projections.add(eqdc2);
                 projections.add(eqdc3);
                 projections.add(fahey);          
@@ -201,8 +204,8 @@ public class Projections {
                 projections.add(fourn2);
                 projections.add(gall);
                 projections.add(gins8);
-                projections.add(gnom);
                 
+                projections.add(gnom);
                 projections.add(goode);
                 projections.add(guyou);
                 projections.add(hammer);
@@ -212,8 +215,8 @@ public class Projections {
                 projections.add(kav5);
                 projections.add(kav7);
                 projections.add(laea);
-                projections.add(lagrng);
                 
+                projections.add(lagrng);
                 projections.add(larr);
                 projections.add(lask);
                 projections.add(lcc);
@@ -223,8 +226,8 @@ public class Projections {
                 projections.add(loxim);
                 projections.add(mbt_s);
                 projections.add(mbt_s3);
-                projections.add(mbtfpq);
                 
+                projections.add(mbtfpq);
                 projections.add(mbtfps);
                 projections.add(merc);
                 projections.add(mill);
@@ -234,8 +237,8 @@ public class Projections {
                 projections.add(nicol); 
                 projections.add(ortel);
                 projections.add(ortho);
-                projections.add(parab);
                 
+                projections.add(parab);
                 projections.add(peiq);
                 projections.add(pers);
                 projections.add(persf);
@@ -245,8 +248,8 @@ public class Projections {
                 projections.add(putp2);
                 projections.add(putp3);
                 projections.add(putp3p);
-                projections.add(putp4p);
                 
+                projections.add(putp4p);
                 projections.add(putp5);
                 projections.add(putp5p);
                 projections.add(putp6);
@@ -256,8 +259,8 @@ public class Projections {
                 projections.add(sinu);
                 projections.add(solo);
                 projections.add(stere);
-                projections.add(twi);
                 
+                projections.add(twi);
                 projections.add(urm5);
                 projections.add(vandg);
                 projections.add(vandg2);
@@ -267,11 +270,12 @@ public class Projections {
                 projections.add(wag2);
                 projections.add(wag3);
                 projections.add(wag4);
-                projections.add(wag6);
                 
+                projections.add(wag6);
                 projections.add(wag7);
                 projections.add(wer);
                 projections.add(weren);
+                projections.add(wiech);
                 projections.add(wink1);
                 projections.add(wink2);
                 projections.add(wintri);
@@ -662,7 +666,7 @@ public class Projections {
         //Aitoff
         public static double X_aitoff(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
         {
-                double X;
+                double X = 0;
                 final double lonr = CartTransformation.redLon0(lon, lon0);
 
                 final double A = cos(lat / RO) * cos(lonr / 2.0 / RO);
@@ -682,9 +686,10 @@ public class Projections {
                         double D = 1 - C * C;
 
                         //Throw exception
-                        if (D < -ARGUMENT_ROUND_ERROR)
+                        if (D < -ARGUMENT_ROUND_ERROR){
+                                System.out.println(lat + " " + lon);
                                 throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate sqrt(D) in X_aitoff coordinate function, ", "D < 0: ", D);
-
+                        }
                         //Correct D
                         if (D < 0.0) D = 0.0;
                       
@@ -701,7 +706,7 @@ public class Projections {
 
         public static double Y_aitoff(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
         {
-                double Y;
+                double Y = 0;
 
                 final double lonr = CartTransformation.redLon0(lon, lon0);
 
@@ -745,6 +750,11 @@ public class Projections {
                 else
                 {
                         //Analogous to Bacon globular, but different Y
+                        
+                        //Throw exception
+                        if (abs(lonr) < MIN_FLOAT)
+                                throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate X_api coordinate function, ", "1.0 / lonr, lonr = 0:", lonr);
+
                         final double F = ((PI / 2) *(PI / 2) * RO / abs(lonr) + abs(lonr) / RO) / 2;
                         final double Y = R * lat / RO;
                         final double G = F * F - Y * Y / (R * R);
@@ -786,7 +796,6 @@ public class Projections {
                 //Throw exception
                 if (A > 1)
                         throw new MathInvalidArgumentException ("MathInvalidArgumentException: can not evaluate acos(A) in X_apiel coordinate function, ", "A > 1: ", A);
-
 
                 final double X = R * lonr / RO * cos(asin(A)) + dx;
 
@@ -936,6 +945,34 @@ public class Projections {
 
                 return Y;
         }
+        
+        
+        //Behrmann Cylindrical
+        public static double X_behr(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+
+                final double X = R * lonr * cos(30.0 / RO) / RO + dx;
+
+
+                //Throw exception
+                if (abs(X) > MAX_FLOAT )
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate X_behr coordinate function, ", "X_behr > MAX_FLOAT: ", X);
+
+                return X;
+        }
+
+        public static double Y_behr(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double Y = R * sin(lat / RO) / cos (30.0 / RO) + dy;
+
+                //Throw exception
+                if (abs(Y) > MAX_FLOAT )
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate Y_behr coordinate function, ", "Y_behr > MAX_FLOAT: ", Y);
+
+                return Y;
+        }
+
 
         
         //Boggs Eumorphic
@@ -3474,17 +3511,17 @@ public class Projections {
                                 throw new  MathZeroDevisionException ("MathDivisonByZeroException: can not evaluate Y_nicol coordinate function, ", "1 / F, F = 0:", F);
 
                         final double G = sin(lat / RO);
-                        final double N = (E * E * G / (B * B) + E / 2.0) / F;
-                        double P = N * N - (E * E * G * G / (B * B) + E * G - 1.0) / F;
+                        final double P = (E * E * G / (B * B) + E / 2.0) / F;
+                        double Q = P * P - (E * E * G * G / (B * B) + E * G - 1.0) / F;
 
                         //Throw exception
-                        if (P < -ARGUMENT_ROUND_ERROR)
-                                throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(P) in Y_nicol coordinate function, ", "P < 0: ", P);
+                        if (Q < -ARGUMENT_ROUND_ERROR)
+                                throw new MathInvalidArgumentException("MathInvalidArgumentException: can not evaluate sqrt(Q) in Y_nicol coordinate function, ", "Q < 0: ", Q);
 
-                        //Correct P
-                        if (P < 0.0) P = 0.0;
+                        //Correct Q
+                        if (Q < 0.0) Q = 0.0;
 
-                        Y = R * PI / 2.0 * (N + signum(-lat) * sqrt(P)) + dy;
+                        Y = R * PI / 2.0 * (P + signum(-lat) * sqrt(Q)) + dy;
                 }
 
                 //Throw exception
@@ -3828,6 +3865,10 @@ public class Projections {
                 {
                         final double E = lonr / RO * sin(lat / RO);
 
+                        //Throw exception
+                        if (abs(lat) < MIN_FLOAT)
+                                throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate X_poly coordinate function, ", "1.0 / lat, lat = 0:", lat);
+                        
                         X = R * 1 / tan(lat / RO) * sin(E) + dx;
                 }
 
@@ -3852,6 +3893,10 @@ public class Projections {
                 else
                 {
                         final double E = lonr / RO * sin(lat / RO);
+
+                        //Throw exception
+        		if (abs(lat) < MIN_FLOAT)
+                		throw new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate Y_poly coordinate function, ", "1.0 / lat, lat = 0:", lat);
 
                         Y = R * (lat/RO - lat1/RO + 1.0 / tan(lat/RO) * (1 - cos(E))) + dy;
                 }
@@ -4492,6 +4537,10 @@ public class Projections {
 
                 else
                 {
+                        //Throw exception
+                        if (abs(lonr) < MIN_FLOAT)
+                                throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate X_vandg coordinate function, ", "1.0 / lonr, lonr = 0:", lonr);
+
                         final double A = 0.5 * abs(180 / lonr - lonr / 180);
                         final double D = A * A;
                         final double E = B + C - 1;
@@ -4501,6 +4550,11 @@ public class Projections {
                                 throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate X_vandg coordinate function, ", "1 / E, E = 0:", E);
 
                         final double G = C / E;
+                        
+                        //Throw exception
+                        if (abs(B) < MIN_FLOAT)
+                                throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate X_vandg coordinate function, ", "1.0 / B, B = 0:", B);
+                        
                         final double P = G * (2.0 / B - 1);
                         final double Q = D + G;
                         final double S = P * P + D;
@@ -4555,6 +4609,10 @@ public class Projections {
 
                 else
                 {
+                        //Throw exception
+                        if (abs(lonr) < MIN_FLOAT)
+                                throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate Y_vandg coordinate function, ", "1.0 / lonr, lonr = 0:", lonr);
+       
                         final double A = 0.5 * abs(180 / lonr - lonr / 180);
                         final double D = A * A;
                         final double E = B + C - 1;
@@ -4564,6 +4622,11 @@ public class Projections {
                                 throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate Y_vandg coordinate function, ", "1 / E, E = 0:", E);
 
                         final double G = C / E;
+                        
+                        //Throw exception
+                        if (abs(B) < MIN_FLOAT)
+                                throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate Y_vandg coordinate function, ", "1.0 / B, B = 0:", B);
+              
                         final double P = G * (2.0 / B - 1);
                         final double Q = D + G;
                         final double S = P * P + D;
@@ -4612,6 +4675,10 @@ public class Projections {
 
                 else
                 {
+                        //Throw exception
+                        if (abs(lonr) < MIN_FLOAT)
+                                throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate X_vandg2 coordinate function, ", "1.0 / lonr, lonr = 0:", lonr);
+
                         final double A = 0.5 * abs(180 / lonr - lonr / 180);
                         final double D = 1 + A * A * B * B;
 
@@ -4657,6 +4724,10 @@ public class Projections {
 
                 else
                 {
+                        //Throw exception
+                        if (abs(lonr) < MIN_FLOAT)
+                                throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate Y_vandg2 coordinate function, ", "1.0 / lonr, lonr = 0:", lonr);
+
                         final double A = 0.5 * abs(180 / lonr - lonr / 180);
                         final double D = 1 + A * A * B * B;
 
@@ -4706,6 +4777,10 @@ public class Projections {
 
                 else
                 {
+                        //Throw exception
+                        if (abs(lonr) < MIN_FLOAT)
+                                throw new MathZeroDevisionException("MathZeroDevisionException: can not evaluate X_vandg3 coordinate function, ", "1.0 / lonr, lonr = 0:", lonr);
+
                         final double A = 0.5 * abs(180.0 / lonr - lonr / 180.0);
                         final double Y1 = B / (1 + C);
                         double D = 1.0 + A * A - Y1 * Y1;
@@ -4786,7 +4861,18 @@ public class Projections {
 
                 else
                 {
-                        final double C = 0.5 * (B * (8.0 - B * (2.0 + B * B)) - 5) / (B * B * (B - 1));
+                        final double B1 = B * B * (B - 1);
+
+                        //Throw exception
+                        if (abs(B1) < MIN_FLOAT)
+                                throw  new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate X_vandg4 coordinate function, ", "1.0 / B1, B1 = 0:", B1);
+
+                        final double C = 0.5 * (B * (8.0 - B * (2.0 + B * B)) - 5) / B1;
+                        
+                         //Throw exception
+                        if (abs(lonr) < MIN_FLOAT)
+                                throw  new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate X_vandg4 coordinate function, ", "1.0 / lonr, lonr = 0:", lonr);
+                        
                         final double C1 = 90 / lonr + lonr / 90;
                         double C2 = C1 * C1 - 4;
 
@@ -4847,7 +4933,18 @@ public class Projections {
 
                 else
                 {
-                        final double C = 0.5 * (B * (8.0 - B * (2.0 + B * B)) - 5) / (B * B * (B - 1));
+                        final double B1 = B * B * (B - 1);
+
+                        //Throw exception
+                        if (abs(B1) < MIN_FLOAT)
+                                throw  new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate Y_vandg4 coordinate function, ", "1.0 / B1, B1 = 0:", B1);
+
+                        final double C = 0.5 * (B * (8.0 - B * (2.0 + B * B)) - 5) / B1;
+                        
+                        //Throw exception
+                        if (abs(lonr) < MIN_FLOAT)
+                                throw  new MathZeroDevisionException ("MathZeroDevisionException: can not evaluate Y_vandg4 coordinate function, ", "1.0 / lonr, lonr = 0:", lonr);
+ 
                         final double C1 = 90 / lonr + lonr / 90;
                         double C2 = C1 * C1 - 4;
 
@@ -5214,6 +5311,35 @@ public class Projections {
                 return Y;
         }
 
+        
+        //Wiechel
+        public static double X_wiech(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+                
+                final double X = R * ( sin (lonr / RO) * cos (lat / RO) - cos (lonr / RO) * (1 - sin (lat / RO))) + dx;
+
+                //Throw exception
+                if (abs(X) > MAX_FLOAT )
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate X_wiech coordinate function, ", "X_wiech > MAX_FLOAT: ", X);
+
+                return X;
+        }
+        
+
+        public static double Y_wiech(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
+        {
+                final double lonr = CartTransformation.redLon0(lon, lon0);
+                
+                final double Y = -R * (cos(lonr / RO) * cos(lat / RO) + sin(lonr / RO) * (1 - sin(lat / RO))) + dy;
+
+                //Throw exception
+                if (abs(Y) > MAX_FLOAT )
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate Y_wiech coordinate function, ", "Y_wiech > MAX_FLOAT: ", Y);
+
+                return Y;
+        }
+        
 
         //Winkel I
         public static double X_wink1(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
@@ -5229,7 +5355,7 @@ public class Projections {
                 return X;
         }
 
-
+        
         public static double Y_wink1(final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c)
         {
                 final double Y = R * lat / RO + dy;

@@ -40,9 +40,10 @@ public class ProjectionEllipsoidal extends Projection
                 b = 1;
         }
         
-	public ProjectionEllipsoidal( final double R_,  final double a_,  final double b_,  final double lat1_,  final double lon0_,  final double dx_,  final double dy_,  final double c_,  final ICoordFunctionProj pX,  final ICoordFunctionProj pY, final String name_) 
+	public ProjectionEllipsoidal( final double R_,  final double a_,  final double b_,  final double lat1_,  final double lon0_,  final double dx_,  final double dy_,  
+                                      final double c_,  final ICoordFunctionProj pX,  final ICoordFunctionProj pY, final String name_, final String id_) 
         {
-                super(R_, lon0_, dx_, dy_, c_, pX, pY, name_);
+                super(R_, lon0_, dx_, dy_, c_, pX, pY, name_, id_);
                 lat1 = lat1_;
                 a = a_;
                 b = b_;
@@ -67,7 +68,7 @@ public class ProjectionEllipsoidal extends Projection
         public TTransformedLongitudeDirection getLonDir() { return NoDirection;}
 
         @Override
-        public String getFamily() { return "Elips";}
+        public String getFamily() { return "Elipsoidal";}
 
         @Override
         public TInterval getLatPInterval() { return new TInterval (MAX_LAT, MAX_LAT); }

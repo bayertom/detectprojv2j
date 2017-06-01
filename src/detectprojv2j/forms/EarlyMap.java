@@ -92,14 +92,14 @@ public class EarlyMap extends JPanel
         private boolean [] enable_zoom_in_lm;                                   //Enable zoom-in operation using the left mouse
         private boolean [] enable_zoom_out_lm;                                  //Enable zoom-out operation using the left mouse
         private boolean [] enable_zoom_fit_all_lm;                              //Enable zoom fit all operation using the left mouse
-        private boolean computation_in_progress;                                //Test, whether a computation is in progress
+        private boolean [] computation_in_progress;                             //Test, whether a computation is in progress
         
         private int [] index_nearest;                                           //Index of the point nearest to the cursor position
         private int [] index_nearest_prev;                                      //Index of the previous point nearest to the cursor position
         
         
         public EarlyMap(List <Point3DCartesian> test_points_, Map map_, final ControlPointsForm control_points_form_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] enable_add_control_points_,
-                boolean [] enable_panning_lm_, boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
+                boolean [] enable_panning_lm_, boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean [] computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
         {
                 //Initialize repaint
                 repaint_vector_data = true;
@@ -188,7 +188,7 @@ public class EarlyMap extends JPanel
                         public void actionPerformed(ActionEvent ae) 
                         {
                                 //Delete nearest point: analyzed map
-                                if (!computation_in_progress)
+                                if (!computation_in_progress[0])
                                 {
                                         //Is there any nearest point?
                                         if (index_nearest[0] >= 0)

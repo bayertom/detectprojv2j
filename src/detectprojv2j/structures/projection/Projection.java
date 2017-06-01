@@ -36,10 +36,12 @@ public abstract class Projection
 	protected double dx;						//Aditive finalant dx
 	protected double dy;						//Aditive finalant dy
 	protected double c;						//Additional finalant of the projection
-	protected String name;                                          //Projection name (In accordance with Proj.4)
-
+	        
 	ICoordFunctionProj X;                                           //Pointer to the coordinate function X = F(lat, lon)
 	ICoordFunctionProj Y;                                           //Pointer to the coordinate function Y = Y(lat, lon)
+
+        protected String name;                                          //Projection name
+        protected String id;                                            //Projection ID (In accordance with Proj.4)
 
         public Projection()
         {
@@ -50,10 +52,11 @@ public abstract class Projection
                  c = 1;
                  X = Projections::X_aea;
                  Y = Projections::Y_def;
-                 name = "default";
+                 name = "Azimuthal equal area";
+                 id = "aea";
         }
 
-	Projection(final double R_, final double lon0_, final double dx_, final double dy_, final double c_, final ICoordFunctionProj  pX, final ICoordFunctionProj  pY, final String name_) 
+	Projection(final double R_, final double lon0_, final double dx_, final double dy_, final double c_, final ICoordFunctionProj  pX, final ICoordFunctionProj  pY, final String name_, final String id_) 
         {
                 
 		R = R_;
@@ -61,9 +64,10 @@ public abstract class Projection
                 dx = dx_;
                 dy = dy_;
                 c = c_;
-                name = name_;
                 X = pX;  
                 Y = pY;
+                name = name_;
+                id = id_;
         }
 
 	//Methods common for all derived classes (methods are final)
@@ -79,6 +83,7 @@ public abstract class Projection
 	public final double getY(final double R_, final double lat1_, final double lat2_, final double lat_, final double lon_, final double lon0_, final double dx_, final double dy_, final double c_) { return Y.f(R_, lat1_, lat2_, lat_, lon_, lon0_, dx_, dy_, c_); }
 	public final ICoordFunctionProj  getY() { return Y; }
 	public final String getName() {return name;}
+        public final String getID() {return id;}
 
 	public void setR(final double R_) {R = R_;}
 	public void setLon0(final double lon0_) {lon0 = lon0_;}
@@ -86,6 +91,7 @@ public abstract class Projection
 	public void setDy(final double dy_) {dy = dy_;}
 	public void setC(final double c_) {c = c_;}
 	public void setName(final String name_){name = name_;}
+        public void setID(final String id_){id = id_;}
 
 	//Methods different for all derived classes (abstract methods)
 	public abstract Point3DGeographic getCartPole();

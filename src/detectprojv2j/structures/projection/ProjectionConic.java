@@ -42,9 +42,10 @@ public class ProjectionConic extends Projection
                 lon_dir = NormalDirection2;
         }
         
-	public ProjectionConic( final double R_,  final double latp_,  final double lonp_,  final double lat1_, final double lat2_, final TTransformedLongitudeDirection lon_dir_,  final double lon0_,  final double dx_,  final double dy_,  final double c_,  final ICoordFunctionProj pX,  final ICoordFunctionProj pY, final String name_) 
+	public ProjectionConic( final double R_,  final double latp_,  final double lonp_,  final double lat1_, final double lat2_, final TTransformedLongitudeDirection lon_dir_,  final double lon0_,  final double dx_,  final double dy_,  
+                                final double c_,  final ICoordFunctionProj pX,  final ICoordFunctionProj pY, final String name_, final String id_) 
         {
-                super(R_, lon0_, dx_, dy_, c_, pX, pY, name_);
+                super(R_, lon0_, dx_, dy_, c_, pX, pY, name_, id_);
                 lat1 = lat1_;
                 lat2 = lat2_;
                 cart_pole = new Point3DGeographic (latp_, lonp_, 0.0);

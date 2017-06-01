@@ -40,9 +40,10 @@ public class ProjectionAzimuthal extends Projection
                 lon_dir = NormalDirection2;
         }
         
-	public ProjectionAzimuthal( final double R_,  final double latp_,  final double lonp_,  final TTransformedLongitudeDirection lon_dir_,  final double lon0_,  final double dx_,  final double dy_,  final double c_,  final ICoordFunctionProj pX,  final ICoordFunctionProj pY, final String name_) 
+	public ProjectionAzimuthal( final double R_,  final double latp_,  final double lonp_,  final TTransformedLongitudeDirection lon_dir_,  final double lon0_,  final double dx_,  final double dy_, 
+                                    final double c_,  final ICoordFunctionProj pX,  final ICoordFunctionProj pY, final String name_, final String id_) 
         {
-                super(R_, lon0_, dx_, dy_, c_, pX, pY, name_);
+                super(R_, lon0_, dx_, dy_, c_, pX, pY, name_, id_);
                 cart_pole = new Point3DGeographic (latp_, lonp_, 0.0);
                 lon_dir = lon_dir_;
         }
@@ -66,7 +67,7 @@ public class ProjectionAzimuthal extends Projection
         public TTransformedLongitudeDirection getLonDir() { return lon_dir;}
 
         @Override
-        public String getFamily() { return "Azim";}
+        public String getFamily() { return "Azimuthal";}
 
         @Override
         public TInterval getLatPInterval() { return new TInterval (MIN_LAT, MAX_LAT); }

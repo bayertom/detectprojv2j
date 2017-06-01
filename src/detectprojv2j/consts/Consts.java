@@ -48,6 +48,9 @@ public final class Consts {
 
     //Shift of the meridian/parallel point, when graticule constructed
     public static final double GRATICULE_LAT_LON_SHIFT = 1.0e-3;
+    
+    //Maximum amount of the planisphere subdivision into tiles (when the graticule constructed)
+    public static final double MAX_GRATICULE_SPLIT_AMOUNT = 100;
 
     //Maximum length of the NLS step
     public static final double MAX_NLS_STEP_LENGTH = 1.0e3;

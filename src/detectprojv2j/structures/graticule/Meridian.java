@@ -38,7 +38,8 @@ import detectprojv2j.algorithms.carttransformation.CartTransformation;
 import detectprojv2j.algorithms.round.Round;
 
 import detectprojv2j.exceptions.MathException;
-import detectprojv2j.exceptions.MathInvalidArgumentException;
+import detectprojv2j.exceptions.MathLatSingularityException;
+import detectprojv2j.exceptions.MathLonSingularityException;
 
 public class Meridian {
         
@@ -86,8 +87,14 @@ public class Meridian {
                 final double lat_start = Round.roundToMultipleFloor(lat_interval.min_value, dlat) + dlat;
                 final double lat_end = Round.roundToMultipleCeil(lat_interval.max_value, dlat) - dlat;
 
-                //Add first point (lower bound of the interval)
-                lats.add(max(min(lat_interval.min_value + lat_min_shift, MAX_LAT), MIN_LAT));
+                //Set value lat_min inside [MIN_LAT, MAX_LAT] (shifted lower bound)
+                double lat_lb = max(min(lat_interval.min_value + lat_min_shift, MAX_LAT), MIN_LAT);
+
+                //Set value lat_min <= lat_interval.max
+                lat_lb = min(lat_lb, lat_interval.max_value);
+
+                //Add first point (shifted lower bound of the interval)
+                lats.add(lat_lb);
 
                 //Add intermediate points
                 for (double lat_point = lat_start; lat_point <= lat_end; lat_point += dlat)
@@ -95,8 +102,14 @@ public class Meridian {
                         lats.add(lat_point);
                 }
 
-                //Add last point (upper bound of the interval)
-                lats.add(max(min(lat_interval.max_value - lat_max_shift, MAX_LAT), MIN_LAT));
+                //Set value lat_min inside [MIN_LAT, MAX_LAT] (shifted upper bound)
+                double lat_ub = min(max(lat_interval.max_value - lat_max_shift, MIN_LAT), MAX_LAT);
+
+                //Set value lat_max >= lat_interval.min
+                lat_ub = max(lat_ub, lat_interval.min_value);
+
+                //Add last point (shifted upper bound of the interval)
+                lats.add(lat_ub);
         }
 
 
@@ -105,23 +118,82 @@ public class Meridian {
                 //Project meridian
                 for (final double lat : lats)
                 {
-                        double [] X={0}, Y = {0};
+                        double [] X = {0.0}, Y = {0.0}, lat_trans = {0.0}, lon_trans = {0.0};
                         
                         //Project point
                         try
                         {
-                                CartTransformation.latLontoXY(lat, lon, proj, alpha, X, Y);
+                                CartTransformation.latLontoXY(lat, lon, proj, alpha, lat_trans, lon_trans, X, Y);
                         }
 
-                        //Throw exception
+                        //Throw exception: meridian crosses the singularity
                         catch (MathException error)
                         {
-                                //Throw new math error
-                                throw new MathInvalidArgumentException ("MathInvalidArgumentException: error in coordinate function.", "Can not compute meridian points, lat = ", lat);
+                                //Reduce longitude at the suspected point
+                                final double lon_trans_r = CartTransformation.redLon0(lon_trans[0], proj.getLon0());
+
+                                //Shift points in 2 orthogonal directions (lat / lon): lat shift
+                                final double lat1_trans_shift = lat_trans[0] - 0.5 * GRATICULE_LAT_LON_SHIFT;
+                                final double lat2_trans_shift = lat_trans[0] + 0.5 * GRATICULE_LAT_LON_SHIFT;
+                                final double lat_trans_shift = (lat1_trans_shift < MAX_LAT) && (lat1_trans_shift > -MAX_LAT) ? lat1_trans_shift : lat2_trans_shift;
+
+                                //Shift points in 2 orthogonal directions (lat / lon): lon shift
+                                final double lon1_trans_shift_r = lon_trans_r - 0.5 * GRATICULE_LAT_LON_SHIFT;
+                                final double lon2_trans_shift_r = lon_trans_r + 0.5 * GRATICULE_LAT_LON_SHIFT;
+                                final double lon_trans_shift_r = (lon1_trans_shift_r < MAX_LON) && (lon1_trans_shift_r > -MAX_LON) ? lon1_trans_shift_r : lon2_trans_shift_r;
+                                final double lon_trans_shift = CartTransformation.redLon0(lon_trans_shift_r, -proj.getLon0());
+
+                                //Inverse transformation shifted points [lat_trans_shift, lon_trans], [lat_trans, lon_trans_shift] . [. , lon]
+                                final double lat_shift_lon = CartTransformation.lonTransToLon(lat_trans_shift, lon_trans[0], proj.getCartPole().getLat(), proj.getCartPole().getLon(), proj.getLonDir());
+                                final double lon_shift_lon = CartTransformation.lonTransToLon(lat_trans[0], lon_trans_shift, proj.getCartPole().getLat(), proj.getCartPole().getLon(), proj.getLonDir());
+
+                                //Projected coordinates of shifted points
+                                double [] X_shift = {0.0}, Y_shift = {0.0}, lat_trans_shift_temp = {0.0}, lon_trans_shift_temp = {0.0};
+
+                                //Point [lat_trans, lon_trans] in the latitudinal direction shifted by +-dlat to [lat_trans +- dlat, lon_trans]
+                                //Singularity probably remains in the longitudinal (meridian) direction: c = lon_trans
+                                //It is aligned with [lat_trans, lon_trans] and [lat_trans, lon_trans +- dlon]
+                                try
+                                {
+                                        CartTransformation.latLontoXY(proj.getR(), proj.getLat1(), proj.getLat2(), lat_trans_shift, lon_trans_r, 90.0, 0.0, proj.getLonDir(), 0.0, proj.getDx(), proj.getDy(), proj.getC(), proj.getX(), proj.getY(), alpha, lat_trans_shift_temp, lon_trans_shift_temp, X, Y);
+                                }
+
+                                //Throw error: singularity in the lon/lat coordinate
+                                catch (MathException error2)
+                                {
+                                        //Singularity along the meridian - transformed meridian aligned with the singularity (geographic meridian); meridian needs to be shifted
+                                        if (abs(lat_shift_lon - lon) < ANGLE_ROUND_ERROR)
+                                                throw new MathLonSingularityException ("MathLonSingularitytException: error in coordinate function.", "Can not compute meridian points, lon = ", lon);
+
+                                        //Singularity intersects the meridian
+                                        else
+                                                throw new MathLatSingularityException  ("MathLatSingularitytException: error in coordinate function.", "Can not compute meridian points, lat = ", lat);
+                                }
+
+                                //Point [lat_trans, lon_trans] shifted in the longitudinal direction by +-dlon to [lat_trans, lon_trans +- dlon]
+                                //Singularity probably remains in the latitudinal (parallel) direction: c = lat_trans
+                                //It is aligned with [lat_trans, lon_trans] and [lat_trans +- dlat, lon_trans]
+                                try
+                                {
+                                        CartTransformation.latLontoXY(proj.getR(), proj.getLat1(), proj.getLat2(), lat_trans[0], lon_trans_shift_r, 90.0, 0.0, proj.getLonDir(), 0.0, proj.getDx(), proj.getDy(), proj.getC(), proj.getX(), proj.getY(), alpha, lat_trans_shift_temp, lon_trans_shift_temp, X, Y);
+                                }
+
+                                //Throw error: singularity in the lon/lat coordinate
+                                catch (MathException error2)
+                                {
+                                        //Singularity along the meridian - transformed parallel aligned with the singularity (geographic meridian); meridian needs to be shifted
+                                        if (abs(lon_shift_lon - lon) < ANGLE_ROUND_ERROR)
+                                                throw new MathLonSingularityException ("MathLonSingularitytException: error in coordinate function.", "Can not compute meridian points, lon = ", lon);
+
+                                        //Singularity intersects the meridian
+                                        else
+                                                throw new MathLatSingularityException ("MathLatSingularitytException: error in coordinate function.", "Can not compute meridian points, lat = ", lat);
+
+                                }
                         }
 
                         //Add projected point to the list
-                        Point3DCartesian p_proj = new Point3DCartesian(X[0], Y[0], 0);
+                        Point3DCartesian p_proj = new Point3DCartesian(X[0], Y[0], 0.0);
                         mer.add(p_proj);
                 }
         }

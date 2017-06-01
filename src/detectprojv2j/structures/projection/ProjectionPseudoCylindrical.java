@@ -34,7 +34,7 @@ public class ProjectionPseudoCylindrical extends Projection
         
         protected double lat1;                                                  //True parallel
         protected Point3DGeographic cart_pole;					//Meta-pole position
-	protected TTransformedLongitudeDirection lon_dir;                      //Measuring londitudes mode
+	protected TTransformedLongitudeDirection lon_dir;                       //Measuring londitudes mode
         
          public ProjectionPseudoCylindrical() {
                 super();
@@ -43,9 +43,10 @@ public class ProjectionPseudoCylindrical extends Projection
                 lon_dir = NormalDirection2;
         }
         
-	public ProjectionPseudoCylindrical( final double R_,  final double latp_,  final double lonp_,  final double lat1_, final TTransformedLongitudeDirection lon_dir_,  final double lon0_,  final double dx_,  final double dy_,  final double c_,  final ICoordFunctionProj pX,  final ICoordFunctionProj pY, final String name_) 
+	public ProjectionPseudoCylindrical( final double R_,  final double latp_,  final double lonp_,  final double lat1_, final TTransformedLongitudeDirection lon_dir_,  final double lon0_,  final double dx_,  final double dy_,  
+                                            final double c_,  final ICoordFunctionProj pX,  final ICoordFunctionProj pY, final String name_, final String id_) 
         {
-                super(R_, lon0_, dx_, dy_, c_, pX, pY, name_);
+                super(R_, lon0_, dx_, dy_, c_, pX, pY, name_, id_);
                 lat1 = lat1_;
                 cart_pole = new Point3DGeographic (latp_, lonp_, 0.0);
                 lon_dir = lon_dir_;
@@ -70,7 +71,7 @@ public class ProjectionPseudoCylindrical extends Projection
         public TTransformedLongitudeDirection getLonDir() { return lon_dir;}
 
         @Override
-        public String getFamily() { return "Pseudocyl";}
+        public String getFamily() { return "Pseudocylindrical";}
 
         @Override
         public TInterval getLatPInterval() { return new TInterval (MIN_LAT, MAX_LAT); }
