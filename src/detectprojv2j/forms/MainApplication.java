@@ -76,8 +76,9 @@ import detectprojv2j.algorithms.graticule2.Graticule2;
 
 import detectprojv2j.io.DXFExport;
 import detectprojv2j.io.IO;
-import java.awt.event.MouseEvent;
-import org.openstreetmap.gui.jmapviewer.DefaultMapController;
+import java.awt.Image;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 
 public class MainApplication extends javax.swing.JFrame  {
@@ -228,8 +229,14 @@ public class MainApplication extends javax.swing.JFrame  {
                 //Enable drag and drop operation for both maps
                 DropTarget target_early_map = new DropTarget(early_map, new DragAndDrop()); 
                 DropTarget target_map = new DropTarget(map, new DragAndDrop()); 
+                
+                //Set detectproj icon
+                List<Image> icons = new ArrayList<Image>();
+                icons.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/detectprojv2j/resources/icon.png")));
+                icons.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/detectprojv2j/resources/icon_task.png")));
+                this.setIconImages(icons);               
         }
-
+        
         
         //Inner class containing drag and drop support
         private class DragAndDrop implements DropTargetListener 
