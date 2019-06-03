@@ -1,6 +1,6 @@
 // Description: Create projection graticule given by the lat/lon intervals
 
-// Copyright (c) 2015 - 2016
+// Copyright (c) 2015 - 2018
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -21,34 +21,57 @@
 
 package detectprojv2j.algorithms.graticule;
 
-import java.util.List;
-import java.util.ArrayList;
 import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import detectprojv2j.types.TInterval;
+import detectprojv2j.types.TTransformedLongitudeDirection;
 
 import detectprojv2j.structures.graticule.Meridian;
 import detectprojv2j.structures.graticule.Parallel;
 import detectprojv2j.structures.point.Point3DCartesian;
+import detectprojv2j.structures.point.Point3DGeographic;
 import detectprojv2j.structures.projection.Projection;
 
 import static detectprojv2j.consts.Consts.*;
 
-import detectprojv2j.exceptions.MathException;
+import detectprojv2j.exceptions.MathLatSingularityException;
+import detectprojv2j.exceptions.MathLonSingularityException;
 
 import detectprojv2j.algorithms.carttransformation.CartTransformation;
+import detectprojv2j.algorithms.greatcircleintersection.GreatCircleIntersection;
 import detectprojv2j.algorithms.round.Round;
+import detectprojv2j.exceptions.MathSingularityException;
+import detectprojv2j.types.TGraticuleSampling;
+import detectprojv2j.types.TInterval2D;
+import java.util.Stack;
 
 
 public class Graticule {
   
+        private final double dlat;				//Uniform sampling, sampling step
+	private final double dlon;				//Uniform sampling, sampling step
+	private final double dff;				//Adaptive sampling, flat factor
+	private final int dmin;                                 //Minimum recursion depth, after the uniform sampling transforms into adaptive
+	private final int dmax;                                 //Maximum recursion depth, adaptive sampling
+
+	
+        public Graticule(final double dlat_, final double dlon_, final double dff_, final int dmin_, final int dmax_)
+        {
+                dlat = dlat_;
+                dlon = dlon_;
+                dff = dff_;
+                dmin = dmin_;
+                dmax = dmax_;
+        }
+
         
-        public static void createGraticule ( final Projection proj, final TInterval lat_extent, final TInterval lon_extent, final double lat_step, final double lon_step, final double d_lat, final double d_lon, final double alpha, List <Meridian> meridians, List<List <Point3DCartesian >> meridians_proj, List <Parallel > parallels, List<List <Point3DCartesian >> parallels_proj )
+        public void createGraticule ( final Projection proj, final TInterval lat_extent, final TInterval lon_extent, final double lat_step, final double lon_step, final double alpha, List <Meridian> meridians, List<List <Point3DCartesian >> meridians_proj, List <Parallel > parallels, List<List <Point3DCartesian >> parallels_proj, final TGraticuleSampling sampling_method, final int max_splits, final double fmax, final double eps)
         {
                 //Compute graticule given by meridians and parallels
-                TInterval  lat_interval_part, lon_interval_part;
-
-                //Parameters of the projection
+                Stack <TInterval2D> S = new Stack<>();
+                
                 final double latp = proj.getCartPole().getLat();
                 final double lonp = proj.getCartPole().getLon();
                 final double lon0 = proj.getLon0();
@@ -60,41 +83,51 @@ public class Graticule {
                 //Generate meridians and parallels
                 if ( lat_step <= lat_interval_width || lon_step <= lon_interval_width )
                 {
-                        //Create lat intervals to avoid basic singular points
-                        List <TInterval>  lat_intervals = new ArrayList<>();
-                        createLatIntervals ( lat_extent, latp, lat_intervals );
+                        //Create lat interval
+                        TInterval lat_interval = new TInterval(lat_extent.min_value,lat_extent.max_value);
+                        lat_interval.min_value = max(lat_extent.min_value, MIN_LAT + eps);
+                        lat_interval.max_value = min(lat_extent.max_value, MAX_LAT - eps);
 
-                        //Create lon intervals to avoid basic singular points
-                        List <TInterval>  lon_intervals = new ArrayList<>();
-                        final double lon_break = CartTransformation.redLon0(lonp, -lon0);
-                        createLonIntervals(lon_extent, lon_break, lon_intervals);
+                        //Create lon interval
+                        TInterval lon_interval = new TInterval(lon_extent.min_value,lon_extent.max_value);
+                        lon_interval.min_value = max(lon_extent.min_value, MIN_LON + eps);
+                        lon_interval.max_value = min(lon_extent.max_value, MAX_LON - eps);
+
+                        //Create 2D interval
+                        TInterval2D lat_lon_interval = new TInterval2D(lat_interval, lon_interval);
+                        S.push(lat_lon_interval);
 
                         //Process all meridians and parallels: automatic detection of additional singular points
-                        int split_amount = 0;
-                        int [] i = {0}, j = {0};
-
-                        //Process all lat intervals
-                        for ( i[0] = 0; i[0] <  lat_intervals.size(); i[0]++)
+                        //Process until the stack S is empty (recursive approach)
+                        int [] split_amount = {0};
+                       
+                        while (!S.empty())
                         {
-                                //cout << "lat: <" << i_lat_intervals.min_value << ", " << i_lat_intervals.max_value << "> \n";
-                                //Process all lon intervals
-                                for ( j[0] = 0; j[0] <  lon_intervals.size();  )
-                                {
-                                        //cout << "   lon: <" << i_lon_intervals.min_value << ", " << i_lon_intervals.max_value << "> \n";
-                                        //Create temporary meridians and parallels
-                                        List <Meridian> meridians_temp = new ArrayList<>();
-                                        List <Parallel> parallels_temp = new ArrayList<>();
-                                        List <List<Point3DCartesian>> meridians_temp_proj = new ArrayList<>();
-                                        List <List<Point3DCartesian>> parallels_temp_proj = new ArrayList<>();
+                                //Get the current lat/lon interval on the top of S
+                                TInterval2D interval = S.pop();
+			
+                                //System.out.println("[" + interval.i1.min_value + "," + interval.i1.max_value + "]");
+                                //System.out.println("[" + interval.i2.min_value + "," + interval.i2.max_value + "]\n"); 
+                          
+                                //Create temporary containers for the meridians/parallels
+                                List <Meridian> meridians_temp = new ArrayList<>();
+                                List <Parallel> parallels_temp = new ArrayList<>();
+                                List <List<Point3DCartesian>> meridians_temp_proj = new ArrayList<>();
+                                List <List<Point3DCartesian>> parallels_temp_proj = new ArrayList<>();
 
-                                        //Compute meridians and parallels
-                                        double [] lat_error = {0.0}, lon_error = {0.0};
-
+                                //Create intervals to treat the singularity
+                                short [] k = {0};
+                                TInterval2D int1 = new TInterval2D(interval.i1, interval.i2);
+                                TInterval2D int2 = new TInterval2D(interval.i1, interval.i2);
+                                
+                                //Try to create meridians and parallels
+                                try
+                                {        
                                         try
-                                        {                            
-                                                //Compute meridians and parallels
-                                                createMeridians (proj, lat_intervals.get(i[0]), lon_intervals.get(j[0]), lon_step, d_lat, alpha, meridians_temp, meridians_temp_proj, lat_error, lon_error );
-                                                createParallels (proj, lat_intervals.get(i[0]), lon_intervals.get(j[0]), lat_step, d_lon, alpha, parallels_temp, parallels_temp_proj, lat_error, lon_error);
+                                        {
+                                                //Create meridians and parallels
+                                                createMeridians (proj, interval.i1, interval.i2, lon_step, alpha, meridians_temp, meridians_temp_proj, sampling_method, fmax, eps);
+                                                createParallels (proj, interval.i1, interval.i2, lat_step, alpha, parallels_temp, parallels_temp_proj, sampling_method, fmax, eps);
 
                                                 //Copy temporary meridians and parallels to the output data structure
                                                 for (Meridian m:meridians_temp) meridians.add(m);
@@ -103,326 +136,412 @@ public class Graticule {
                                                 //Copy temporary projected meridians and parallels to the output data structure
                                                 for (List<Point3DCartesian> m:meridians_temp_proj) meridians_proj.add(m);
                                                 for (List<Point3DCartesian> p:parallels_temp_proj) parallels_proj.add(p);
-
-                                                //Increment lon intervals only if comuptation was successful
-                                                j[0]++;
                                         }
 
-                                        //Exception
-                                        catch ( MathException error )
+                                        //Exception: singularity in the latitude direction
+                                        catch (MathLatSingularityException error)
                                         {
-                                                //Too many splits, projection is suspected, stop computations
-                                                if ( split_amount > 100 )
-                                                {
-                                                        meridians.clear(); parallels.clear();
-                                                        meridians_proj.clear(); parallels_proj.clear();
-                                                        return;
-                                                }
+                                                //Get latitude singularity
+                                                final double lat_error = error.getArg();
 
-                                                //Empty lat interval, delete
-                                                if (abs((lat_intervals.get(i[0])).max_value - (lat_intervals.get(i[0])).min_value) < 10 * GRATICULE_LAT_LON_SHIFT)
-                                                {
-                                                        lat_intervals.remove(i[0]);
-       
-                                                }
-
-                                                //Lat value is lower bound: shift lower bound
-                                                else if ((abs((lat_intervals.get(i[0])).min_value - lat_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
-                                                         (abs((lat_intervals.get(i[0])).max_value - (lat_intervals.get(i[0])).min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
-                                                {
-                                                        lat_intervals.get(i[0]).min_value +=  2 *GRATICULE_LAT_LON_SHIFT;
-                                                }
-
-                                                //Lat value is upper bound: shift upper bound
-                                                else if ((abs((lat_intervals.get(i[0])).max_value - lat_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
-                                                         (abs((lat_intervals.get(i[0])).max_value - (lat_intervals.get(i[0])).min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
-                                                {
-                                                        lat_intervals.get(i[0]).max_value -= 2 * GRATICULE_LAT_LON_SHIFT;
-                                                }
-
-                                                //Lat value inside interval: split intervals
-                                                else if ((((lat_intervals.get(i[0])).min_value) < lat_error[0]) && ((lat_intervals.get(i[0])).max_value > lat_error[0]))
-                                                {
-                                                        splitIntervals(lat_intervals, lat_intervals.get(i[0]), i, lat_error[0]);
-                                                        
-                                                        //Increment split amount
-                                                        split_amount++;
-                                                }
-
-                                                //Empty lon interval, delete
-                                                if (abs((lon_intervals.get(j[0])).max_value - (lon_intervals.get(j[0])).min_value) < 10 * GRATICULE_LAT_LON_SHIFT)
-                                                {
-                                                        lon_intervals.remove(j[0]);
-                                                }
-
-                                                //Lon value is lower bound : shift lower bound
-                                                else if ((abs((lon_intervals.get(j[0])).min_value - lon_error[0]) <  2 *GRATICULE_LAT_LON_SHIFT) && 
-                                                         (abs((lon_intervals.get(j[0])).max_value - (lon_intervals.get(j[0])).min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
-                                                {
-                                                        (lon_intervals.get(j[0])).min_value += 2 * GRATICULE_LAT_LON_SHIFT;
-                                                }
-
-                                                //Lon value is upper bound: shift upper bound
-                                                else if ((abs((lon_intervals.get(j[0])).max_value - lon_error[0]) <  2 * GRATICULE_LAT_LON_SHIFT) && 
-                                                         (abs((lon_intervals.get(j[0])).max_value - (lon_intervals.get(j[0])).min_value) > 10 * GRATICULE_LAT_LON_SHIFT))
-                                                {
-                                                        (lon_intervals.get(j[0])).max_value -= 2 * GRATICULE_LAT_LON_SHIFT;
-                                                }
-
-                                                //Lon value inside interval: split intervals
-                                                else if ((lon_intervals.get(j[0]).min_value  < lon_error[0] ) && (lon_intervals.get(j[0]).max_value > lon_error[0] ))
-                                                {
-                                                        splitIntervals ( lon_intervals, lon_intervals.get(j[0]), j, lon_error[0] );
-
-                                                        //Increment split amount
-                                                        split_amount++;
-                                                }
-
-                                                //cout << (*i_lat_intervals).min_value << "   " << (*i_lat_intervals).max_value << '\n';
-                                                //cout << (*i_lon_intervals).min_value << "   " << (*i_lon_intervals).max_value << '\n';
+                                                //Too many splits, projection is suspected, stop graticule construction
+                                                if (split_amount[0] < max_splits)
+                                                        processInterval(interval.i1, lat_error, int1.i1, int2.i1, k, split_amount, eps);
+                                                
+                                                throw error;
                                         }
 
+                                        //Exception, singularity in the longitude direction
+                                        catch (MathLonSingularityException error)
+                                        {
+                                                //Get longitude singularity
+                                                final double lon_error = error.getArg();
+
+                                                //Process lon interval
+                                                if (split_amount[0] < max_splits)
+                                                        processInterval(interval.i2, lon_error, int1.i2, int2.i2, k, split_amount, eps);
+                                                
+                                                throw error;
+                                        }
+                     
                                         //Other than math error: error in equation or in parser
-                                        catch ( Exception exception )
+                                        catch (Exception error)
                                         {
                                                 //Clear meridians and parallels
                                                 meridians.clear(); parallels.clear();
                                                 return;
                                         }
+                                }
+                                
+                                //Math singularity exception
+                                catch (MathSingularityException error)
+                                {
+                                        //Too many splits, projection is suspected, stop graticule construction
+                                        if (split_amount[0] > max_splits)
+                                        {
+                                                meridians.clear(); parallels.clear();
+                                                meridians_proj.clear(); parallels_proj.clear();
+                                                return;
+                                        }
 
+                                        //Add intervals
+                                        else
+                                        {
+                                                //Add first interval
+                                                if (k[0] > 0)
+                                                        S.add(int1);
+
+                                                //Add second interval
+                                                if (k[0] > 1)
+                                                        S.add(int2);
+                                        }
                                 }
                         }
                 }
         }
 
-
-        public static void  createLatIntervals ( final TInterval lat_extent, final double latp, List <TInterval> lat_intervals )
+        
+        public void processInterval(final TInterval i, final double c, TInterval i1, TInterval i2, short []k, int [] split_amount, final double eps)
         {
-                //Split the geographic extent into several sub-intervals
-                TInterval  lat_interval_part1 = new TInterval(-90, 90);
-                TInterval  lat_interval_part2 = new TInterval(-90, 90);
+                //Assign values: amount of destination intervals
+                k[0] = 0;
+                i1.min_value = i.min_value;
+                i1.max_value = i.max_value;
+                i2.min_value = i.min_value;
+                i2.max_value = i.max_value;
 
-                //First lat interval ( -90, latp )
-                lat_interval_part1.min_value = max (MIN_LAT, lat_extent.min_value ); 
-                lat_interval_part1.max_value = min (latp, lat_extent.max_value );
-
-                //Test interval and add to the list
-                if ( lat_interval_part1.max_value > lat_interval_part1.min_value )
-                        lat_intervals.add ( lat_interval_part1 );
-
-                //Second lat interval ( latp, 90 )
-                lat_interval_part2.min_value = max (latp, lat_extent.min_value );
-                lat_interval_part2.max_value = min (lat_extent.max_value, MAX_LAT );
-
-                //Test interval and add to the list
-                if ( lat_interval_part2.max_value > lat_interval_part2.min_value )
-                        lat_intervals.add ( lat_interval_part2 );
-        }
-
-
-        public static void createLonIntervals ( final TInterval lon_extent, final double lonp, List <TInterval> lon_intervals )
-        {
-                //Split the geographic extent into several sub-intervals
-                TInterval  lon_interval_part1 = new TInterval(-180, 180);
-                TInterval  lon_interval_part2 = new TInterval(-180, 180);
-                TInterval  lon_interval_part3 = new TInterval(-180, 180);
-
-                //Split given interval into sub intervals: lonp >=0
-                if ( lonp >= 0 )
+                //Resize or split a given interval
+                //Empty interval, delete
+                if (abs(i.max_value - i.min_value) < eps)
                 {
-                        //First interval <-180, lonp - 180)
-                        lon_interval_part1.min_value = max (MIN_LON, lon_extent.min_value ); 
-                        lon_interval_part1.max_value =  min (lonp - 180.0, lon_extent.max_value );
-
-                        //Test first interval and add to the list
-                        if ( lon_interval_part1.max_value > lon_interval_part1.min_value )
-                                lon_intervals.add ( lon_interval_part1 );
-
-                        //Second interval (lonp - 180, lonp>
-                        lon_interval_part2.min_value = max (lonp - 180.0, lon_extent.min_value ); 
-                        lon_interval_part2.max_value = min (lonp, lon_extent.max_value );
-
-                        //Test second interval and add to the list
-                        if ( lon_interval_part2.max_value > lon_interval_part2.min_value )
-                                lon_intervals.add ( lon_interval_part2 );
-
-                        //Third interval (lonp, MAX_LON>
-                        lon_interval_part3.min_value = max (lonp, lon_extent.min_value ); 
-                        lon_interval_part3.max_value = min (MAX_LON, lon_extent.max_value );
-
-                        //Test third interval and add to the list
-                        if ( lon_interval_part3.max_value > lon_interval_part3.min_value )
-                                lon_intervals.add ( lon_interval_part3 );
+                        return;
                 }
 
-                //Split given interval into sub intervals: lonp < 0
-                else
+                //Incorrect interval, continue
+                else if (i.min_value > i.max_value)
                 {
-                        //First interval <-180, lonp >
-                        lon_interval_part1.min_value = max (MIN_LON, lon_extent.min_value ); 
-                        lon_interval_part1.max_value = min (lonp, lon_extent.max_value );
+                        return;
+                }
 
-                        //Test first interval and add to the list
-                        if ( lon_interval_part1.max_value > lon_interval_part1.min_value )
-                                lon_intervals.add ( lon_interval_part1 );
+                //Singularity is lower bound: shift lower bound
+                else if ((i.min_value <= c) && (abs(c - i.min_value) <= eps))
+                {
+                        i1.min_value += eps;
+                        k[0]++;
+                }
 
-                        //Second interval <lonp, lonp + 180>
-                        lon_interval_part2.min_value = max (lonp, lon_extent.min_value ); 
-                        lon_interval_part2.max_value = min (lonp + 180.0, lon_extent.max_value );
+                //Singularity is upper bound: shift upper bound
+                else if ((i.max_value >= c) && (abs(c - i.max_value) <= eps))
+                {
+                        i1.max_value -= eps;
+                        k[0]++;
+                }
 
-                        //Test second interval and add to the list
-                        if ( lon_interval_part2.max_value > lon_interval_part2.min_value )
-                                lon_intervals.add ( lon_interval_part2 );
+                //Singularity inside the interval: split intervals
+                else if ((i.min_value < c) && (i.max_value > c) &&
+                        (abs(c - i.min_value) > eps) && (abs(c - i.max_value) > eps))
+                {
+                        //Process first interval
+                        i1.max_value = c - eps;
 
-                        //Third interval (lonp + 180, 180>
-                        lon_interval_part3.min_value = max (lonp + 180.0, lon_extent.min_value ); 
-                        lon_interval_part3.max_value = min (MAX_LON, lon_extent.max_value );
+                        //Process second interval
+                        i2.min_value = c + eps;
 
-                        //Test third interval and add to the list
-                        if ( lon_interval_part3.max_value > lon_interval_part3.min_value )
-                                lon_intervals.add ( lon_interval_part3 );
+                        //Increment split amount
+                        split_amount[0]++;
+                        k[0] += 2;
                 }
         }
-
-
-        public static void splitIntervals ( List<TInterval> intervals, TInterval interval, int [] index, final double error )
-        {
-                //Split one interval in 2
-                final double max_val = interval.max_value;
-
-                //Resize old interval <min, max_value> to <min, error)
-                interval.max_value = error;
-
-                //Create new interval (error, max_value>
-                TInterval  interval_temp  = new TInterval(error, max_val);
-
-                //Add the new interval to the list
-                intervals.add (index[0], interval_temp );
-
-                //Move iterator to the previous item
-                index[0] --;
-        }
-
-
-        public static void createMeridians (final Projection proj, final TInterval lat_interval, final TInterval lon_interval, final double lon_step, 
-                final double d_lat, final double alpha, List <Meridian > meridians, List <List<Point3DCartesian>> meridians_proj, double [] lat_error, double [] lon_error )
+        
+        
+        public void createMeridians (final Projection proj, final TInterval lat_interval, final TInterval lon_interval, final double lon_step, 
+                final double alpha, List <Meridian > meridians, List <List<Point3DCartesian>> meridians_proj, final TGraticuleSampling sampling_method, final double fmax, final double eps)
         {
                 //Set start value of the longitude as a multiplier of lon_step 
                 final double lon_start = Round.roundToMultipleFloor(lon_interval.min_value, lon_step) + lon_step;
                 final double lon_end = Round.roundToMultipleCeil(lon_interval.max_value, lon_step) - lon_step;
-                double lon = max(min(lon_interval.min_value + GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON);
+                
+                //Set value lon inside [MIN_LAT, MAX_LAT] (shifted lower bound)
+        	double lon_lb = max(min(lon_interval.min_value, MAX_LON), MIN_LON);
 
-                try
+                //Set value lon <= lon_max
+                lon_lb = min(lon_lb, lon_interval.max_value);
+        
+                //Create first meridian (lower bound of the interval, not lower than MIN_LON)
+                //Split the interval, if a meridian is intersected by the prime meridian of the transformed system [lat_trans, lon_trans]
+                createMeridianFragment(proj, lon_lb, lat_interval, alpha, meridians, meridians_proj, sampling_method, fmax, eps);
+
+                //Create intermediate meridians
+                //Split the interval, if a meridian is intersected by the prime meridian of the transformed system [lat_trans, lon_trans]
+                for (double lon = lon_start; lon <= lon_end; lon += lon_step)
+                        createMeridianFragment(proj, lon, lat_interval, alpha, meridians, meridians_proj, sampling_method, fmax, eps);
+
+                //Set value lat inside [MIN_LAT, MAX_LAT] (shifted upper bound)
+                double lon_ub = min(max(lon_interval.max_value - eps, MIN_LON), MAX_LON);
+
+                //Set value lon >= lon_interval.min
+                lon_ub = max(lon_ub, lon_interval.min_value);
+
+                //Create last meridian (upper bound of the interval, not higher than MAX_LON)
+                //Split the interval, if a meridian is intersected by the prime meridian of the transformed system [lat_trans, lon_trans]
+                createMeridianFragment(proj, lon_ub, lat_interval, alpha, meridians, meridians_proj, sampling_method, fmax, eps);
+
+                //Create meridian intersecting the pole of the transformed system [lat_trans, lon_trans]
+                double lon = proj.getCartPole().getLon();
+                if ((lon > lon_interval.min_value) && (lon < lon_interval.max_value))
                 {
-                        //Create first meridian (lower bound of the interval, not lower than MIN_LON)
-                        Meridian  m1 = new Meridian(lon, lat_interval, d_lat, GRATICULE_LAT_LON_SHIFT, GRATICULE_LAT_LON_SHIFT);
-                        List <Point3DCartesian> mer1 = new ArrayList<>();
-                        m1.project(proj, alpha, mer1);
-
-                        //Add meridian and projected meridian to the list
-                        meridians.add(m1);
-                        meridians_proj.add(mer1);
-
-                        //Create intermediate meridians
-                        for (lon = lon_start; lon <= lon_end; lon += lon_step)
-                        {
-                                Meridian  m2 = new Meridian(lon, lat_interval, d_lat, GRATICULE_LAT_LON_SHIFT, GRATICULE_LAT_LON_SHIFT);
-                                List <Point3DCartesian> mer2 = new ArrayList<>();
-                                m2.project(proj, alpha, mer2);
-
-                                //Add meridian and projected meridian to the list
-                                meridians.add(m2);
-                                meridians_proj.add(mer2);
-                        }
-
-                        //Create last meridian (upper bound of the interval, not higher than MAX_LON)
-                        lon = max(min(lon_interval.max_value - GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON);
-
-                        Meridian  m3 = new Meridian(lon, lat_interval, d_lat, GRATICULE_LAT_LON_SHIFT, GRATICULE_LAT_LON_SHIFT);
-                        List <Point3DCartesian> mer3 = new ArrayList<>();
-                        m3.project(proj, alpha, mer3);
-
-                        //Add meridian and projected meridian to the list
-                        meridians.add(m3);
-                        meridians_proj.add(mer3);
+                        createMeridianFragment(proj, min(max(lon - eps, MIN_LON), MAX_LON), lat_interval, alpha, meridians, meridians_proj, sampling_method, fmax, eps);
+                        createMeridianFragment(proj, max(min(lon + eps, MAX_LON), MIN_LON), lat_interval, alpha, meridians, meridians_proj, sampling_method, fmax, eps);
                 }
 
-                //Throw math exception: get error values
-                catch (MathException error)
+                //Create meridian opposite the pole of the transformed system [lat_trans, lon_trans]
+                lon = (lon > 0 ? lon - 180 : lon + 180);
+                if ((lon > lon_interval.min_value) && (lon < lon_interval.max_value))
                 {
-                        //Get posible error values
-                        lat_error[0] = error.getArg();
-                        lon_error[0] = lon;
-
-                        //Throw exception
-                        throw error;
-                }
-
-                //Throw other exception: error in parser or incorrect equation
-                catch (Exception error)
-                {
-                        throw error;
-                }
+                        createMeridianFragment(proj, min(max(lon - GRATICULE_LAT_LON_SHIFT, MIN_LON), MAX_LON), lat_interval, alpha, meridians, meridians_proj, sampling_method, fmax, eps);
+                        createMeridianFragment(proj, max(min(lon + GRATICULE_LAT_LON_SHIFT, MAX_LON), MIN_LON), lat_interval, alpha, meridians, meridians_proj, sampling_method, fmax, eps);
+                }      
         }
 
 
-        public static void createParallels ( final Projection proj, final TInterval lat_interval, final TInterval lon_interval, final double lat_step, 
-                final double d_lon, final double alpha, List <Parallel > parallels, List <List<Point3DCartesian>> parallels_proj, double [] lat_error, double [] lon_error )
+        public void createParallels ( final Projection proj, final TInterval lat_interval, final TInterval lon_interval, final double lat_step, final double alpha, 
+                List <Parallel > parallels, List <List<Point3DCartesian>> parallels_proj, final TGraticuleSampling sampling_method, final double fmax, final double eps)
         {
                 //Set start value of the longitude as a multiplier of lon_step 
                 final double lat_start = Round.roundToMultipleFloor(lat_interval.min_value, lat_step) + lat_step;
                 final double lat_end = Round.roundToMultipleCeil(lat_interval.max_value, lat_step) - lat_step;
-                double lat = max(min(lat_interval.min_value + GRATICULE_LAT_LON_SHIFT, MAX_LAT), MIN_LAT);
+                
+                //Set value lat inside [MIN_LAT, MAX_LAT] (shifted lower bound)
+                double lat_lb = max(min(lat_interval.min_value, MAX_LAT), MIN_LAT);
 
-                try
+                //Set value lat <= lat_max
+                lat_lb = min(lat_lb, lat_interval.max_value);
+               
+                //Create first parallel (lower bound of the interval, nor lower than MIN_LAT)
+                //Split the interval, if a parallel is intersected by the prime meridian of the transformed system [lat_trans, lon_trans]
+                createParallelFragment(proj, lat_lb, lon_interval, alpha, parallels, parallels_proj, sampling_method, fmax, eps);
+
+                //Create intermediate parallels
+                //Split the interval, if a parallel is intersected by the prime meridian of the transformed system [lat_trans, lon_trans]
+                for (double lat = lat_start; lat <= lat_end; lat += lat_step)
+                        createParallelFragment(proj, lat, lon_interval, alpha, parallels, parallels_proj, sampling_method, fmax, eps);
+
+                //Set value lat inside [MIN_LAT, MAX_LAT] (shifted upper bound)
+                double lat_ub = min(max(lat_interval.max_value, MIN_LAT), MAX_LAT);
+
+                //Set value lat >= lat_interval.min
+                lat_ub = max(lat_ub, lat_interval.min_value);
+
+                //Create last parallel (upper bound of the interval, not greater than MAX_LAT)
+                //Split the interval, if a parallel is intersected by the prime meridian of the transformed system [lat_trans, lon_trans]
+                createParallelFragment(proj, lat_ub, lon_interval, alpha, parallels, parallels_proj, sampling_method, fmax, eps);
+        } 
+        
+        
+        public void createMeridianFragment(final Projection proj, final double lon, final TInterval lat_interval, final double alpha, List <Meridian > meridians, List <List<Point3DCartesian>> meridians_proj, final TGraticuleSampling sampling_method, final double fmax, final double eps)
+        {
+                //Create meridian fragment given by the latitude interval
+                //A meridian is interrupted at its intersection with the prime meridian of the transfomed system [lat_trans, lon_trans]
+                for (TInterval lat_interval_split : splitLatInterval(lat_interval, lon, proj.getCartPole(), proj.getLonDir(), proj.getLon0(), eps))
                 {
-                        //Create first parallel (lower bound of the interval, nor lower than MIN_LAT)
-                        Parallel  p1 = new Parallel(lat, lon_interval, d_lon, GRATICULE_LAT_LON_SHIFT, GRATICULE_LAT_LON_SHIFT);
-                        List <Point3DCartesian> par1 = new ArrayList<>();
-                        p1.project(proj, alpha, par1);
-
-                        //Add parallel and projected parallel to the list
-                        parallels.add(p1);
-                        parallels_proj.add(par1);
-
-                        //Create intermediate parallels
-                        for (lat = lat_start; lat <= lat_end; lat += lat_step)
+                        Meridian mer = null;
+                        List <Point3DCartesian> mer_proj = new ArrayList<>();
+                        
+                        //Uniform sampling
+                        if (sampling_method == TGraticuleSampling.UniformSampling)
                         {
-                                Parallel  p2 = new Parallel(lat, lon_interval, d_lon, GRATICULE_LAT_LON_SHIFT, GRATICULE_LAT_LON_SHIFT);
-                                List <Point3DCartesian> par2 = new ArrayList<>();
-                                p2.project(proj, alpha, par2);
-
-                                //Add parallel and projected parallel to the list
-                                parallels.add(p2);
-                                parallels_proj.add(par2);
+                                Meridian mer_u = new Meridian(lon, lat_interval_split, dlat, 0.0, 0.0);
+                                mer_u.project(proj, alpha, mer_proj);
+                                mer = mer_u;
                         }
 
-                        //Create last parallel (upper bound of the interval, not hreater than MAX_LAT)
-                        lat = max(min(lat_interval.max_value - GRATICULE_LAT_LON_SHIFT, MAX_LAT), MIN_LAT);
-                        Parallel  p3 = new Parallel(lat, lon_interval, d_lon, GRATICULE_LAT_LON_SHIFT, GRATICULE_LAT_LON_SHIFT);
-                        List <Point3DCartesian> par3 = new ArrayList<>();
-                        p3.project(proj, alpha, par3);
+                        //Adaptive sampling
+                        else
+                        {
+                                Meridian mer_a = new Meridian(lon, lat_interval_split, dff, 0.0, 0.0, proj, alpha, mer_proj, fmax, dmin, dmax, eps);
+                                mer = mer_a;
+                        }
+
+                        //Add meridian and projected meridian to the list
+                        meridians.add(mer);
+                        meridians_proj.add(mer_proj);
+                }
+        }
+
+
+        public void createParallelFragment(final Projection proj, final double lat, final TInterval lon_interval, final double alpha, List <Parallel > parallels, List <List<Point3DCartesian>> parallels_proj, final TGraticuleSampling sampling_method, final double fmax, final double eps)
+        {
+                //Create parallel fragment given by the longitude interval [lon_minm lon_max]
+                //A parallel is interrupted at its intersection with the prime meridian of the transformed system [lat_trans, lon_trans]
+                for (TInterval lon_interval_split : splitLonInterval(lon_interval, lat, proj.getCartPole(), proj.getLonDir(), proj.getLon0(), eps))
+                {
+                        Parallel par = null;
+                        List <Point3DCartesian> par_proj = new ArrayList<>();
+                        
+                        //Uniform sampling
+                        if (sampling_method == TGraticuleSampling.UniformSampling)
+                        {
+                                Parallel par_u = new Parallel(lat, lon_interval_split, dlon, 0.0, 0.0);
+                                par_u.project(proj, alpha, par_proj);
+                                par = par_u;
+                        }
+
+                        //Adaptive sampling
+                        else
+                        {
+                                Parallel par_a = new Parallel(lat, lon_interval_split, dff, 0.0, 0.0, proj, alpha, par_proj, fmax, dmin, dmax, eps);
+                                par = par_a;
+                        }
 
                         //Add parallel and projected parallel to the list
-                        parallels.add(p3);
-                        parallels_proj.add(par3);
+                        parallels.add(par);
+                        parallels_proj.add(par_proj);
                 }
+        }
 
-                //Throw math exception: get error values
-                catch (MathException error)
+        
+        public List<TInterval> splitLatInterval(final TInterval lat_interval, final double lon, final Point3DGeographic pole, final TTransformedLongitudeDirection lon_dir, final double lon0, final double eps)
+        {
+                //Split the meridian interval [lat_min, lat_max] at the intersection with the prime meridian of the transformed system [lat_trans, lon_trans] shifted by lon0
+                //to two subintervals I1=[lat_min, lat_inters], I2=[lat_inters, lat_max]
+                List <TInterval> lats_split = new ArrayList<>();
+                
+                final Point3DGeographic p1 = new Point3DGeographic(MIN_LAT + 1.0, lon);
+                final Point3DGeographic p2 = new Point3DGeographic(1.0, lon);
+                final Point3DGeographic p3 = new Point3DGeographic(MAX_LAT - 1.0, lon);
+
+                //Sample central meridian of the transformed system in the oblique aspect
+                //Transform it to the normal aspect
+                final double lat4 = CartTransformation.latTransToLat(MIN_LAT + 1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+                final double lon4 = CartTransformation.lonTransToLon(MIN_LAT + 1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+
+                //P5: (lat_trans, lon_trans) -> (lat, lon)
+                final double lat5 = CartTransformation.latTransToLat(1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+                final double lon5 = CartTransformation.lonTransToLon(1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+
+                //P6: (lat_trans, lon_trans) -> (lat, lon)
+                final double lat6 = CartTransformation.latTransToLat(MAX_LAT - 1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+                final double lon6 = CartTransformation.lonTransToLon(MAX_LAT - 1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+
+                //Create sampled points
+                final Point3DGeographic p4 = new Point3DGeographic(lat4, lon4);
+                final Point3DGeographic p5 = new Point3DGeographic(lat5, lon5);
+                final Point3DGeographic p6 = new Point3DGeographic(lat6, lon6);
+
+                //Intersection of both great circles
+                Point3DGeographic [] i1 = {new Point3DGeographic(0,0)}, i2 = {new Point3DGeographic(0,0)};
+                boolean intersection_exists = GreatCircleIntersection.getGreatCirclePlainIntersection(p1, p2, p3, p4, p5, p6, i1, i2, pole, lon_dir);
+
+                //Is there any intersection ?
+                if (intersection_exists)
                 {
-                        //Get posible error values
-                        lat_error[0] = lat;
-                        lon_error[0] = error.getArg();
+                        //Get both intersections
+                        final double lat_inters1 = i1[0].getLat();
+                        final double lat_inters2 = i2[0].getLat();
+                        final double lon_inters1 = i1[0].getLon();
+                        final double lon_inters2 = i2[0].getLon();
 
-                        //Throw exception
-                        throw error;
+                        //Is an intersection point i1 latitude inside the lat interval? Create 2 intervals.
+                        if ((lat_inters1 > lat_interval.min_value) && (lat_inters1 < lat_interval.max_value) && (abs(lon_inters1 - lon) < ANGLE_ROUND_ERROR))
+                        {
+                                lats_split.add(new TInterval (lat_interval.min_value, lat_inters1 - eps));
+                                lats_split.add(new TInterval (lat_inters1 + eps, lat_interval.max_value));
+
+                                return lats_split;
+                        }
+
+                        //Is an intersection point i1 latitude inside the lat interval? Create 2 intervals.
+                        else if ((lat_inters2 > lat_interval.min_value) && (lat_inters2 < lat_interval.max_value) && (abs(lon - lon_inters2) < ANGLE_ROUND_ERROR))
+                        {		
+                                lats_split.add(new TInterval ( lat_interval.min_value, lat_inters2 - eps));
+                                lats_split.add(new TInterval ( lat_inters2 + eps, lat_interval.max_value));
+
+                                return lats_split;
+                        }
                 }
 
-                //Throw other exception: error in parser or incorrect equation
-                catch (Exception error)
+                //No intersection, no split
+                lats_split.add(new TInterval (lat_interval.min_value, lat_interval.max_value));
+
+                return lats_split;
+        }
+
+
+        public List<TInterval> splitLonInterval(final TInterval lon_interval, final double lat, final Point3DGeographic pole, final TTransformedLongitudeDirection lon_dir, final double lon0, final double eps)
+        {
+                //Split the parallel interval [lon_min, lon_max] at the intersection with the prime meridian of the transformed system [lat_trans, lon_trans] shifted by lon0
+                //to three subintervals I3=[lon_min, lon_inters1], I4=[lon_inters1, lon_inters2], I5=[lon_inters2, lon_max]
+                List <TInterval> lons_split = new ArrayList<>();
+
+                final Point3DGeographic p1 = new Point3DGeographic(lat, MIN_LON + 1.0);
+                final Point3DGeographic p2 = new Point3DGeographic(lat, 1.0);
+                final Point3DGeographic p3 = new Point3DGeographic(lat, MAX_LON - 1.0);
+
+                //Sample central meridian of the transformed system in the oblique aspect
+                //Transform it to the normal aspect
+                final double lat4 = CartTransformation.latTransToLat(MIN_LAT + 1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+                final double lon4 = CartTransformation.lonTransToLon(MIN_LAT + 1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+
+                //P5: (lat_trans, lon_trans) -> (lat, lon)
+                final double lat5 = CartTransformation.latTransToLat(1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+                final double lon5 = CartTransformation.lonTransToLon(1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+
+                //P6: (lat_trans, lon_trans) -> (lat, lon)
+                final double lat6 = CartTransformation.latTransToLat(MAX_LAT - 1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+                final double lon6 = CartTransformation.lonTransToLon(MAX_LAT - 1.0, lon0, pole.getLat(), pole.getLon(), lon_dir);
+
+                //Create sampled points
+                final Point3DGeographic p4 = new Point3DGeographic(lat4, lon4);
+                final Point3DGeographic p5 = new Point3DGeographic(lat5, lon5);
+                final Point3DGeographic p6 = new Point3DGeographic(lat6, lon6);
+
+                //Intersection of both great circles
+                Point3DGeographic [] i1 = {new Point3DGeographic(0,0)}, i2 = {new Point3DGeographic(0,0)};
+                boolean intersection_exists = GreatCircleIntersection.getGreatCirclePlainIntersection(p1, p2, p3, p4, p5, p6, i1, i2, pole, lon_dir);
+
+                //Is there any intersection ?
+                if (intersection_exists)
                 {
-                        throw error;
+                        //Sort both intersections according to lon
+                        final double lon_inters1 = min(i1[0].getLon(), i2[0].getLon());
+                        final double lon_inters2 = max(i1[0].getLon(), i2[0].getLon());
+
+                        //Both intersections inside the lon interval? Create 3 intervals.
+                        if (((lon_inters1 > lon_interval.min_value) && (lon_inters1 < lon_interval.max_value)) &&
+			((lon_inters2 > lon_interval.min_value) && (lon_inters2 < lon_interval.max_value)) && (abs(lon_inters2 - lon_inters1) > ANGLE_ROUND_ERROR))
+                        {
+                                final double lon_inters12_min = min(lon_inters1, lon_inters2);
+                                final double lon_inters12_max = max(lon_inters1, lon_inters2);
+                                
+                                lons_split.add( new TInterval (lon_interval.min_value, lon_inters12_min - eps ));
+                                lons_split.add( new TInterval (lon_inters12_min + eps, lon_inters12_max - eps ));
+                                lons_split.add( new TInterval (lon_inters12_max + eps, lon_interval.max_value ));
+
+                                return lons_split;
+                        }
+
+                        //Only the first intersection lon1 inside the lon interval. Create 2 intervals.
+                        else if ((lon_inters1 > lon_interval.min_value) && (lon_inters1 < lon_interval.max_value))
+                        {
+                                lons_split.add( new TInterval (lon_interval.min_value, lon_inters1 - eps ));
+                                lons_split.add( new TInterval (lon_inters1 + eps, lon_interval.max_value));
+
+                                return lons_split;
+                        }
+
+                        //Only the second intersection lon2 inside the lon interval. Create 2 intervals.
+                        else if ((lon_inters2 > lon_interval.min_value) && (lon_inters2 < lon_interval.max_value))
+                        {
+                                lons_split.add( new TInterval (lon_interval.min_value, lon_inters2 - eps));
+                                lons_split.add( new TInterval (lon_inters2 + eps, lon_interval.max_value));
+
+                                return lons_split;
+                        }
                 }
-        } 
+
+                //No intersection, no split
+                lons_split.add(new TInterval (lon_interval.min_value, lon_interval.max_value));
+
+                return lons_split;
+        }  
 }

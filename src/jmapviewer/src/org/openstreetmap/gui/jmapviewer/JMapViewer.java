@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -673,14 +674,26 @@ public class JMapViewer extends JPanel implements TileLoaderListener {
             }
         }
 
-        if (mapMarkersVisible && mapMarkerList != null) {
-            synchronized (this) {
-                for (MapMarker marker : mapMarkerList) {
-                    if (marker.isVisible())
-                        paintMarker(g, marker);
-                }
+            if (mapMarkersVisible && mapMarkerList != null) {
+                    synchronized (mapMarkerList) {
+                            synchronized (this) {
+                                    Iterator it = mapMarkerList.iterator();
+                                        while (it.hasNext()) {
+                                                MapMarker marker = (MapMarker) it.next();
+                                                if (marker.isVisible()) {
+                                                    paintMarker(g, marker);
+                                            }
+                                        }
+                                    /*
+                                    for (MapMarker marker : mapMarkerList) {
+                                            if (marker.isVisible()) {
+                                                    paintMarker(g, marker);
+                                            }
+                                    }
+                                    */    
+                            }
+                    }
             }
-        }
 
         attribution.paintAttribution(g, getWidth(), getHeight(), getPosition(0, 0), getPosition(getWidth(), getHeight()), zoom, this);
     }

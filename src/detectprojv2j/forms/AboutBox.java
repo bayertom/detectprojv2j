@@ -81,7 +81,6 @@ public class AboutBox extends javax.swing.JFrame {
                 titleLabel.setText("<html> <br> detectproj v. 1.1 </html>");
                 descriptionPanel.add(titleLabel);
 
-                descriptionLabel.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
                 descriptionLabel.setText("<html><br> Estimation of the unknown projection and its parameters from a map.<br> <br> License: GNU/GPL v. 2.0 </html>");
                 descriptionPanel.add(descriptionLabel);
 
@@ -89,16 +88,13 @@ public class AboutBox extends javax.swing.JFrame {
 
                 authorLabel.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
                 authorLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-                authorLabel.setText("C 2016-17, Tomas Bayer");
+                authorLabel.setText("© 2016-19, Tomas Bayer");
 
-                adressLabel.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
                 adressLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 adressLabel.setText("<html> <br> Department of Applied Geoinformatics and Cartography, <br> Faculty of Science, Charles University, Prague.<br><br> E-mail: bayertom@natur.cuni.cz</html>");
 
-                supportedMethodsLabel.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
                 supportedMethodsLabel.setText("<html>Supported detection methods: M7, M8 <br> Supported optimizations: NLS, NM, DE </html>");
 
-                otherInformationLabel.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
                 otherInformationLabel.setText("<html> Map operations based on jMapViewer library. <br> Compiler: NetBeans 8.x, 64. </html>");
 
                 javax.swing.GroupLayout aboutFurtherInformationPanelLayout = new javax.swing.GroupLayout(aboutFurtherInformationPanel);
@@ -131,6 +127,8 @@ public class AboutBox extends javax.swing.JFrame {
                                 .addComponent(otherInformationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
+
+                authorLabel.getAccessibleContext().setAccessibleName("C 2016-19, Tomas Bayer");
 
                 javax.swing.GroupLayout textPanelLayout = new javax.swing.GroupLayout(textPanel);
                 textPanel.setLayout(textPanelLayout);

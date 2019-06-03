@@ -39,19 +39,19 @@ public class FRM8{
 
         private final List <Point3DCartesian> test_points;                              //List of test points
 	private final List <Point3DGeographic> reference_points;                        //List of analyzed points
-	private final ICoordFunctionProj getX, getY;                                        //Pointers to the coordinate functions
-	private final TTransformedLongitudeDirection trans_lon_dir;                    //Transformed longitude direction
+	private final ICoordFunctionProj F, G;                                          //References to the coordinate functions
+	private final TTransformedLongitudeDirection trans_lon_dir;                     //Transformed longitude direction
 	private final double [] R;							//Earth radius (will be updated)
 	private final double [] q1, q2;							//Coefficient of  2D Helmert transformation (will be updated)
 	private final double [] dx, dy;                                                 //Shifts between analyzed and reference maps
         
-        public	FRM8(final List test_points_, final List reference_points_, final ICoordFunctionProj  pX, final ICoordFunctionProj pY, final TTransformedLongitudeDirection trans_lon_dir_, 
+        public	FRM8(final List test_points_, final List reference_points_, final ICoordFunctionProj  pF_, final ICoordFunctionProj pG_, final TTransformedLongitudeDirection trans_lon_dir_, 
                 double [] R_, double [] q1_, double [] q2_, double [] dx_, double [] dy_) 
         {
                 test_points = test_points_;
                 reference_points = reference_points_;
-                getX = pX;
-                getY = pY;
+                F = pF_;
+                G = pG_;
                 trans_lon_dir = trans_lon_dir_;
                 R = R_;
                 q1 = q1_;
@@ -81,8 +81,8 @@ public class FRM8{
 			final double lon_transr = CartTransformation.redLon0(lon_trans, X.items[4][0]);
                         
 			// (lat_trans, lon_trans) -> (X, Y)
-			final double XR = getX.f(R[0], X.items[2][0], X.items[3][0], lat_trans, lon_transr, 0, 0, 0, X.items[5][0]);
-			final double YR = getY.f(R[0], X.items[2][0], X.items[3][0], lat_trans, lon_transr, 0, 0, 0, X.items[5][0]);
+			final double XR = F.f(lat_trans, lon_transr, R[0], X.items[2][0], X.items[3][0], 0, 0, 0, X.items[5][0]);
+			final double YR = G.f(lat_trans, lon_transr, R[0], X.items[2][0], X.items[3][0], 0, 0, 0, X.items[5][0]);
 			
 			//Add point to the list
 			Point3DCartesian  p_temp = new Point3DCartesian(XR, YR, 0);
@@ -138,5 +138,6 @@ public class FRM8{
 
 		//Evaluate new radius
 		R[0] *= sqrt(q1[0] * q1[0] + q2[0] * q2[0]);
+                System.out.println(q1[0] + "  " + q2[0] + "  " + R[0] + "  " + x_mass_test + "  " + y_mass_test + "  " + x_mass_reference + "  " + y_mass_reference);
        }    
 }

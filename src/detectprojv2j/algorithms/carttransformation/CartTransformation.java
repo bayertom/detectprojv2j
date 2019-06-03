@@ -1,6 +1,6 @@
 // Description: transformation of the geographic coordinates (lat, lon) to (lat, lon)_trans. 
 
-// Copyright (c) 2015 - 2016
+// Copyright (c) 2015 - 2017
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -21,6 +21,8 @@
 package detectprojv2j.algorithms.carttransformation;
 
 import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import detectprojv2j.types.*;
 import static detectprojv2j.types.TTransformedLongitudeDirection.*;
@@ -33,7 +35,6 @@ import detectprojv2j.structures.point.Point3DCartesian;
 
 import detectprojv2j.exceptions.MathInvalidArgumentException;
 
-import java.util.List;
 
 public class CartTransformation
 {    
@@ -222,9 +223,12 @@ public class CartTransformation
                 //lon_trans is measured from the “extended” meridian arc(i.e., from its part south of K) of the base system passing the new pole K
                 //in the clockwise direction, which represents the new prime meridian.
                 else if (lon_direction == ReversedDirection) {
-                        if (lon_trans < 0) {
+                        if (lon_trans < 0) 
+                        {
                                 lon_trans = lon_trans + 180;
-                        } else {
+                        } 
+                        else 
+                        {
                                 lon_trans = lon_trans - 180;
                         }
                 }
@@ -233,9 +237,11 @@ public class CartTransformation
                 //lon_trans is measured from the “extended” meridian arc(i.e., from its part south of K) of the base system passing the new pole K
                 //in the counterclockwise direction.
                 else if (lon_direction == NormalDirection) {
-                        if (lon_trans < 0) {
+                        if (lon_trans < 0) 
+                        {
                                 lon_trans = -180 - lon_trans;
-                        } else 
+                        } 
+                        else 
                         {
                                 lon_trans = 180 - lon_trans;
                         }
@@ -262,7 +268,10 @@ public class CartTransformation
                 //Projection in normal position
                 if ((abs(MAX_LAT - latp) < ANGLE_ROUND_ERROR) && (abs(lonp) < ANGLE_ROUND_ERROR))
                 {
-                        return lonp + lon_trans;
+                        //lon = lonp + lon_trans
+                        final double lon = redLon0(lonp, -lon_trans); 
+                        
+                        return lon;
                 }
                 
                 //Same coordinates as the cartographic pole: singular point
@@ -307,28 +316,31 @@ public class CartTransformation
                 //Compute dlon
                 double dlon = atan2(cos(lat_trans * PI / 180) * sin(lon_trans2 * PI / 180),  sin(lat_trans * PI / 180) * cos(latp * PI / 180) - cos(lon_trans2 * PI / 180) * sin(latp * PI / 180) * cos(lat_trans * PI / 180)) * 180 / PI;
 
-                return lonp + dlon;
+                //lon = lonp + dlon
+                final double lon = redLon0(lonp, -dlon); 
+                   
+                return lon;
+        }
+        
+
+        public static void latLonToXY(final double lat, final double lon, final Projection proj, final double alpha, double [] lat_trans, double [] lon_trans, double [] X, double [] Y)
+        {
+                //Convert a geographic point to the Cartesian coordinates using projection equations
+                latLonToXY(lat, lon, proj.getR(), proj.getLat1(), proj.getLat2(), proj.getCartPole().getLat(), proj.getCartPole().getLon(), proj.getLonDir(), proj.getLon0(), proj.getDx(), proj.getDy(), proj.getC(), proj.getX(), proj.getY(), alpha, lat_trans, lon_trans, X, Y);
         }
         
         
-        
-        public static void latLontoXY(final double lat, final double lon, final Projection proj, final double alpha, double [] lat_trans, double [] lon_trans, double [] X, double [] Y)
+        public static void latLonToXY(final double lat, final double lon, final double R, final double lat1, final double lat2, final double latp, final double lonp, final TTransformedLongitudeDirection lon_dir, final double lon0, final double dx, final double dy, final double c, final ICoordFunctionProj F, final ICoordFunctionProj G, final double alpha, double [] lat_trans, double [] lon_trans, double [] X, double [] Y)
         {
-                latLontoXY(proj.getR(), proj.getLat1(), proj.getLat2(), lat, lon, proj.getCartPole().getLat(), proj.getCartPole().getLon(), proj.getLonDir(), proj.getLon0(), proj.getDx(), proj.getDy(), proj.getC(), proj.getX(), proj.getY(), alpha, lat_trans, lon_trans, X, Y);
-        }
-        
-        
-        public static void latLontoXY(final double R, final double lat1, final double lat2, final double lat, final double lon, final double latp, final double lonp, final TTransformedLongitudeDirection lon_dir, final double lon0, final double dx, final double dy, final double c, final ICoordFunctionProj getX, final ICoordFunctionProj getY, final double alpha, double [] lat_trans, double [] lon_trans, double [] X, double [] Y)
-        {
-                //Convert a geographic point to the Cartesian coordinates
+                //Convert a geographic point to the Cartesian coordinates using projection equations
 
                 //(lat, lon) -> (lat_trans, lon_trans)
                 lat_trans[0] = CartTransformation.latToLatTrans(lat, lon, latp, lonp);
                 lon_trans[0] = CartTransformation.lonToLonTrans(lat, lon, latp, lonp, lon_dir);
                 
                 //(lat_trans, lon_trans) -> (X, Y)
-                final double Xr = getX.f(R, lat1, lat2, lat_trans[0], lon_trans[0], lon0, 0.0, 0.0, c);
-                final double Yr = getY.f(R, lat1, lat2, lat_trans[0], lon_trans[0], lon0, 0.0, 0.0, c);
+                final double Xr = F.f(lat_trans[0], lon_trans[0], R, lat1, lat2, lon0, 0.0, 0.0, c);
+                final double Yr = G.f(lat_trans[0], lon_trans[0], R, lat1, lat2, lon0, 0.0, 0.0, c);
 
                 //Compute Helmert transformation coefficients (for the M8 method)
                 final double q1 = cos(alpha * PI / 180);
@@ -340,23 +352,93 @@ public class CartTransformation
         }
         
         
-        public static void latsLonstoXY (final List <Point3DGeographic> reference_points, final Projection proj, final double alpha, List <Point3DCartesian> projected_points)
+        public static void XYToLatLon(final double X, final double Y, final Projection proj, final double alpha, double [] lat_trans, double [] lon_trans, double [] lat, double [] lon)
         {
-                //Convert all geographic points to the Cartesian coordinates
-                try
+                //Convert a point in the Cartesian coordinates to geographic using inverse projection equations
+                XYToLatLon(X, Y, proj.getR(), proj.getLat1(), proj.getLat2(), proj.getCartPole().getLat(), proj.getCartPole().getLon(), proj.getLonDir(), proj.getLon0(), proj.getDx(), proj.getDy(), proj.getC(), proj.getLat(), proj.getLon(), alpha, lat_trans, lon_trans, lat, lon);
+        }
+
+
+        public static void XYToLatLon(final double X, final double Y, final double R, final double lat1, final double lat2, final double latp, final double lonp, final TTransformedLongitudeDirection lon_dir, final double lon0, final double dx, final double dy, final double c, final ICoordFunctionProj FI, final ICoordFunctionProj GI, final double alpha, double [] lat_trans, double [] lon_trans, double [] lat, double [] lon )
+        {
+                //Convert a point in the Cartesian coordinates to geographic using inverse projection equations
+
+                //Compute Helmert transformation coefficients (for the M8 method)
+                final double q1 = cos(alpha * PI / 180);
+                final double q2 = sin(alpha * PI / 180);
+
+                //Unrotate points (for the M8 method)
+                final double Xr = (X - dx) * q1 + ( Y - dy) * q2;
+                final double Yr = -(X - dx) * q2 + (Y - dy) * q1;
+
+                //(X, Y)->(lat_trans, lon_trans)
+                lat_trans[0] = FI.f(Xr, Yr, R, lat1, lat2, lon0, 0.0, 0.0, c);
+                lon_trans[0] = GI.f(Xr, Yr, R, lat1, lat2, lon0, 0.0, 0.0, c);
+
+                //(lat_trans, lon_trans)->(lat, lon)
+                lat[0] = CartTransformation.latTransToLat(lat_trans[0], lon_trans[0], latp, lonp, lon_dir);
+                lon[0] = CartTransformation.lonTransToLon(lat_trans[0], lon_trans[0], latp, lonp, lon_dir);
+        }
+
+        
+        public static List <Point3DCartesian> latsLonsToXY (final List <Point3DGeographic> reference_points, final Projection proj, final double alpha)
+        {
+                //Convert all geographic points to the Cartesian coordinates using the projection equations
+                List <Point3DCartesian> projected_points = new ArrayList<>();
+                
+                for (Point3DGeographic p:reference_points)
                 {
-                        for (Point3DGeographic p:reference_points)
+                        double [] X = {0.0}, Y = {0.0}, lat_trans = {0.0}, lon_trans = {0.0};
+                        
+                        try
                         {
-                                double [] X = {0.0}, Y = {0.0}, lat_trans = {0.0}, lon_trans = {0.0};
-                                CartTransformation.latLontoXY(p.getLat(), p.getLon(), proj, alpha,lat_trans, lon_trans, X, Y);
-                                projected_points.add(new Point3DCartesian(X[0], Y[0], 0));
+                                //Convert a point
+                                CartTransformation.latLonToXY(p.getLat(), p.getLon(), proj, alpha,lat_trans, lon_trans, X, Y);
+                         
+                                //Add to the list of points
+                                projected_points.add(new Point3DCartesian(X[0], Y[0], p.getH()));
+                        }
+                        
+                        //Throw exception
+                        catch(Exception e)
+                        {
+                                
+                                // System.out.println( p.getLat()+ " " + p.getLon() + " " + X[0] + " " + Y[0]);
+                                //e.printStackTrace();     
+                        }
+                } 
+                
+                return projected_points;
+        }
+        
+        
+        public static List <Point3DGeographic> XYToLatsLons (final List <Point3DCartesian> reference_points, final Projection proj, final double alpha)
+        {
+                //Convert all points in the Cartesian coordinates to geographic using inverse projection equations
+                List <Point3DGeographic> projected_points = new ArrayList<>();
+                
+                for (Point3DCartesian p : reference_points) 
+                {
+                        double[] lat = {0.0}, lon = {0.0}, lat_trans = {0.0}, lon_trans = {0.0};
+
+                        try 
+                        {
+                                //Convert a point
+                                CartTransformation.XYToLatLon(p.getX(), p.getY(), proj, alpha, lat_trans, lon_trans, lat, lon);
+                                
+                                //Add to the list of points
+                                projected_points.add(new Point3DGeographic(lat[0], lon[0], p.getZ()));
+                        } 
+                        
+                        //Throw exception
+                        catch (Exception e) 
+                        {
+                                //e.printStackTrace();
+                                //System.out.println("     Error:" + p.getX()+ " " + p.getY());
                         }
                 }
-
-                catch(Exception e)
-                {
-                        e.printStackTrace();
-                }
+                
+                return projected_points;
         }
                         
 }

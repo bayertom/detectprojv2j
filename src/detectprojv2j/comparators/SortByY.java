@@ -29,8 +29,8 @@ public class SortByY implements Comparator <Point3DCartesian> {
         @Override
         public int compare(final Point3DCartesian p1, final Point3DCartesian p2)
         {
-                if (p1.getX() < p2.getX()) return -1;
-                if (p1.getX() > p2.getX()) return 1;
+                if (p1.getY() < p2.getY()) return -1;
+                if (p1.getY() > p2.getY()) return 1;
                 return 0;
         }
 }

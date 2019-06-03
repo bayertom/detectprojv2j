@@ -33,8 +33,8 @@ public class FDiffM7 {
       
 	private final double lat;                                               //Latitude of the point
 	private final double lon;                                               //Longitude of the point
-	private final ICoordFunctionProj equat;                                     //Coordinate function
-	private final TTransformedLongitudeDirection trans_lon_dir;            //Transformed longitude direction
+	private final ICoordFunctionProj equat;                                 //Coordinate function
+	private final TTransformedLongitudeDirection trans_lon_dir;             //Transformed longitude direction
         
         FDiffM7(final double lat_, final double lon_, final ICoordFunctionProj equat_, final TTransformedLongitudeDirection trans_lon_dir_) 
         {
@@ -54,7 +54,7 @@ public class FDiffM7 {
                 final double lon_transr = CartTransformation.redLon0(lon_trans, XT.items[0][5]);
                 
                 //Evaluate map projection equation; used for the partial derivative
-                double res = equat.f(XT.items[0][0], XT.items[0][3], XT.items[0][4], lat_trans, lon_transr, 0, 0, 0, XT.items[0][6]);
+                double res = equat.f(lat_trans, lon_transr, XT.items[0][0], XT.items[0][3], XT.items[0][4], 0, 0, 0, XT.items[0][6]);
 
                 return res;
         }

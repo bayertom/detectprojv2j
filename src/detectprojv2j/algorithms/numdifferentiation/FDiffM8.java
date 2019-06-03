@@ -55,7 +55,7 @@ public class FDiffM8 {
                 final double lon_transr = CartTransformation.redLon0(lon_trans, XT.items[0][4]);
                 
                 //Evaluate map projection equation; used for the partial derivative
-                double res = equat.f(R, XT.items[0][2], XT.items[0][3], lat_trans, lon_transr, 0, 0, 0, XT.items[0][5]);
+                double res = equat.f(lat_trans, lon_transr, R, XT.items[0][2], XT.items[0][3], 0, 0, 0, XT.items[0][5]);
 
                 return res;
         }

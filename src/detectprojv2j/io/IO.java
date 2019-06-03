@@ -36,7 +36,7 @@ import detectprojv2j.exceptions.BadDataException;
 public class IO {
         
         
-        public static <Point> void load3DPoints(final String file, List <Point> points, final Class<Point> o_class)
+        public static <Point> void load3DPoints(final String file, List <Point> points, final Class <Point> o_class)
         {
                 //Load file and split to the words
                 final  List<List<String>> file_content = loadFileToWords(file);

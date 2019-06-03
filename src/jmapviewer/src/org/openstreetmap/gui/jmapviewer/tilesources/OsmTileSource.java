@@ -12,9 +12,9 @@ public class OsmTileSource {
     public static class Mapnik extends AbstractOsmTileSource {
 
 
-        private static final String PATTERN = "http://%s.tile.openstreetmap.org";
+        //private static final String PATTERN = "http://%s.tile.openstreetmap.org";
 
-        //private static final String PATTERN = "https://%s.tile.openstreetmap.org";
+        private static final String PATTERN = "https://%s.tile.openstreetmap.org";
 
         //private static final String PATTERN = "https://London.tile.openstreetmap.org";
         

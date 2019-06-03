@@ -22,6 +22,7 @@
 package detectprojv2j;
 
 import detectprojv2j.algorithms.carttransformation.CartTransformation;
+import detectprojv2j.algorithms.graticule.Graticule;
 import static java.lang.Math.*;
 import detectprojv2j.io.IO;
 import java.util.List;
@@ -49,14 +50,14 @@ import static detectprojv2j.consts.Consts.*;
 import detectprojv2j.comparators.SortByLat;
 import detectprojv2j.comparators.SortByLon;
 
-import detectprojv2j.algorithms.graticule.Graticule;
-import detectprojv2j.algorithms.graticule2.Graticule2;
+import detectprojv2j.algorithms.graticuleAS.GraticuleAS;
 import detectprojv2j.comparators.SortByDistCart;
 import detectprojv2j.exceptions.BadDataException;
 import detectprojv2j.forms.MainApplication;
 import detectprojv2j.io.DXFExport;
 import detectprojv2j.structures.graticule.Meridian;
 import detectprojv2j.structures.graticule.Parallel;
+import detectprojv2j.types.TGraticuleSampling;
 import detectprojv2j.types.TTransformedLongitudeDirection;
 import static detectprojv2j.types.TTransformedLongitudeDirection.*;
 import java.awt.Dimension;
@@ -99,23 +100,37 @@ public class Detectprojv2j {
 	double lon24 = CartTransformation.lonTransToLon(latt4, lont4, latp, lonp, mode);
         */
         /*
-        List <Projection> projections = new ArrayList<> ();
-        Projections.init(projections);
+        TTransformedLongitudeDirection mode1 = NormalDirection2;
+        //ProjectionMiscellaneous proj = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, mode1, 0.0, 0.0, 0.0, 1.0, Projections::F_armad, Projections::G_armad, Projections::FI_armad, Projections::GI_armad, "Armadillo", "armad");
+        //ProjectionMiscellaneous proj = new ProjectionMiscellaneous (R0, 90.0, 0.0, 0.0, mode1, 0.0, 0.0, 0.0, 1.0, Projections::F_litt, Projections::G_litt, Projections::FI_litt, Projections::GI_litt, "Armadillo", "armad");
+        ProjectionPseudoCylindrical proj = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 0.0, mode1, 0.0, 0.0, 0.0, 1.0, Projections::F_nell_h, Projections::G_nell_h, Projections::FI_nell_h, Projections::GI_nell_h, "Armadillo", "armad");
+
+        double lat = 10, lon = 100;
+        double []  lat_trans = {0}, lon_trans ={0}, X={0}, Y = {0};
+ 
+        CartTransformation.latLonToXY(lat, lon, proj, 0.0, lat_trans, lon_trans, X, Y);
+        double [] lat2 ={0}, lon2  = {0};
+        CartTransformation.XYToLatLon(X[0], Y[0], proj, 0.0, lat_trans, lon_trans, lat2, lon2);
+        */
         
-        Projection proj = projections.get(0);
-        
+        /*
+        TTransformedLongitudeDirection mode = NormalDirection2;
+        //ProjectionPseudoCylindrical proj = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, mode, 0.0, 0.0, 0.0, 1.0, Projections::F_mbt_s3, Projections::G_mbt_s3, Projections::F_mbt_s3, Projections::G_mbt_s3, "McBryde-Thomas, flat-pole sine III.", "mbt_s3");
+        //ProjectionMiscellaneous proj = new ProjectionMiscellaneous (R0, 90.0, 0.0, 10.0, mode, 0.0, 0.0, 0.0, 1.0, Projections::F_nicol, Projections::G_nicol, Projections::FI_nicol, Projections::GI_nicol, "Nicolosi, globular", "nicol");
+        ProjectionPseudoCylindrical proj = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, mode, 0.0, 0.0, 0.0, 1.0, Projections::F_goode, Projections::G_goode, Projections::F_goode, Projections::G_goode, "Goode, homolosine", "goode");
+                       
         //proj.setCartPole(new Point3DGeographic(-90, 115.2, 0));
         //proj.setCartPole(new Point3DGeographic(89.5, -174.48));
-        proj.setCartPole(new Point3DGeographic(50, 15));
-        proj.setLat1(0.0);
+        proj.setCartPole(new Point3DGeographic(90, -0.04));
+        proj.setLat1(42.56);
         proj.setLon0(0);
 	//proj.setLon0(-122.71);
         //final double alpha = 7.1;
         final double alpha = 0;
-        final double lat_min = 20.0;
-        final double lat_max = 30;
-        final double lon_min = -180;
-        final double lon_max = 180;
+        final double lat_min = -90.0;
+        final double lat_max = 90;
+        final double lon_min = -180;//-140;
+        final double lon_max = 180;//-120;
         final double lat_step = 10;
         final double lon_step = 10;
         final double font_height = 0.05 * proj.getR() * min(lat_step, lon_step) * PI / 180;
@@ -128,14 +143,13 @@ public class Detectprojv2j {
         List <List<Point3DCartesian> > parallels_proj = new ArrayList<>();        
        
         //Create graticule
-        Graticule2.createGraticule(proj, lat_interval, lon_interval, lat_step, lon_step, 0.1 * lat_step, 0.1 * lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj);
+        Graticule gr = new Graticule(1.0, 1.0, 5, 0, 100);
+        gr.createGraticule(proj, lat_interval, lon_interval, lat_step, lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj, TGraticuleSampling.AdaptiveSampling, 1000, 1.0e9, 0.001);
+	
+        //GraticuleAS.createGraticule(proj, lat_interval, lon_interval, lat_step, lon_step, 0.1 * lat_step, 0.1 * lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj);
               
         //Export graticule to DXF
         DXFExport.exportGraticuleToDXF("graticule.dxf", meridians, meridians_proj, parallels, parallels_proj, font_height, min(lat_step, lon_step));
-        */
-        
-        
-        
         
         
         /*
@@ -253,8 +267,8 @@ public class Detectprojv2j {
 //                lon_min = MIN_LON;
 //                lon_max = MAX_LON;
 //        }
-//        TInterval lat_interval = new TInterval (lat_min, lat_max);
-//        TInterval lon_interval = new TInterval ( lon_min, lon_max);
+//        TInterval lat_interval = new TInterval (-90, 90);
+//        TInterval lon_interval = new TInterval ( -180, 180);
 //        
 //        System.out.println("Exporting points, graticules: ");
 //        
@@ -278,7 +292,10 @@ public class Detectprojv2j {
 //                //std::cout << res.second.proj->getName() << '\n';
 //
 //                //Create graticule
-//                Graticule.createGraticule(value.proj, lat_interval, lon_interval, lat_step, lon_step, 0.1 * lat_step, 0.1 * lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj);
+//                Graticule gr = new Graticule(10.0, 10.0, 5, 0, 100);
+//                gr.createGraticule(value.proj, lat_interval, lon_interval, lat_step, lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj, TGraticuleSampling.UniformSampling, 1000, 1.0e9, 0.001);
+//	
+//                //Graticule.createGraticule(value.proj, lat_interval, lon_interval, lat_step, lon_step, 0.1 * lat_step, 0.1 * lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj);
 //              
 //                //Create file names
 //                String output_file_graticule = test_file;
