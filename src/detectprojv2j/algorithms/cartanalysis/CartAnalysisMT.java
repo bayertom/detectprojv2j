@@ -44,13 +44,9 @@ import detectprojv2j.structures.matrix.Matrix;
 
 import static detectprojv2j.consts.Consts.*;
 
-<<<<<<< HEAD
 import detectprojv2j.comparators.SortPointsByLat;
 import detectprojv2j.comparators.SortPointsByLon;
-=======
-import detectprojv2j.comparators.SortByLat;
-import detectprojv2j.comparators.SortByLon;
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
+
 
 import detectprojv2j.algorithms.carttransformation.CartTransformation;
 import detectprojv2j.algorithms.geneticalgorithms.DifferentialEvolution;
@@ -108,17 +104,11 @@ public class CartAnalysisMT implements Runnable
                 String button_text = button.getText();
 
                 //Geographic extent of the analyzed territory
-<<<<<<< HEAD
                 final double lat_min = (Collections.min(reference_points, new SortPointsByLat())).getLat();
                 final double lat_max = (Collections.max(reference_points, new SortPointsByLat())).getLat();
                 final double lon_min = (Collections.min(reference_points, new SortPointsByLon())).getLon();
                 final double lon_max = (Collections.max(reference_points, new SortPointsByLon())).getLon();
-=======
-                final double lat_min = (Collections.min(reference_points, new SortByLat())).getLat();
-                final double lat_max = (Collections.max(reference_points, new SortByLat())).getLat();
-                final double lon_min = (Collections.min(reference_points, new SortByLon())).getLon();
-                final double lon_max = (Collections.max(reference_points, new SortByLon())).getLon();
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
+
                 final double lat_aver = 0.5 * (lat_min + lat_max), lon_aver = 0.5 * (lon_min + lon_max);
 
                 //Initialize cartographic parameters

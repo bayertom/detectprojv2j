@@ -11,16 +11,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-<<<<<<< HEAD
-//<<<<<<< .mine
-=======
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 import java.util.Iterator;
 import java.util.LinkedList;
-//||||||| .r33089
-import java.util.LinkedList;
-//=======
-//>>>>>>> .r35022
 import java.util.List;
 
 import javax.swing.ImageIcon;

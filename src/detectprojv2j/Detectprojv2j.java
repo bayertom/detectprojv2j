@@ -47,19 +47,12 @@ import detectprojv2j.structures.matrix.Matrix;
 
 import static detectprojv2j.consts.Consts.*;
 
-<<<<<<< HEAD
 import detectprojv2j.comparators.SortPointsByLat;
 import detectprojv2j.comparators.SortPointsByLon;
 
 import detectprojv2j.algorithms.graticuleAS.GraticuleAS;
 import detectprojv2j.comparators.SortPointsByDistCart;
-=======
-import detectprojv2j.comparators.SortByLat;
-import detectprojv2j.comparators.SortByLon;
 
-import detectprojv2j.algorithms.graticuleAS.GraticuleAS;
-import detectprojv2j.comparators.SortByDistCart;
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 import detectprojv2j.exceptions.BadDataException;
 import detectprojv2j.forms.MainApplication;
 import detectprojv2j.io.DXFExport;
@@ -263,17 +256,10 @@ public class Detectprojv2j {
 //        output.close();
 //        
 //        // Geographic extent of the analyzed territory   
-<<<<<<< HEAD
 //        double lat_min = (Collections.min(reference_points, new SortPointsByLat())).getLat();
 //        double lat_max = (Collections.max(reference_points, new SortPointsByLat())).getLat();
 //        double lon_min = (Collections.min(reference_points, new SortPointsByLon())).getLon();
 //        double lon_max = (Collections.max(reference_points, new SortPointsByLon())).getLon();
-=======
-//        double lat_min = (Collections.min(reference_points, new SortByLat())).getLat();
-//        double lat_max = (Collections.max(reference_points, new SortByLat())).getLat();
-//        double lon_min = (Collections.min(reference_points, new SortByLon())).getLon();
-//        double lon_max = (Collections.max(reference_points, new SortByLon())).getLon();
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 //        double lat_aver = 0.5 * (lat_min + lat_max), lon_aver = 0.5 * (lon_min + lon_max);
 //
 //        //Get limits; stretch over the whole planishere, if necessarry

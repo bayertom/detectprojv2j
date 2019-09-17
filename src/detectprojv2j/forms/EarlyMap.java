@@ -57,11 +57,8 @@ import detectprojv2j.structures.projection.Projection;
 
 import detectprojv2j.consts.Consts;
 
-<<<<<<< HEAD
 import detectprojv2j.comparators.SortPointsByDistCart;
-=======
-import detectprojv2j.comparators.SortByDistCart;
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
+
 
 
 
@@ -454,11 +451,7 @@ public class EarlyMap extends JPanel
                 }
                 
                 //Sort points according to the distance from the given point
-<<<<<<< HEAD
                 Point3DCartesian p_nearest = Collections.min(test_points, new SortPointsByDistCart(point));
-=======
-                Point3DCartesian p_nearest = Collections.min(test_points, new SortByDistCart(point));
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                 
                 //Get spherical distance to the nerest point
                 final double dX = point.getX() - p_nearest.getX();
