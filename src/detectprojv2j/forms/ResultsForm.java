@@ -155,6 +155,7 @@ public class ResultsForm extends javax.swing.JFrame {
                                 
                                 //Recomputed index according to the sorted elements
                                 final int proj_index  = sel_index > -1 ? resultsTable.convertRowIndexToModel( sel_index ) : -1;
+<<<<<<< HEAD
 
                                 //Two clicks
                                 if (e.getClickCount() == 2) 
@@ -209,6 +210,62 @@ public class ResultsForm extends javax.swing.JFrame {
                                                         //Store computed results       
                                                         Future <List<MercTile>> results = es.submit(mw);
 
+=======
+
+                                //Two clicks
+                                if (e.getClickCount() == 2) 
+                                {
+                                        //Get selected row
+                                        TResult res = results.get(results.keySet().toArray()[proj_index]);
+                                        
+                                        //Remove all map markers except the points
+                                        List <MapMarker> map_markers = Collections.synchronizedList(map.getMapMarkerList());
+                                        final int np = map.reference_points.size();
+
+                                        synchronized (map_markers)
+                                        {              
+                                                //More map markers than points
+                                                if (map_markers.size() > np) 
+                                                        for( int i = map_markers.size() - 1; i >= np; i--)
+                                                                map_markers.remove(i);
+                                        }
+
+                                        //The previous analysis has been finished
+                                        if (!computation_in_progress[0]) 
+                                        {
+                                                //Create new service
+                                                ExecutorService es = Executors.newFixedThreadPool(5);
+                                                
+                                                //Reproject map in a selected projection to tiles
+                                                if (res.tiles == null)
+                                                {
+                                                        final double R = 6378137.0, latp = 90.0, lonp = 0.0, lat1 = 0.0, lon0 = 0.0, dX = 0.0, dY = 0.0, c = 1.0;
+                                                        double[] sx = {0}, sy = {0}, ratio = {0}, lat_sw = {0}, lon_sw = {0}, lat_ne = {0}, lon_ne = {0};
+
+                                                        //Disable computation
+                                                        computation_in_progress[0] = true;
+
+                                                        //Create output projection for OSM: Mercator
+                                                        ProjectionCylindrical merc = new ProjectionCylindrical(R, latp, lonp, lat1, TTransformedLongitudeDirection.NormalDirection, lon0, dX, dY, c, Projections::F_merc, Projections::G_merc, Projections::FI_merc, Projections::GI_merc, "Mercator", "merc");
+                                                        
+                                                        //Get size of the raster
+                                                        final int rwidth = early_map.img.getWidth();
+                                                        final int rheight = early_map.img.getHeight();                                                      
+                                                        final int rsize = max(rwidth, rheight);
+
+                                                        //Get optimal tile size : 0.1 * rsize                                       
+                                                        final int min_tile = 300, max_tile = 800;
+                                                        
+                                                        int tile_size = min(rsize / 10, max_tile);
+                                                        tile_size = max (tile_size, min_tile);
+                                                        
+                                                        //Create new map object for georeference and warping
+                                                        MapWarp mw = new MapWarp(early_map.img, res.proj, merc, res.map_rotation, tile_size, slider, label, map);
+                                                        
+                                                        //Store computed results       
+                                                        Future <List<MercTile>> results = es.submit(mw);
+
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                                                         //After storing results add to the map
                                                         es.submit(() -> 
                                                         {
@@ -324,7 +381,11 @@ public class ResultsForm extends javax.swing.JFrame {
         private void initializeTable()
         {
                 //Set properties of the table
+<<<<<<< HEAD
                 String[] col_names = { "#", "Family", "Projection*", "Residuals", "R", "latk", "lonk", "lat1", "lat2", "lon0", "dX", "dY", "k", "Map scale+", "Map rotation", "q1", "q2", "Iterations"};
+=======
+                String[] col_names = { "#", "Family", "Projection", "Residuals", "R", "latk", "lonk", "lat1", "lat2", "lon0", "dX", "dY", "k", "Map scale*", "Map rotation", "q1", "q2", "Iterations"};
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                 DefaultTableModel model = (DefaultTableModel)resultsTable.getModel();
                 model.setColumnIdentifiers(col_names);
                 

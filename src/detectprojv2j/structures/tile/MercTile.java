@@ -28,6 +28,7 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 public class MercTile {
         
+<<<<<<< HEAD
         private final BufferedImage img;                      //Rendered raster (a part of the georeferenced early map)
         private final Coordinate sw;                          //Geographic coordinates of the south-west point of map bounding box
         private final Coordinate ne;                          //Geographic coordinates of the north-east point of map bounding box
@@ -37,13 +38,24 @@ public class MercTile {
         private final double ratio;
 
         public MercTile(BufferedImage img_, Coordinate sw_, Coordinate ne_, float alphat_, double sx_, double sy_, double ratio_) {
+=======
+        private final BufferedImage img;                      //Rendered raster (a georeferenced early map)
+        private final Coordinate sw;                          //Geographic coordinates of the south-west point of map bounding box
+        private final Coordinate ne;                          //Geographic coordinates of the north-east point of map bounding box
+        private final float alphat;                           //Transparency ratio
+
+        public MercTile(BufferedImage img_, Coordinate sw_, Coordinate ne_, float alphat_) {
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                 img = img_;
                 sw = sw_;
                 ne = ne_;
                 alphat = alphat_;
+<<<<<<< HEAD
                 sx = sx_;
                 sy = sy_;
                 ratio = ratio_;
+=======
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
         }
 
         public BufferedImage getImgage() {
@@ -57,6 +69,7 @@ public class MercTile {
         public Coordinate getNECorner() {
                 return ne;
         }
+<<<<<<< HEAD
         
         public double getSx()
         {
@@ -72,4 +85,6 @@ public class MercTile {
         {
                 return ratio;
         }
+=======
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 }

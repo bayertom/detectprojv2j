@@ -1760,10 +1760,17 @@ public class MainApplication extends javax.swing.JFrame  {
                                         results_form.printResult(n_results);
 
                                         //Geographic extent of the analyzed territory   
+<<<<<<< HEAD
                                         double lat_min = (create_entire_graticule[0] ? -89.0 : (Collections.min(reference_points, new SortPointsByLat())).getLat());
                                         double lat_max = (create_entire_graticule[0] ? 89.0 : (Collections.max(reference_points, new SortPointsByLat())).getLat());
                                         double lon_min = (create_entire_graticule[0] ? -180.0 : (Collections.min(reference_points, new SortPointsByLon())).getLon());
                                         double lon_max = (create_entire_graticule[0] ? 180.0 : (Collections.max(reference_points, new SortPointsByLon())).getLon());
+=======
+                                        double lat_min = (create_entire_graticule[0] ? -89.0 : (Collections.min(reference_points, new SortByLat())).getLat());
+                                        double lat_max = (create_entire_graticule[0] ? 89.0 : (Collections.max(reference_points, new SortByLat())).getLat());
+                                        double lon_min = (create_entire_graticule[0] ? -180.0 : (Collections.min(reference_points, new SortByLon())).getLon());
+                                        double lon_max = (create_entire_graticule[0] ? 180.0 : (Collections.max(reference_points, new SortByLon())).getLon());
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 
                                         double lat_aver = 0.5 * (lat_min + lat_max), lon_aver = 0.5 * (lon_min + lon_max);
 

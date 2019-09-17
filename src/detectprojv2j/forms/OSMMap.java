@@ -62,7 +62,11 @@ import detectprojv2j.structures.tile.MercTile;
 
 import static detectprojv2j.consts.Consts.*;
 
+<<<<<<< HEAD
 import detectprojv2j.comparators.SortPointsByDistGeo;
+=======
+import detectprojv2j.comparators.SortByDistGeo;
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 
 import detectprojv2j.algorithms.graticule.Graticule;
 import detectprojv2j.algorithms.sphericaldistance.SphericalDistance;
@@ -389,7 +393,11 @@ public class OSMMap extends JMapViewer
                 }
                 
                 //Sort points according to the distance from the given point
+<<<<<<< HEAD
                 Point3DGeographic p_nearest = Collections.min(reference_points, new SortPointsByDistGeo(point, R));
+=======
+                Point3DGeographic p_nearest = Collections.min(reference_points, new SortByDistGeo(point, R));
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                 
                 //Get spherical distance to the nerest point
                 dist_nearest[0] = SphericalDistance.distance(point, p_nearest, R);                    

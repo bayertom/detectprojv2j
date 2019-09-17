@@ -24,7 +24,11 @@ import java.util.Comparator;
 
 import detectprojv2j.structures.point.Point3DCartesian;
 
+<<<<<<< HEAD:src/detectprojv2j/comparators/SortPointsByY.java
 public class SortPointsByY implements Comparator <Point3DCartesian> {
+=======
+public class SortByY implements Comparator <Point3DCartesian> {
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5:src/detectprojv2j/comparators/SortByY.java
     
         @Override
         public int compare(final Point3DCartesian p1, final Point3DCartesian p2)

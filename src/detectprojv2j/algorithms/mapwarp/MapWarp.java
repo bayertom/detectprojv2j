@@ -42,13 +42,17 @@ import javax.swing.JLabel;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 
+<<<<<<< HEAD
 
 import detectprojv2j.types.Triplet;
 
+=======
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 import detectprojv2j.structures.point.Point3DCartesian;
 import detectprojv2j.structures.projection.Projection;
 import detectprojv2j.structures.point.Point3DGeographic;
 import detectprojv2j.structures.tile.MercTile;
+<<<<<<< HEAD
 import detectprojv2j.structures.tile.BigBufferedImage;
 
 import detectprojv2j.comparators.SortPointsByX;
@@ -72,6 +76,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
+=======
+
+import detectprojv2j.comparators.SortByX;
+import detectprojv2j.comparators.SortByY;
+
+import detectprojv2j.comparators.MaxLatPredcate;
+import detectprojv2j.comparators.SortByLat;
+import detectprojv2j.comparators.SortByLon;
+
+import detectprojv2j.algorithms.carttransformation.CartTransformation;
+
+import detectprojv2j.forms.RasterMapMarker;
+import detectprojv2j.forms.OSMMap;
+import java.awt.image.Raster;
+import static java.lang.Math.round;
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 import javax.swing.JSlider;
 
 
@@ -116,16 +136,23 @@ public class MapWarp implements Callable <List<MercTile>> {
                 final String status_bar_text = "Warping map: " + iproj.getFamily()+ " " + iproj.getName() + " Projection";
                 List <MercTile> proj_tiles = new ArrayList<>();
 
+<<<<<<< HEAD
                 //Expected amount of tiles
+=======
+                //Amount of tiles
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                 final int rows = (int)ceil((double)h / tile_size);
                 final int columns = (int)ceil((double)w / tile_size);
                 final int tiles_amount = rows * columns;
                 
                 //Print status
                 label.setText(status_bar_text);
+<<<<<<< HEAD
                 
                 //Initialize scale ratio
                 double [] ratio = {-1};
+=======
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                         
                 //Remove all map marks representing tiles except control points
                 List <MapMarker> map_markers = Collections.synchronizedList(map.getMapMarkerList());
@@ -143,7 +170,11 @@ public class MapWarp implements Callable <List<MercTile>> {
                                 List <Point3DGeographic> tile_points_sphere = CartTransformation.XYToLatsLons(tile_points_proj, iproj, rotation);        
 
                                 //Remove all points with the latitude > 85 deg (resampled map looks strange here)
+<<<<<<< HEAD
                                 tile_points_sphere.removeIf(new MaxLatPredicate(85.0));
+=======
+                                tile_points_sphere.removeIf(new MaxLatPredcate(85.0));
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                                 
                                 //Remove all unique points
 
@@ -151,10 +182,17 @@ public class MapWarp implements Callable <List<MercTile>> {
                                 if (tile_points_sphere.size() > 2)
                                 {
                                         //Find vertices of the min-max box: transformed raster will placed inside
+<<<<<<< HEAD
                                         final double lat_sw = (Collections.min(tile_points_sphere, new SortPointsByLat())).getLat();
                                         final double lon_sw = (Collections.min(tile_points_sphere, new SortPointsByLon())).getLon();
                                         final double lat_ne = (Collections.max(tile_points_sphere, new SortPointsByLat())).getLat();
                                         final double lon_ne = (Collections.max(tile_points_sphere, new SortPointsByLon())).getLon();
+=======
+                                        final double lat_sw = (Collections.min(tile_points_sphere, new SortByLat())).getLat();
+                                        final double lon_sw = (Collections.min(tile_points_sphere, new SortByLon())).getLon();
+                                        final double lat_ne = (Collections.max(tile_points_sphere, new SortByLat())).getLat();
+                                        final double lon_ne = (Collections.max(tile_points_sphere, new SortByLon())).getLon();
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                                                                                 
                                         //Initialize shifts as a projection dX, dY values
                                         final double [] sx = {proj.getDx()};
@@ -170,10 +208,15 @@ public class MapWarp implements Callable <List<MercTile>> {
                                         System.out.println("---");
                                         */
                                         //Convert points to the raster: create reprojected map
+<<<<<<< HEAD
+=======
+                                        double [] ratio = {0};
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                                         final BufferedImage img_proj = pointTileToRaster(tile_points_reproj, sx, sy, ratio);
 
                                         if (img_proj != null)
                                         {
+<<<<<<< HEAD
                                                 /*
                                                 //Store tiles
                                                 try
@@ -193,13 +236,23 @@ public class MapWarp implements Callable <List<MercTile>> {
                                                 
                                                 //Create tile
                                                 MercTile tile = new MercTile(img_proj, new Coordinate(lat_sw, lon_sw), new Coordinate(lat_ne, lon_ne), 0.01f * slider.getValue(), sx[0], sy[0], ratio[0]);
+=======
+                                                //Create tile
+                                                MercTile tile = new MercTile(img_proj, new Coordinate(lat_sw, lon_sw), new Coordinate(lat_ne, lon_ne), 0.01f * slider.getValue());
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                                                 
                                                 //Add tile to the list
                                                 proj_tiles.add(tile);
                                                 
+<<<<<<< HEAD
                                                 //Add map to the maker list: it will be displayed as a raster map marker
                                                 synchronized (map_markers)
                                                 {
+=======
+                                                synchronized (map_markers)
+                                                {
+                                                        //Add map to the maker list: it will be displayed as a raster map marker
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                                                         map_markers.add(new RasterMapMarker(tile.getSWCorner(), tile.getNECorner(), img_proj, 0.01f * slider.getValue(), map));
                                                 }
                                         }
@@ -221,9 +274,12 @@ public class MapWarp implements Callable <List<MercTile>> {
                 //Warping has been completed
                 label.setText("Completed...");
                 
+<<<<<<< HEAD
                 //Merge tiles into one file
                 //mergeTiles(proj_tiles);
                 
+=======
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                 //Return list of warped raster tiles
                 return proj_tiles;   
         }
@@ -265,7 +321,11 @@ public class MapWarp implements Callable <List<MercTile>> {
                 final int green_sw = (color_sw & 0xff00) >> 8;
                 final int red_sw = (color_sw & 0xff0000) >> 16;
                 
+<<<<<<< HEAD
                 //White pixel, do not add to the list
+=======
+                //White pixel, add to the list
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                 if (red_sw * green_sw * blue_sw > white_threshold)
                         tile_points.add(new Point3DCartesian(i, -(l_max - 1), color_sw));
                 
@@ -275,7 +335,11 @@ public class MapWarp implements Callable <List<MercTile>> {
                 final int green_ne = (color_ne & 0xff00) >> 8;
                 final int red_ne = (color_ne & 0xff0000) >> 16;
                 
+<<<<<<< HEAD
                 //White pixel, do not add to the list
+=======
+                //White pixel, add to the list
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                 if (red_ne * green_ne * blue_ne > white_threshold)
                         tile_points.add(new Point3DCartesian(k_max - 1, -j, color_ne));
                 
@@ -293,10 +357,17 @@ public class MapWarp implements Callable <List<MercTile>> {
                 if (points.size() > 2)
                 {
                         //Find minimum coordinates
+<<<<<<< HEAD
                         final double xmin = (Collections.min(points, new SortPointsByX())).getX();
                         final double ymin = (Collections.min(points, new SortPointsByY())).getY();
                         final double xmax = (Collections.max(points, new SortPointsByX())).getX();
                         final double ymax = (Collections.max(points, new SortPointsByY())).getY();
+=======
+                        final double xmin = (Collections.min(points, new SortByX())).getX();
+                        final double ymin = (Collections.min(points, new SortByY())).getY();
+                        final double xmax = (Collections.max(points, new SortByX())).getX();
+                        final double ymax = (Collections.max(points, new SortByY())).getY();
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 
                         //Add raster shifts to the projection shifts
                         sx[0] += - xmin;
@@ -307,6 +378,7 @@ public class MapWarp implements Callable <List<MercTile>> {
                         final double dy = ymax - ymin;
                         final double rx = dx / tile_size;
                         final double ry = dy / tile_size;
+<<<<<<< HEAD
                         
                         //Ratio is unique for the entire raster
                         //if (ratio[0] < 0)
@@ -321,6 +393,13 @@ public class MapWarp implements Callable <List<MercTile>> {
                         //Size of the created raster: width and height
                         final double w = max(dx / ratio[0], 2.0);
                         final double h = max(dy / ratio[0], 2.0);
+=======
+                        ratio[0] = min(rx, ry);
+
+                        //Size of the created raster
+                        double w = max(dx / ratio[0], 2.0);
+                        double h = max(dy / ratio[0], 2.0);
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 
                         //System.out.println(xmin + " " + ymin + " " + xmax + " " + ymax);
                         //Create new raster with the white background
@@ -342,6 +421,7 @@ public class MapWarp implements Callable <List<MercTile>> {
                         //Write all points of tile to the image as dots
                         for (Point3DCartesian p:points)
                         {
+<<<<<<< HEAD
                                 //Apply shift and rescaling to the pixel coordinates [x_pix, y_pix]
                                 //Change direction due to the different orientation of Y axis
                                 double x_pix = ( p.getX() + sx[0] ) / ratio[0];
@@ -357,6 +437,20 @@ public class MapWarp implements Callable <List<MercTile>> {
                                 //Check, if coordinates are not bigger than raster size
                                 x_pix = min (x_pix, w - 1);
                                 y_pix = min (y_pix, h - 1);
+=======
+                                //Apply shift and rescaling
+                                //Change direction due to the different orientation of Y axis
+                                double x_resc = ( p.getX() + sx[0] ) / ratio[0];
+                                double y_resc = h - ( p.getY() + sy[0] ) / ratio[0];
+
+                                //Check, if coordinates are not negative
+                                x_resc = max (0, x_resc);
+                                y_resc = max (0, y_resc);
+
+                                //Check, if coordinates are not bigger than raster size
+                                x_resc = min (x_resc, w - 1);
+                                y_resc = min (y_resc, h - 1);
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 
                                 //Convert (r, g,b) to Color
                                 final int col = (int) p.getZ();
@@ -368,12 +462,17 @@ public class MapWarp implements Callable <List<MercTile>> {
                                 g.setColor(new Color(red, green, blue));
                                 
                                 double radius = 3.0;
+<<<<<<< HEAD
                                 g.fillOval((int)(x_pix - 0.5 * radius), (int)(y_pix -0.5 * radius), (int)radius + 1, (int)radius + 1);
+=======
+                                g.fillOval((int)(x_resc - 0.5 * radius), (int)(y_resc -0.5 * radius), (int)radius + 1, (int)radius + 1);
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
                         }
                 }
                 
                 return img_proj;
         }
+<<<<<<< HEAD
         
         
         public void mergeTiles(List <MercTile> proj_tiles)
@@ -457,4 +556,6 @@ public class MapWarp implements Callable <List<MercTile>> {
                 
                 }
         }   
+=======
+>>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
 }
