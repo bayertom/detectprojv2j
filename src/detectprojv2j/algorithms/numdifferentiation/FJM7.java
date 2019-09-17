@@ -39,22 +39,24 @@ public class FJM7 {
         
         private final List <Point3DCartesian> test_points;				//List of test points
 	private final List <Point3DGeographic>  reference_points;			//List of reference points
-	private final ICoordFunctionProj  getX, getY;					//Pointer to the coordinate functions
-	private final TTransformedLongitudeDirection trans_lon_dir;			//Transformed longitude direction
+	private final ICoordFunctionProj  F;                                            //Reference to the coordinate function X = F(lat, lon)
+        private final ICoordFunctionProj  G;                                            //Reference to the coordinate function Y = G(lat, lon)
+       	private final TTransformedLongitudeDirection trans_lon_dir;			//Transformed longitude direction
         
-        public FJM7(final List <Point3DCartesian > test_points_, final List <Point3DGeographic > reference_points_, final ICoordFunctionProj  pX, final ICoordFunctionProj  pY, final TTransformedLongitudeDirection trans_lon_dir_)
+        public FJM7(final List <Point3DCartesian > test_points_, final List <Point3DGeographic > reference_points_, final ICoordFunctionProj  pF, final ICoordFunctionProj  pG, final TTransformedLongitudeDirection trans_lon_dir_)
         { 
                 test_points = test_points_;
                 reference_points = reference_points_;
-                getX = pX; 
-                getY = pY;
+                F = pF; 
+                G = pG;
                 trans_lon_dir  = trans_lon_dir_;
         }
 
 	public void function (final Matrix X, Matrix J)
 	{
 		//Evaluate members of the Jacobian matrix, method M7
-		Matrix  J_T = new Matrix(J);                            //Temporary Jacobian matrix
+                //Temporary Jacobian matrix
+		Matrix  J_T = new Matrix(J);                          
 		
 		//Create matrix XT (1, 7) from X (7, 1)
 		Matrix  XT = X.trans();          
@@ -69,8 +71,8 @@ public class FJM7 {
 			final double lon = p.getLon();
                         
                         //Create objects
-                        FDiffM7  fderx = new FDiffM7(lat, lon, getX, trans_lon_dir);
-                        FDiffM7  fdery = new FDiffM7(lat, lon, getY, trans_lon_dir);
+                        FDiffM7  fderx = new FDiffM7(lat, lon, F, trans_lon_dir);
+                        FDiffM7  fdery = new FDiffM7(lat, lon, G, trans_lon_dir);
 
 			//Upper part of the Jacobian matrix: R, latp, lonp, lat0, lon0=0 (angular values in radians)
 			J_T.items[i][0] = NumDifferentiation.getDerivative(fderx::function, XT, FirstDerivative, VariableX1, NUM_DERIV_STEP, false);

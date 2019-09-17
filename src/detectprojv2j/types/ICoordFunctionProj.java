@@ -1,7 +1,7 @@
 // Description: Interface to the coordinate function of the projection
 // Replacement of the function pointer in C++
 
-// Copyright (c) 2015 - 2016
+// Copyright (c) 2015 - 2017
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -24,5 +24,5 @@ package detectprojv2j.types;
 @FunctionalInterface
 public interface ICoordFunctionProj {
         
-    double f( final double R, final double lat1, final double lat2, final double lat, final double lon, final double lon0, final double dx, final double dy, final double c);
+        double f( final double lat, final double lon, final double R, final double lat1, final double lat2, final double lon0, final double dx, final double dy, final double c);
 }

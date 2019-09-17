@@ -29,7 +29,7 @@ import detectprojv2j.structures.matrix.Matrix;
 
 public class NonLinearLeastSquares {
         
-        public static double  BFGSH(IJacobian function_j, IResiduals function_v, Matrix  W, Matrix  X, Matrix  Y, Matrix  V, final Matrix  A, final Matrix  B, int [] iterations,
+        public static double BFGSH(IJacobian function_j, IResiduals function_v, Matrix  W, Matrix  X, Matrix  Y, Matrix  V, final Matrix  A, final Matrix  B, int [] iterations,
 	final double alpha, final double nu, final double max_error, final int max_iterations, final double max_diff)
         {
                 //Solving Non-linear Least Squares using the hybrid BFGS algorithm

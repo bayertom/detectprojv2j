@@ -24,5 +24,5 @@ package detectprojv2j.types;
 import detectprojv2j.structures.matrix.Matrix;
 
 public interface IResiduals {
-          void f( Matrix X, Matrix Y, Matrix V, Matrix W);
+        void f( Matrix X, Matrix Y, Matrix V, Matrix W);
 }

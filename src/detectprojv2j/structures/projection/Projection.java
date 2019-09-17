@@ -1,7 +1,7 @@
 // Description: General cartographic projection with abstract methods
 // Supported equations in the non-closed form,
 
-// Copyright (c) 2015 - 2016
+// Copyright (c) 2015 - 2017
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -32,13 +32,15 @@ public abstract class Projection
         
         //Common cartographic projection: abstract class
 	protected double R;						//Sphere radius
-	protected double lon0;						//Projection central parallel
+	protected double lon0;						//Projection central meridian
 	protected double dx;						//Aditive finalant dx
 	protected double dy;						//Aditive finalant dy
 	protected double c;						//Additional finalant of the projection
 	        
-	ICoordFunctionProj X;                                           //Pointer to the coordinate function X = F(lat, lon)
-	ICoordFunctionProj Y;                                           //Pointer to the coordinate function Y = Y(lat, lon)
+	ICoordFunctionProj  F;                                          //Reference to the coordinate function X = F(lat, lon)
+        ICoordFunctionProj  G;                                          //Reference to the coordinate function Y = G(lat, lon)
+        ICoordFunctionProj  FI;                                         //Reference to the inverse coordinate function Lat = F_inv(X, Y)
+        ICoordFunctionProj  GI;                                         //Reference to the inverse coordinate function Lon = G_inv(X, Y)
 
         protected String name;                                          //Projection name
         protected String id;                                            //Projection ID (In accordance with Proj.4)
@@ -50,13 +52,15 @@ public abstract class Projection
                  dx = 0;
                  dy = 0;
                  c = 1;
-                 X = Projections::X_aea;
-                 Y = Projections::Y_def;
+                 F = Projections::F_aea;
+                 G = Projections::G_def;
+                 FI = Projections::F_aea;
+                 GI = Projections::G_def;
                  name = "Azimuthal equal area";
                  id = "aea";
         }
 
-	Projection(final double R_, final double lon0_, final double dx_, final double dy_, final double c_, final ICoordFunctionProj  pX, final ICoordFunctionProj  pY, final String name_, final String id_) 
+	Projection(final double R_, final double lon0_, final double dx_, final double dy_, final double c_, final ICoordFunctionProj  pF, final ICoordFunctionProj  pG, final ICoordFunctionProj  pFI, final ICoordFunctionProj  pGI, final String name_, final String id_) 
         {
                 
 		R = R_;
@@ -64,8 +68,10 @@ public abstract class Projection
                 dx = dx_;
                 dy = dy_;
                 c = c_;
-                X = pX;  
-                Y = pY;
+                F = pF;  
+                G = pG;
+                FI = pFI;  
+                GI = pGI;
                 name = name_;
                 id = id_;
         }
@@ -76,13 +82,24 @@ public abstract class Projection
 	public final double getDx() {return dx;}
 	public final double getDy() {return dy;}
 	public final double getC() {return c;}
-	public final double getX(final double lat, final double lon) { return X.f(this.getR(), this.getLat1(), this.getLat2(), lat, lon, this.getLon0(), this.getDx(), this.getDy(), this.getC()); }
-	public final double getX(final double R_, final double lat1_, final double lat2_, final double lat_, final double lon_, final double lon0_, final double dx_, final double dy_, final double c_) {return X.f(R_, lat1_, lat2_, lat_, lon_, lon0_, dx_, dy_, c_);}
-	public final ICoordFunctionProj  getX() { return X; }
-	public final double getY(final double lat, final double lon) { return Y.f(this.getR(), this.getLat1(), this.getLat2(), lat, lon, this.getLon0(), this.getDx(), this.getDy(), this.getC()); }
-	public final double getY(final double R_, final double lat1_, final double lat2_, final double lat_, final double lon_, final double lon0_, final double dx_, final double dy_, final double c_) { return Y.f(R_, lat1_, lat2_, lat_, lon_, lon0_, dx_, dy_, c_); }
-	public final ICoordFunctionProj  getY() { return Y; }
-	public final String getName() {return name;}
+	
+        public final double getX(final double lat, final double lon) { return F.f(lat, lon, this.getR(), this.getLat1(), this.getLat2(), this.getLon0(), this.getDx(), this.getDy(), this.getC()); }
+	public final double getX(final double lat, final double lon, final double R_, final double lat1_, final double lat2_, final double lon0_, final double dx_, final double dy_, final double c_) {return F.f(lat, lon, R_, lat1_, lat2_, lon0_, dx_, dy_, c_);}
+	public final ICoordFunctionProj  getX() { return F; }
+	
+        public final double getY(final double lat, final double lon) { return G.f(lat, lon, this.getR(), this.getLat1(), this.getLat2(), this.getLon0(), this.getDx(), this.getDy(), this.getC()); }
+	public final double getY(final double lat, final double lon, final double R_, final double lat1_, final double lat2_, final double lon0_, final double dx_, final double dy_, final double c_) { return G.f(lat, lon, R_, lat1_, lat2_, lon0_, dx_, dy_, c_); }
+	public final ICoordFunctionProj  getY() { return G; }
+        
+        public final double getLat(final double x, final double y) { return FI.f(x, y, this.getR(), this.getLat1(), this.getLat2(), this.getLon0(), this.getDx(), this.getDy(), this.getC()); }
+	public final double getLat(final double x_, final double y_, final double R_, final double lat1_, final double lat2_, final double lon0_, final double dx_, final double dy_, final double c_) {return FI.f(x_, y_, R_, lat1_, lat2_, lon0_, dx_, dy_, c_);}
+	public final ICoordFunctionProj  getLat() { return FI; }
+	
+        public final double getLon(final double x, final double y) { return GI.f(x, y, this.getR(), this.getLat1(), this.getLat2(), this.getLon0(), this.getDx(), this.getDy(), this.getC()); }
+	public final double getLon(final double x, final double y, final double R_, final double lat1_, final double lat2_, final double lon0_, final double dx_, final double dy_, final double c_) { return GI.f(x, y, R_, lat1_, lat2_, lon0_, dx_, dy_, c_); }
+	public final ICoordFunctionProj  getLon() { return GI; }
+        
+        public final String getName() {return name;}
         public final String getID() {return id;}
 
 	public void setR(final double R_) {R = R_;}

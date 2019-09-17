@@ -47,8 +47,8 @@ public class DPI {
                                 v_size[0] = getPixelSize(dimension, "VerticalPixelSize");
 
                                 // TODO: Convert pixelsPerMM to DPI left as an exercise to the r.. ;-)  
-                                System.out.println("horizontalPixelSizeMM: " + h_size[0]);
-                                System.out.println("verticalPixelSizeMM: " + v_size[0]);
+                                //System.out.println("horizontalPixelSizeMM: " + h_size[0]);
+                                //System.out.println("verticalPixelSizeMM: " + v_size[0]);
                         } 
                         
                         //Throw exception

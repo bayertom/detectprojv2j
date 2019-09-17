@@ -1,7 +1,7 @@
 // Description: Main window of the detectproj application
 // Design in NetBeans
 
-// Copyright (c) 2015 - 2016
+// Copyright (c) 2015 - 2017
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -67,24 +67,27 @@ import detectprojv2j.consts.Consts;
 import static detectprojv2j.consts.Consts.MAX_LAT;
 import static detectprojv2j.consts.Consts.MIN_LAT;
 
-import detectprojv2j.comparators.SortByLat;
-import detectprojv2j.comparators.SortByLon;
+import detectprojv2j.comparators.SortPointsByLat;
+import detectprojv2j.comparators.SortPointsByLon;
 
 import detectprojv2j.algorithms.cartanalysis.CartAnalysisMT;
 import detectprojv2j.algorithms.carttransformation.CartTransformation;
-import detectprojv2j.algorithms.graticule2.Graticule2;
+import detectprojv2j.algorithms.graticule.Graticule;
+import detectprojv2j.algorithms.graticuleAS.GraticuleAS;
 
 import detectprojv2j.io.DXFExport;
 import detectprojv2j.io.IO;
+import detectprojv2j.structures.projection.ProjectionMiscellaneous;
+import detectprojv2j.types.TGraticuleSampling;
 import java.awt.Image;
 import java.awt.Toolkit;
-import javax.swing.ImageIcon;
+import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 
 
 public class MainApplication extends javax.swing.JFrame  {
 
         private final EarlyMap early_map;                                                     //Early map prepresentation
-        private final Map map;                                                                //Reference map prepresentation (OSM)
+        private final OSMMap map;                                                             //Reference map prepresentation (OSM)
         private final List <Point3DCartesian> test_points;                                    //List of test points
         private final List <Point3DGeographic> reference_points;                              //List of reference points
         private final List <Projection> projections;                                          //List of the analyzed projections
@@ -122,7 +125,7 @@ public class MainApplication extends javax.swing.JFrame  {
         private final TInterval lon_interval;                                                 //Geographic extent of the analyzed territory in the longitudinal direction
         
         private TAnalysisMethod method;                                                       //Method of the projection analysis
-        private final TreeMap <Double, TResult> results;                                      //Dynmamic structure (tree map) storing the results [fx, x]
+        private final TreeMap <Double, TResult> results;                                      //Dynamic structure (tree map) storing the results [fx, x]
         
         private final ControlPointsForm control_points_form;                                  //Form displaying control points on the analyzed/reference maps
         private final ResultsForm results_form;                                               //Form displaying results, the determined projections
@@ -192,7 +195,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 //Create early and OSM maps
                 early_map = new EarlyMap(test_points, null, null, add_test_point, add_reference_point, enable_add_control_points, enable_panning_lm,
                         enable_zoom_in_lm, enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress, index_nearest, index_nearest_prev);
-                map = new Map(reference_points, early_map, null, add_test_point, add_reference_point, enable_add_control_points, enable_panning_lm,
+                map = new OSMMap(reference_points, early_map, null, add_test_point, add_reference_point, enable_add_control_points, enable_panning_lm,
                         enable_zoom_in_lm, enable_zoom_out_lm, enable_zoom_fit_all_lm, computation_in_progress, index_nearest, index_nearest_prev);
                 
                 early_map.setMap(map);
@@ -218,7 +221,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 
                 //Create forms with points, results and about box
                 control_points_form = new ControlPointsForm(early_map, map, add_test_point, add_reference_point, computation_in_progress, index_nearest, index_nearest_prev);
-                results_form = new ResultsForm(early_map, results, n_results, this);
+                results_form = new ResultsForm(early_map, map, results, computation_in_progress, n_results, this, transparencySlider, statusBarLabel);
                 about_form = new AboutBox();
                 settings_form = new Settings(reference_points, default_lon_dir, analyze_lon0, create_entire_graticule, lat1_step, lat2_step, lat3_step, lon1_step, lon2_step, lon3_step, lat_incr, lon_incr, lat_interval, lon_interval, projections);
                 
@@ -231,10 +234,27 @@ public class MainApplication extends javax.swing.JFrame  {
                 DropTarget target_map = new DropTarget(map, new DragAndDrop()); 
                 
                 //Set detectproj icon
-                List<Image> icons = new ArrayList<Image>();
+                List<Image> icons = new ArrayList<>();
                 icons.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/detectprojv2j/resources/icon.png")));
                 icons.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/detectprojv2j/resources/icon_task.png")));
-                this.setIconImages(icons);               
+                this.setIconImages(icons); 
+                
+                //************************************
+                
+                double alpha = 0;
+                TTransformedLongitudeDirection default_lon_dir = TTransformedLongitudeDirection.NormalDirection;
+                double [] lat_trans = {0}, lon_trans = {0}, Xp = {0}, Yp = {0};
+                //ProjectionConic aea = new ProjectionConic (3507.735, 71.81, 80.04, 24.42,79.97, default_lon_dir, 0.0, 5403.05, -3459.91, 1.0, Projections::F_aea, Projections::G_aea, Projections::FI_aea, Projections::GI_aea, "aea", "aea");
+                //ProjectionPseudoConic aea = new ProjectionPseudoConic (6378.0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::F_bonne, Projections::G_bonne, Projections::FI_bonne, Projections::GI_bonne, "aea", "aea");
+                ProjectionMiscellaneous aea = new ProjectionMiscellaneous(6378.0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::F_nicol, Projections::G_nicol, Projections::FI_nicol, Projections::GI_nicol, "aea", "aea");
+
+                double latp = 78.0, lonp = 89.0;
+                CartTransformation.latLonToXY(latp, lonp, aea, alpha, lat_trans, lon_trans, Xp, Yp);
+                
+                double [] lat_trans2 = {0}, lon_trans2 = {0}, lat2 = {0}, lon2 = {0};
+                double Xp2 = Xp[0], Yp2 = Yp[0];
+                CartTransformation.XYToLatLon(Xp2, Yp2, aea, alpha, lat_trans2, lon_trans2, lat2, lon2);
+                
         }
         
         
@@ -372,9 +392,13 @@ public class MainApplication extends javax.swing.JFrame  {
                 settingsButton = new javax.swing.JButton();
                 jSeparator16 = new javax.swing.JToolBar.Separator();
                 analyzeButton = new javax.swing.JToggleButton();
+                jSeparator17 = new javax.swing.JToolBar.Separator();
+                transparencySlider = new javax.swing.JSlider();
                 splitPanels = new javax.swing.JSplitPane();
                 earlyMapPanel = new javax.swing.JPanel();
                 osmMapPanel = new javax.swing.JPanel();
+                statusBarPanel = new javax.swing.JPanel();
+                statusBarLabel = new javax.swing.JLabel();
                 menuBar = new javax.swing.JMenuBar();
                 mapMenu = new javax.swing.JMenu();
                 openMenuItem = new javax.swing.JMenuItem();
@@ -433,7 +457,7 @@ public class MainApplication extends javax.swing.JFrame  {
 
                 selectOptimizationPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 5));
 
-                selectDetectionMethodComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Method M7", "Method M8" }));
+                selectDetectionMethodComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Method M7 (Unrotated Map)", "Method M8 (Rotated Map)" }));
                 selectDetectionMethodComboBox.setToolTipText("Select detection method");
                 selectDetectionMethodComboBox.addItemListener(new java.awt.event.ItemListener() {
                         public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -443,7 +467,6 @@ public class MainApplication extends javax.swing.JFrame  {
                 selectOptimizationPanel.add(selectDetectionMethodComboBox);
 
                 selectOptimizationTechniqueComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Non-linear least squares", "Nelder-Mead", "Differential evolution" }));
-                selectOptimizationTechniqueComboBox.setSelectedIndex(1);
                 selectOptimizationTechniqueComboBox.setToolTipText("Select optimization technique");
                 selectOptimizationTechniqueComboBox.addItemListener(new java.awt.event.ItemListener() {
                         public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -760,9 +783,9 @@ public class MainApplication extends javax.swing.JFrame  {
                 analyzeButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
                 analyzeButton.setFocusable(false);
                 analyzeButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-                analyzeButton.setMaximumSize(new java.awt.Dimension(140, 26));
-                analyzeButton.setMinimumSize(new java.awt.Dimension(140, 26));
-                analyzeButton.setPreferredSize(new java.awt.Dimension(140, 26));
+                analyzeButton.setMaximumSize(new java.awt.Dimension(140, 29));
+                analyzeButton.setMinimumSize(new java.awt.Dimension(140, 29));
+                analyzeButton.setPreferredSize(new java.awt.Dimension(140, 29));
                 analyzeButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
                 analyzeButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -771,7 +794,26 @@ public class MainApplication extends javax.swing.JFrame  {
                 });
                 analyzeToolBar.add(analyzeButton);
 
+                jSeparator17.setMaximumSize(new java.awt.Dimension(20, 24));
+                jSeparator17.setMinimumSize(new java.awt.Dimension(20, 24));
+                jSeparator17.setPreferredSize(new java.awt.Dimension(20, 24));
+                analyzeToolBar.add(jSeparator17);
+
                 mainMenuPanel.add(analyzeToolBar);
+
+                transparencySlider.setMajorTickSpacing(25);
+                transparencySlider.setMinorTickSpacing(5);
+                transparencySlider.setPaintTicks(true);
+                transparencySlider.setToolTipText("Set georeferenced map transparency.");
+                transparencySlider.setMaximumSize(new java.awt.Dimension(32767, 25));
+                transparencySlider.setMinimumSize(new java.awt.Dimension(36, 25));
+                transparencySlider.setPreferredSize(new java.awt.Dimension(200, 25));
+                transparencySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+                        public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                                transparencySliderStateChanged(evt);
+                        }
+                });
+                mainMenuPanel.add(transparencySlider);
 
                 splitPanels.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
                 splitPanels.setDividerLocation(940);
@@ -788,6 +830,31 @@ public class MainApplication extends javax.swing.JFrame  {
                 osmMapPanel.setToolTipText("Drag the control points here.");
                 osmMapPanel.setLayout(new java.awt.BorderLayout());
                 splitPanels.setRightComponent(osmMapPanel);
+
+                statusBarPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+                statusBarPanel.setPreferredSize(new java.awt.Dimension(1900, 18));
+
+                statusBarLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+                statusBarLabel.setMaximumSize(new java.awt.Dimension(14, 14));
+                statusBarLabel.setMinimumSize(new java.awt.Dimension(14, 14));
+                statusBarLabel.setPreferredSize(new java.awt.Dimension(14, 14));
+
+                javax.swing.GroupLayout statusBarPanelLayout = new javax.swing.GroupLayout(statusBarPanel);
+                statusBarPanel.setLayout(statusBarPanelLayout);
+                statusBarPanelLayout.setHorizontalGroup(
+                        statusBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statusBarPanelLayout.createSequentialGroup()
+                                .addGap(0, 1396, Short.MAX_VALUE)
+                                .addComponent(statusBarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
+                );
+                statusBarPanelLayout.setVerticalGroup(
+                        statusBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statusBarPanelLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(statusBarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                );
+
+                statusBarLabel.getAccessibleContext().setAccessibleDescription("");
 
                 mapMenu.setMnemonic('m');
                 mapMenu.setText("Map");
@@ -937,7 +1004,7 @@ public class MainApplication extends javax.swing.JFrame  {
 
                 detectionMethodGroup.add(m7CheckBoxMenuItem);
                 m7CheckBoxMenuItem.setSelected(true);
-                m7CheckBoxMenuItem.setText("M7 (7 determined parameters)");
+                m7CheckBoxMenuItem.setText("M7 (Unrotated Map,7 parameters)");
                 m7CheckBoxMenuItem.addChangeListener(new javax.swing.event.ChangeListener() {
                         public void stateChanged(javax.swing.event.ChangeEvent evt) {
                                 m7CheckBoxMenuItemStateChanged(evt);
@@ -946,7 +1013,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 detectionMethodMenu.add(m7CheckBoxMenuItem);
 
                 detectionMethodGroup.add(m8CheckBoxMenuItem);
-                m8CheckBoxMenuItem.setText("M8 (8 determined parameters)");
+                m8CheckBoxMenuItem.setText("M8 (Rotated Map, 8 parameters)");
                 m8CheckBoxMenuItem.addChangeListener(new javax.swing.event.ChangeListener() {
                         public void stateChanged(javax.swing.event.ChangeEvent evt) {
                                 m8CheckBoxMenuItemStateChanged(evt);
@@ -959,7 +1026,7 @@ public class MainApplication extends javax.swing.JFrame  {
                 optimizationTechniqueMenu.setText("Optimization technique");
 
                 optimizationTechniqueGroup.add(nonLinearLeastSquaresCheckBoxMenuItem);
-                nonLinearLeastSquaresCheckBoxMenuItem.setText("Non-linear Least Squares");
+                nonLinearLeastSquaresCheckBoxMenuItem.setText("Non-linear least squares");
                 nonLinearLeastSquaresCheckBoxMenuItem.addChangeListener(new javax.swing.event.ChangeListener() {
                         public void stateChanged(javax.swing.event.ChangeEvent evt) {
                                 nonLinearLeastSquaresCheckBoxMenuItemStateChanged(evt);
@@ -969,7 +1036,7 @@ public class MainApplication extends javax.swing.JFrame  {
 
                 optimizationTechniqueGroup.add(nelderMeadCheckBoxMenuItem);
                 nelderMeadCheckBoxMenuItem.setSelected(true);
-                nelderMeadCheckBoxMenuItem.setText("Nelder-Mead method");
+                nelderMeadCheckBoxMenuItem.setText("Nelder-Mead");
                 nelderMeadCheckBoxMenuItem.addChangeListener(new javax.swing.event.ChangeListener() {
                         public void stateChanged(javax.swing.event.ChangeEvent evt) {
                                 nelderMeadCheckBoxMenuItemStateChanged(evt);
@@ -1067,15 +1134,22 @@ public class MainApplication extends javax.swing.JFrame  {
                 getContentPane().setLayout(layout);
                 layout.setHorizontalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(splitPanels)
-                        .addComponent(mainMenuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 1900, Short.MAX_VALUE)
+                        .addComponent(splitPanels, javax.swing.GroupLayout.DEFAULT_SIZE, 1900, Short.MAX_VALUE)
+                        .addComponent(mainMenuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(statusBarPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addComponent(mainMenuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(mainMenuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(splitPanels, javax.swing.GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE))
+                                .addComponent(splitPanels, javax.swing.GroupLayout.DEFAULT_SIZE, 767, Short.MAX_VALUE)
+                                .addGap(19, 19, 19))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(0, 815, Short.MAX_VALUE)
+                                        .addComponent(statusBarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 );
 
                 pack();
@@ -1542,7 +1616,37 @@ public class MainApplication extends javax.swing.JFrame  {
                 addControlPointsToggleButton.setSelected(false);
         }//GEN-LAST:event_panningMenuItemActionPerformed
 
-        
+        private void transparencySliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_transparencySliderStateChanged
+                //Change transparency of georeferenced map
+                final int transparency = transparencySlider.getValue();
+
+                //Get list of map markerts
+                List <MapMarker> map_markers = Collections.synchronizedList(map.getMapMarkerList());
+                final int np = map.reference_points.size();
+
+                synchronized (map_markers)
+                {
+                        final int nm = map_markers.size();
+
+                        //More map markers than points
+                        if (nm > np)
+                        {
+                                for( int i = np; i < nm; i++)
+                                {
+                                        //Get raster map marker
+                                        RasterMapMarker tile = (RasterMapMarker)map_markers.get(i);
+
+                                        //Change its transparency
+                                        tile.setTransparency(0.01f * transparency);
+                                }
+                        }
+
+                        //Repaint map
+                        map.repaintMap();
+                }
+
+        }//GEN-LAST:event_transparencySliderStateChanged
+
         public void closeApplication()
         {
                 //Show prompt before closing the application
@@ -1575,18 +1679,24 @@ public class MainApplication extends javax.swing.JFrame  {
                         //Set detection and optimization methods
                         switch (index_method + index_optimization)
                         {
-                                        case 11: method = TAnalysisMethod.NLSM7;
-                                                         break;
-                                        case 12: method = TAnalysisMethod.NLSM8;
-                                                         break;
-                                        case 21: method = TAnalysisMethod.NMM7;
-                                                         break;
-                                        case 22: method = TAnalysisMethod.NMM8;
-                                                         break;
-                                        case 31: method = TAnalysisMethod.DEM7;
-                                                         break;
-                                        case 32: method = TAnalysisMethod.DEM8;
-                                                         break;         
+                                case 11:
+                                        method = TAnalysisMethod.NLSM7;
+                                        break;
+                                case 12:
+                                        method = TAnalysisMethod.NLSM8;
+                                        break;
+                                case 21:
+                                        method = TAnalysisMethod.NMM7;
+                                        break;
+                                case 22:
+                                        method = TAnalysisMethod.NMM8;
+                                        break;
+                                case 31:
+                                        method = TAnalysisMethod.DEM7;
+                                        break;
+                                case 32:
+                                        method = TAnalysisMethod.DEM8;
+                                        break;
                         }
 
                         //Different amount of points (1 omitted point)
@@ -1642,102 +1752,110 @@ public class MainApplication extends javax.swing.JFrame  {
                         //Analyze map projection in new thread
                         CartAnalysisMT ca = new CartAnalysisMT(test_points, reference_points, projections, results, method, analyze_lon0[0], System.out, analyzeButton, new Runnable() 
                         {
-                                        @Override
-                                        public void run() 
+                                @Override
+                                public void run() 
+                                {
+                                        //Cartometric analysis run in the separate thread has heen finished
+                                        //Print results: all operation performed after finishing the thread
+                                        results_form.printResult(n_results);
+
+                                        //Geographic extent of the analyzed territory   
+                                        double lat_min = (create_entire_graticule[0] ? -89.0 : (Collections.min(reference_points, new SortPointsByLat())).getLat());
+                                        double lat_max = (create_entire_graticule[0] ? 89.0 : (Collections.max(reference_points, new SortPointsByLat())).getLat());
+                                        double lon_min = (create_entire_graticule[0] ? -180.0 : (Collections.min(reference_points, new SortPointsByLon())).getLon());
+                                        double lon_max = (create_entire_graticule[0] ? 180.0 : (Collections.max(reference_points, new SortPointsByLon())).getLon());
+
+                                        double lat_aver = 0.5 * (lat_min + lat_max), lon_aver = 0.5 * (lon_min + lon_max);
+
+                                        //Get limits; stretch over the whole planishere, if necessarry
+                                        if (((lon_min < MIN_LON + 40) || (lon_max > MAX_LON - 40)) && (lon_max - lon_min > 200))
                                         {
-                                                        //Print results: all operation performed after the thread has been finished
-                                                        results_form.printResult(n_results);
-
-                                                        //Geographic extent of the analyzed territory   
-                                                        double lat_min = (create_entire_graticule[0] ? -89.0 : (Collections.min(reference_points, new SortByLat())).getLat());
-                                                        double lat_max = (create_entire_graticule[0] ? 89.0 : (Collections.max(reference_points, new SortByLat())).getLat());
-                                                        double lon_min = (create_entire_graticule[0] ? -180.0 : (Collections.min(reference_points, new SortByLon())).getLon());
-                                                        double lon_max = (create_entire_graticule[0] ? 180.0 : (Collections.max(reference_points, new SortByLon())).getLon());
-
-                                                        double lat_aver = 0.5 * (lat_min + lat_max), lon_aver = 0.5 * (lon_min + lon_max);
-
-                                                        //Get limits; stretch over the whole planishere, if necessarry
-                                                        if (((lon_min < MIN_LON + 40) || (lon_max > MAX_LON - 40)) && (lon_max - lon_min > 200))
-                                                        {
-                                                                lon_min = MIN_LON;
-                                                                lon_max = MAX_LON;
-                                                        }
-
-                                                        //Change lat/lon intervals depending on the analyzed territory size
-                                                        lat_interval.min_value = lat_min;
-                                                        lat_interval.max_value = lat_max;
-                                                        lon_interval.min_value = lon_min;
-                                                        lon_interval.max_value = lon_max;
-                                                        
-                                                        //Correct steps to avoid slow graticule construction
-                                                        final double dlat = lat_max - lat_min;
-                                                        final double dlon = lon_max - lon_min;
-
-                                                        final double lat_step = ( dlat < 20.0 ? (dlat < 2.0 ? (lat3_step[0] = max(lat3_step[0], dlat/50)) : (lat2_step[0] = max(lat2_step[0], dlat/50))) : (lat1_step[0] = max(lat1_step[0], dlat/50)));
-                                                        final double lon_step = ( dlon < 20.0 ? (dlon < 2.0 ? (lon3_step[0] = max(lon3_step[0], dlon/50)) : (lon2_step[0] = max(lon2_step[0], dlon/50))) : (lon1_step[0] = max(lon1_step[0], dlon/50)));
-                                                        
-                                                        lat_incr[0] = max(lat_incr[0], dlat / 20000.0 * lat_step);
-                                                        lon_incr[0] = max(lon_incr[0], dlon / 40000.0 * lon_step);
-                                                        
-                                                        //Create and store graticules
-                                                        int index = 0;
-                                                        for (java.util.Map.Entry<Double, TResult> entry : results.entrySet())
-                                                        {
-                                                                //Create lists of meridians/parallels
-                                                                List <Meridian> meridians = new ArrayList<>();
-                                                                List <Parallel> parallels = new ArrayList<>();
-                                                                List <List<Point3DCartesian> > meridians_proj = new ArrayList<>();
-                                                                List <List<Point3DCartesian> > parallels_proj = new ArrayList<>();
-
-                                                                //Set font height      
-                                                                Double key = entry.getKey();
-                                                                TResult value = entry.getValue();
-
-                                                                 //Get map rotation
-                                                                final double alpha = value.map_rotation;
-
-                                                                //Compute projected points
-                                                                List <Point3DCartesian> points_proj = new ArrayList<>();
-                                                                CartTransformation.latsLonstoXY (reference_points, value.proj, alpha, points_proj);
-
-                                                                //Create graticule 
-                                                                //System.out.println(value.proj.getName());
-                                                                Graticule2.createGraticule(value.proj, lat_interval, lon_interval, lat_step, lon_step, lat_incr[0], lon_incr[0], alpha, meridians, meridians_proj, parallels, parallels_proj);
-
-                                                                //Store meridians/parallels, reconstructed points, meridians/paralleles 
-                                                                value.meridians = meridians;
-                                                                value.parallels = parallels;
-                                                                value.points_proj = points_proj;
-                                                                value.meridians_proj= meridians_proj;
-                                                                value.parallels_proj = parallels_proj;
-
-                                                                //Increment index
-                                                                index ++;
-                                                        }
-
-                                                        //Display results of the best fit projection: set meridians/paralells
-                                                        TResult result_first = results.firstEntry().getValue();
-                                                        early_map.setMeridians(result_first.meridians);
-                                                        early_map.setParallels(result_first.parallels);
-
-                                                        //Display results of the best fit projection: set projected points, projected meridians/parallels
-                                                        early_map.setProjection(result_first.proj);
-                                                        early_map.setProjectedMeridians(result_first.meridians_proj);
-                                                        early_map.setProjectedParallels(result_first.parallels_proj);
-                                                        early_map.setProjectedPoints(result_first.points_proj);
-
-                                                        //Update main window title
-                                                        MainApplication.this.setTitle("Map projection analysis: " + result_first.proj.getName() + " projection");
-
-                                                        //Update early map
-                                                        early_map.repaint();
-
-                                                        //Show window with results
-                                                        results_form.setVisible(true);
-
-                                                        //Enable change buttons
-                                                        computation_in_progress[0] = false;
+                                                lon_min = MIN_LON;
+                                                lon_max = MAX_LON;
                                         }
+
+                                        //Change lat/lon intervals depending on the analyzed territory size
+                                        lat_interval.min_value = lat_min;
+                                        lat_interval.max_value = lat_max;
+                                        lon_interval.min_value = lon_min;
+                                        lon_interval.max_value = lon_max;
+
+                                        //Correct steps to avoid slow graticule construction
+                                        final double dlat = lat_max - lat_min;
+                                        final double dlon = lon_max - lon_min;
+
+                                        final double lat_step = ( dlat < 20.0 ? (dlat < 2.0 ? (lat3_step[0] = max(lat3_step[0], dlat/50)) : (lat2_step[0] = max(lat2_step[0], dlat/50))) : (lat1_step[0] = max(lat1_step[0], dlat/50)));
+                                        final double lon_step = ( dlon < 20.0 ? (dlon < 2.0 ? (lon3_step[0] = max(lon3_step[0], dlon/50)) : (lon2_step[0] = max(lon2_step[0], dlon/50))) : (lon1_step[0] = max(lon1_step[0], dlon/50)));
+
+                                        lat_incr[0] = max(lat_incr[0], dlat / 20000.0 * lat_step);
+                                        lon_incr[0] = max(lon_incr[0], dlon / 40000.0 * lon_step);
+
+                                        //Create and store graticules
+                                        int index = 0;
+                                        for (java.util.Map.Entry<Double, TResult> entry : results.entrySet())
+                                        {
+                                                //Create lists of meridians/parallels
+                                                List <Meridian> meridians = new ArrayList<>();
+                                                List <Parallel> parallels = new ArrayList<>();
+                                                List <List<Point3DCartesian> > meridians_proj = new ArrayList<>();
+                                                List <List<Point3DCartesian> > parallels_proj = new ArrayList<>();
+
+                                                //Set font height      
+                                                Double key = entry.getKey();
+                                                TResult value = entry.getValue();
+
+                                                //Get map rotation
+                                                final double alpha = value.map_rotation;
+
+                                                //Compute projected points
+                                                List <Point3DCartesian> points_proj = CartTransformation.latsLonsToXY (reference_points, value.proj, alpha);
+                                                
+                                                //System.out.println(value.proj.getName());
+                                                long startTime = System.currentTimeMillis();
+                                                
+                                                //Create graticule 
+                                                Graticule gr = new Graticule(lat_incr[0], lon_incr[0], 5, 0, 20);
+                                                gr.createGraticule(value.proj, lat_interval, lon_interval, lat_step, lon_step, alpha, meridians, meridians_proj, parallels, parallels_proj, TGraticuleSampling.UniformSampling, 100, 1.0e9, 0.001);
+                                                
+                                                long estimatedTime = System.currentTimeMillis() - startTime;
+                                                //System.out.println(estimatedTime + '\n');
+                                                                                                
+                                                //GraticuleAS.createGraticule(value.proj, lat_interval, lon_interval, lat_step, lon_step, lat_incr[0], lon_incr[0], alpha, meridians, meridians_proj, parallels, parallels_proj);
+
+                                                //Store meridians/parallels, reconstructed points, meridians/paralleles 
+                                                value.meridians = meridians;
+                                                value.parallels = parallels;
+                                                value.points_proj = points_proj;
+                                                value.meridians_proj= meridians_proj;
+                                                value.parallels_proj = parallels_proj;
+
+                                                //Increment index
+                                                index ++;
+                                        }
+
+                                        //Display results of the best fit projection: set meridians/paralells
+                                        TResult result_first = results.firstEntry().getValue();
+                                        early_map.setMeridians(result_first.meridians);
+                                        early_map.setParallels(result_first.parallels);
+
+                                        //Display results of the best fit projection: set projected points, projected meridians/parallels
+                                        early_map.setProjection(result_first.proj);
+                                        early_map.setProjectedMeridians(result_first.meridians_proj);
+                                        early_map.setProjectedParallels(result_first.parallels_proj);
+                                        early_map.setProjectedPoints(result_first.points_proj);
+
+                                        //Update main window title
+                                        MainApplication.this.setTitle("Map projection analysis: " + result_first.proj.getName() + " projection");
+
+                                        //Update early map
+                                        early_map.repaint();
+
+                                        //Show window with results
+                                        results_form.setVisible(true);
+
+                                        //Enable change buttons
+                                        computation_in_progress[0] = false;
+                                }
                         });
 
                         //Disable change buttons
@@ -1853,7 +1971,7 @@ public class MainApplication extends javax.swing.JFrame  {
                         exception.printStackTrace();
                 }
                 
-                //Add user-defined map markers forloaded points to OSM map
+                //Add user-defined map markers (loaded points) to OSM map
                 if (o_class == Point3DGeographic.class)
                 { 
                         //Process all loaded points
@@ -1975,7 +2093,10 @@ public class MainApplication extends javax.swing.JFrame  {
                 clearResults();
                 
                 //Clear all mp marker
-                map.removeAllMapMarkers();
+                synchronized (map)
+                {
+                        map.removeAllMapMarkers();
+                }
         }
         
         
@@ -1999,6 +2120,18 @@ public class MainApplication extends javax.swing.JFrame  {
                 
                 //Remove the projection name
                 this.setTitle("Map projection analysis: detectproj");
+                
+                //Remove all map markers except the points
+                List <MapMarker> map_markers = Collections.synchronizedList(map.getMapMarkerList());
+                final int np = map.reference_points.size();
+
+                synchronized (map_markers)
+                {              
+                        //More map markers than points
+                        if (map_markers.size() > np) 
+                                for( int i = map_markers.size() - 1; i >= np; i--)
+                                        map_markers.remove(i);
+                }
         }
         
 
@@ -2075,6 +2208,7 @@ public class MainApplication extends javax.swing.JFrame  {
         private javax.swing.JToolBar.Separator jSeparator14;
         private javax.swing.JPopupMenu.Separator jSeparator15;
         private javax.swing.JToolBar.Separator jSeparator16;
+        private javax.swing.JToolBar.Separator jSeparator17;
         private javax.swing.JToolBar.Separator jSeparator2;
         private javax.swing.JPopupMenu.Separator jSeparator3;
         private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -2108,6 +2242,9 @@ public class MainApplication extends javax.swing.JFrame  {
         private javax.swing.JButton showResultsButton;
         private javax.swing.JMenuItem showResultsMenuItem;
         private javax.swing.JSplitPane splitPanels;
+        private javax.swing.JLabel statusBarLabel;
+        private javax.swing.JPanel statusBarPanel;
+        private javax.swing.JSlider transparencySlider;
         private javax.swing.JMenuItem viewAllMenuItem;
         private javax.swing.JToggleButton viewAllToggleButton;
         private javax.swing.JMenu viewMenu;

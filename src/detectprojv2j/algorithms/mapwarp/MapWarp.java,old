@@ -1,0 +1,255 @@
+// Description: Warp map represented by a raster from the source to destination projection
+// Conversion projection_source -> sphere -> projection_dest
+
+// Copyright (c) 2016 - 2017
+// Tomas Bayer
+// Charles University in Prague, Faculty of Science
+// bayertom@natur.cuni.cz
+
+// This library is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this library. If not, see <http://www.gnu.org/licenses/>.
+
+
+package detectprojv2j.algorithms.mapwarp;
+
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.awt.image.BufferedImage;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.io.File;
+import static java.lang.Math.max;
+import java.util.HashMap;
+import javax.imageio.ImageIO;
+
+import detectprojv2j.types.RunnableListener;
+
+import detectprojv2j.structures.point.Point3DCartesian;
+import detectprojv2j.structures.projection.Projection;
+import detectprojv2j.structures.point.Point3DGeographic;
+
+import detectprojv2j.comparators.SortByX;
+import detectprojv2j.comparators.SortByY;
+
+import detectprojv2j.comparators.MaxLatPredcate;
+import detectprojv2j.comparators.SortByLat;
+import detectprojv2j.comparators.SortByLon;
+
+import detectprojv2j.algorithms.carttransformation.CartTransformation;
+import javax.swing.SwingUtilities;
+
+
+public class MapWarp implements Runnable {
+        
+        private final BufferedImage img;
+        private BufferedImage img_proj;
+        private final Projection iproj;
+        private final Projection proj;
+        private final double rotation;
+        private double [] lat_sw;
+        private double [] lon_sw;
+        private double [] lat_ne;
+        private double [] lon_ne;
+        private double [] sx;
+        private double [] sy;
+        private double [] ratio;
+        private final Runnable f_callback;
+        
+        
+        public MapWarp(final BufferedImage img_, final Projection iproj_, final Projection proj_, final double rotation_, double [] lat_sw_, double [] lon_sw_, 
+                       double [] lat_ne_, double [] lon_ne_, double [] sx_, double [] sy_, double [] ratio_, final Runnable f_callback_)
+        {
+                img = img_;
+                img_proj = null;
+                iproj = iproj_;
+                proj = proj_;
+                rotation = rotation_;
+                lat_sw = lat_sw_;
+                lon_sw = lon_sw_;
+                lat_ne = lat_ne_;
+                lon_ne = lon_ne_;
+                sx = sx_;
+                sy = sy_;
+                ratio = ratio_;
+                f_callback = f_callback_;
+        }
+        
+        
+        @Override
+        public void run () 
+        {
+                warpEarlyMapToProj();
+        }
+        
+        public BufferedImage getWarpedMap()
+        {
+                return img_proj;
+        }
+        
+        public void warpEarlyMapToProj()
+        {
+                //Warp early map from its projection to the destination projection
+                
+                //Convert raster to the list of points in the Cartesian coordinates
+                List<Point3DCartesian> early_map_points_proj = rasterToListOfPoints(img);
+                
+                //Convert Cartesian coordinates to geographic using the inverse projection equations
+                List <Point3DGeographic> early_map_points_sphere = CartTransformation.XYToLatsLons(early_map_points_proj, iproj, rotation);        
+                
+                //Remove all points with the latitude > 85 deg (resampled map looks strange here)
+                early_map_points_sphere.removeIf(new MaxLatPredcate(85.0));
+
+                //At least 2 points have been converted
+                if (early_map_points_sphere.size() > 2)
+                {
+                        //Find vertices of the min-max box: transformed raster will placed inside
+                        lat_sw[0] = (Collections.min(early_map_points_sphere, new SortByLat())).getLat();
+                        lon_sw[0] = (Collections.min(early_map_points_sphere, new SortByLon())).getLon();
+                        lat_ne[0] = (Collections.max(early_map_points_sphere, new SortByLat())).getLat();
+                        lon_ne[0] = (Collections.max(early_map_points_sphere, new SortByLon())).getLon();
+                        
+                        //Initialize shifts as a projection dX, dY values
+                        sx[0] = proj.getDx();
+                        sy[0] = proj.getDy();
+
+                        //Convert geographic coordinates to the destination projection (Web Mercator in JMapViewer)
+                        List <Point3DCartesian> early_map_points_cart_reproj = CartTransformation.latsLonsToXY(early_map_points_sphere, proj, rotation);
+
+                        //Convert points to the raster: create reprojected map
+                        img_proj = listOfPointsToRaster(early_map_points_cart_reproj, sx, sy, ratio);
+                }
+                
+                //Process the callback
+                SwingUtilities.invokeLater(f_callback);
+        }
+        
+        
+        public List <Point3DCartesian> rasterToListOfPoints(final BufferedImage img)
+        {
+                //Convert map represented by the raster to the list of points
+                final int w = img.getWidth(), h = img.getHeight();
+                
+                //Create new container
+                List<Point3DCartesian> map_points = new ArrayList<>(); 
+                
+                //Process all pixels
+                for (int i = 0; i < w; i++)
+                {
+                        for (int j = 0; j < h; j++)
+                        {
+                                //Color of the pixel
+                                final int col = img.getRGB(i, j);
+                                
+                                //Create new point: jump white pixels
+                                if (col != -1)
+                                {
+                                        Point3DCartesian point_temp = new Point3DCartesian(i, -j, col);
+                                
+                                        //Add point to the list
+                                        map_points.add(point_temp);
+                                }
+                        }
+                }
+                        
+                return map_points;   
+        }
+        
+        
+        public void findMinMaxBoxVertices (List <Point3DGeographic> points, Point3DGeographic sw, Point3DGeographic ne)
+        {
+                //Find south-west and north-east vertices of the list
+                //Transformed raster will be placed between these points
+                final double lat_min = (Collections.min(points, new SortByLat())).getLat();
+                final double lon_min = (Collections.min(points, new SortByLat())).getLat();
+                final double lat_max = (Collections.max(points, new SortByLon())).getLon();
+                final double lon_max = (Collections.max(points, new SortByLon())).getLon();
+                
+                //Create points ofthe bounding box
+                sw = new Point3DGeographic(lat_min, lon_min);
+                ne = new Point3DGeographic(lat_max, lon_max);
+        }
+        
+        
+        public BufferedImage listOfPointsToRaster(final List <Point3DCartesian> points, double [] sx, double [] sy, double [] ratio)
+        {
+                //Convert list of points to the map represented by the raster
+                final int MAX_RASTER_SIZE = 2000;
+                
+                //Find minimum coordinates
+                final double xmin = (Collections.min(points, new SortByX())).getX();
+                final double ymin = (Collections.min(points, new SortByY())).getY();
+                final double xmax = (Collections.max(points, new SortByX())).getX();
+                final double ymax = (Collections.max(points, new SortByY())).getY();
+                
+                //Add raster shifts to the projection shifts
+                sx[0] += - xmin;
+                sy[0] += - ymin;
+                
+                //Compute differences and ratio so as the longest edge of the raster is smaller than MAX_RASTER_SIZE
+                final double dx = xmax - xmin;
+                final double dy = ymax - ymin;
+                final double rx = dx / MAX_RASTER_SIZE;
+                final double ry = dy / MAX_RASTER_SIZE;
+                ratio[0] = max(rx, ry);
+                
+                //Size of the created raster
+                final int w = (int) (dx / ratio[0]);
+                final int h = (int) (dy / ratio[0]);
+                
+                //Create new raster with the white background and set its propereties
+                BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+                Graphics2D g = img.createGraphics();
+                Map<RenderingHints.Key, Object> map = new HashMap<>();
+                map.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                RenderingHints renderHints = new RenderingHints(map);
+                g.setRenderingHints(renderHints);
+                
+                //Write all computed points to the image as dots
+                for (Point3DCartesian p:points)
+                {
+                        //Apply shift and rescaling
+                        //Change direction due to the different orientation of Y axis
+                        int x_resc = (int)(( p.getX() + sx[0] ) / ratio[0]);
+                        int y_resc = h - (int)(( p.getY() + sy[0] ) / ratio[0]);
+                                         
+                        //Check, if coordinates are not negative
+                        x_resc = max (0, x_resc);
+                        y_resc = max (0, y_resc);
+                        
+                        //Check, if ccordinates are not bigger than raster size
+                        x_resc = min (x_resc, w - 1);
+                        y_resc = min (y_resc, h - 1);
+                        
+                        //Convert (r, g,b) to Color
+                        final int col = (int) p.getZ();
+                        final int red = (col >> 16) & 0xFF;
+                        final int green = (col >> 8) & 0xFF;
+                        final int blue = (col >> 0) & 0xFF;
+                                               
+                        //Write pixel to the raster
+                        g.setColor(new Color(red, green, blue));
+                        g.drawLine(x_resc, y_resc, x_resc, y_resc);
+                        //g.drawOval(x_resc, y_resc, 1, 1);
+                }
+                
+                return img;
+        }
+}

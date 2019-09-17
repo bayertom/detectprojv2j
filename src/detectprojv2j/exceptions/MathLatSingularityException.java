@@ -21,22 +21,18 @@
 package detectprojv2j.exceptions;
 
 //Math error: singularity in the latitude direction
-public class MathLatSingularityException extends MathException{
-        
-        private final double lat;
-        
+public class MathLatSingularityException extends MathSingularityException{
+             
         public MathLatSingularityException(final String exception_text_, final String math_text_, final double lat_)
         {
-                super(exception_text_, math_text_);
-                lat = lat_;
+                super(exception_text_, math_text_, lat_);
         }
         
         @Override
         public void printException() {
                 super.printStackTrace();
-                System.out.println(lat + '\n');
         }
         
         @Override
-        public double getArg() {return lat;}
+        public double getArg() {return super.getArg();}
 }

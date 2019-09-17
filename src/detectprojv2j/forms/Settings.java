@@ -33,8 +33,8 @@ import detectprojv2j.types.TTransformedLongitudeDirection;
 import detectprojv2j.structures.point.Point3DGeographic;
 import detectprojv2j.structures.projection.Projection;
 
-import detectprojv2j.comparators.SortByLat;
-import detectprojv2j.comparators.SortByLon;
+import detectprojv2j.comparators.SortPointsByLat;
+import detectprojv2j.comparators.SortPointsByLon;
 
 
 public class Settings extends javax.swing.JDialog {
@@ -516,7 +516,7 @@ public class Settings extends javax.swing.JDialog {
                                 .addGap(22, 22, 22)
                                 .addGroup(SamplingStepsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(longitudeIntervalLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(latitudeIntervalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(latitudeIntervalLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(39, 39, 39))
                 );
                 SamplingStepsPanelLayout.setVerticalGroup(
@@ -552,10 +552,10 @@ public class Settings extends javax.swing.JDialog {
                                                 .addContainerGap()
                                                 .addComponent(additionalParametersPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addContainerGap())
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(163, 163, 163)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(195, 195, 195))
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -570,9 +570,9 @@ public class Settings extends javax.swing.JDialog {
                                 .addComponent(SamplingStepsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(additionalParametersPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(18, 18, 18)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
+                                .addGap(8, 8, 8))
                 );
 
                 pack();
@@ -684,10 +684,10 @@ public class Settings extends javax.swing.JDialog {
                 //Geographic extent of the analyzed territory   
                 if (reference_points.size() > 1)
                 {
-                        double lat_min = (create_entire_graticule[0] ? -89.0 : (Collections.min(reference_points, new SortByLat())).getLat());
-                        double lat_max = (create_entire_graticule[0] ? 89.0 : (Collections.max(reference_points, new SortByLat())).getLat());
-                        double lon_min = (create_entire_graticule[0] ? -180.0 : (Collections.min(reference_points, new SortByLon())).getLon());
-                        double lon_max = (create_entire_graticule[0] ? 180.0 : (Collections.max(reference_points, new SortByLon())).getLon());
+                        double lat_min = (create_entire_graticule[0] ? -89.0 : (Collections.min(reference_points, new SortPointsByLat())).getLat());
+                        double lat_max = (create_entire_graticule[0] ? 89.0 : (Collections.max(reference_points, new SortPointsByLat())).getLat());
+                        double lon_min = (create_entire_graticule[0] ? -180.0 : (Collections.min(reference_points, new SortPointsByLon())).getLon());
+                        double lon_max = (create_entire_graticule[0] ? 180.0 : (Collections.max(reference_points, new SortPointsByLon())).getLon());
 
                         //Change lat/lon intervals
                         lat_extent.min_value = lat_min;

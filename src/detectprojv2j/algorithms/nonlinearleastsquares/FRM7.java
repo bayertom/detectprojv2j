@@ -39,16 +39,16 @@ public class FRM7 {
         
         private final List <Point3DCartesian> test_points;                              //List of test points
 	private final List <Point3DGeographic> reference_points;                        //List of analyzed points
-	private final ICoordFunctionProj getX, getY;                                        //Pointers to the coordinate functions
-	private final TTransformedLongitudeDirection trans_lon_dir;                    //Transformed longitude direction
+	private final ICoordFunctionProj F, G;                                          //Refernces to the coordinate functions
+	private final TTransformedLongitudeDirection trans_lon_dir;                     //Transformed longitude direction
 	private final double [] dx, dy;                                                 //Shifts between analyzed and reference maps
 
-        public	FRM7(final List test_points_, final List reference_points_, final ICoordFunctionProj  pX, final ICoordFunctionProj pY, final TTransformedLongitudeDirection trans_lon_dir_, double [] dx_, double [] dy_) 
+        public	FRM7(final List test_points_, final List reference_points_, final ICoordFunctionProj  pF_, final ICoordFunctionProj pG_, final TTransformedLongitudeDirection trans_lon_dir_, double [] dx_, double [] dy_) 
         {
                 test_points = test_points_;
                 reference_points = reference_points_;
-                getX = pX;
-                getY = pY;
+                F = pF_;
+                G = pG_;
                 trans_lon_dir = trans_lon_dir_;
                 dx = dx_; 
                 dy = dy_;
@@ -77,8 +77,8 @@ public class FRM7 {
 			final double lon_transr = CartTransformation.redLon0(lon_trans, X.items[5][0]);
                         
 			// (lat_trans, lon_trans) -> (X, Y)
-			final double XR = getX.f(X.items[0][0], X.items[3][0], X.items[4][0], lat_trans, lon_transr, 0, 0, 0, X.items[6][0]);
-			final double YR = getY.f(X.items[0][0], X.items[3][0], X.items[4][0], lat_trans, lon_transr, 0, 0, 0, X.items[6][0]);
+			final double XR = F.f(lat_trans, lon_transr, X.items[0][0], X.items[3][0], X.items[4][0], 0, 0, 0, X.items[6][0]);
+			final double YR = G.f(lat_trans, lon_transr, X.items[0][0], X.items[3][0], X.items[4][0], 0, 0, 0, X.items[6][0]);
 			
 			//Add point to the list
 			Point3DCartesian  p_temp = new Point3DCartesian(XR, YR, 0);

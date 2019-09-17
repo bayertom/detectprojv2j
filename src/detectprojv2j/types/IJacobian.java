@@ -24,5 +24,5 @@ package detectprojv2j.types;
 import detectprojv2j.structures.matrix.Matrix;
 
 public interface IJacobian {
-         void f( final Matrix X, Matrix J);
+        void f( final Matrix X, Matrix J);
 }

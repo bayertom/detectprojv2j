@@ -2,7 +2,7 @@
 // Supported equations in the non-closed form
 // For evaluation, stored in the postfix notation
 
-// Copyright (c) 2015 - 2016
+// Copyright (c) 2015 - 2017
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -44,9 +44,9 @@ public class ProjectionPseudoCylindrical extends Projection
         }
         
 	public ProjectionPseudoCylindrical( final double R_,  final double latp_,  final double lonp_,  final double lat1_, final TTransformedLongitudeDirection lon_dir_,  final double lon0_,  final double dx_,  final double dy_,  
-                                            final double c_,  final ICoordFunctionProj pX,  final ICoordFunctionProj pY, final String name_, final String id_) 
+                                            final double c_,  final ICoordFunctionProj pF_,  final ICoordFunctionProj pG_, final ICoordFunctionProj pFI_, final ICoordFunctionProj pGI_, final String name_, final String id_) 
         {
-                super(R_, lon0_, dx_, dy_, c_, pX, pY, name_, id_);
+                super(R_, lon0_, dx_, dy_, c_, pF_, pG_, pFI_, pGI_, name_, id_);
                 lat1 = lat1_;
                 cart_pole = new Point3DGeographic (latp_, lonp_, 0.0);
                 lon_dir = lon_dir_;

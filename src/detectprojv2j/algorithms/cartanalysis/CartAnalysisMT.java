@@ -44,8 +44,8 @@ import detectprojv2j.structures.matrix.Matrix;
 
 import static detectprojv2j.consts.Consts.*;
 
-import detectprojv2j.comparators.SortByLat;
-import detectprojv2j.comparators.SortByLon;
+import detectprojv2j.comparators.SortPointsByLat;
+import detectprojv2j.comparators.SortPointsByLon;
 
 import detectprojv2j.algorithms.carttransformation.CartTransformation;
 import detectprojv2j.algorithms.geneticalgorithms.DifferentialEvolution;
@@ -58,7 +58,7 @@ import detectprojv2j.algorithms.numdifferentiation.FJM7;
 import detectprojv2j.algorithms.numdifferentiation.FJM8;
 import detectprojv2j.algorithms.transformation.HelmertTransformation2D;
 import detectprojv2j.algorithms.simplexmethod.*;
-import detectprojv2j.forms.MainApplication;
+
 
 public class CartAnalysisMT implements Runnable
 {
@@ -90,12 +90,11 @@ public class CartAnalysisMT implements Runnable
         @Override
         public void run ()
         {
-                //Run multithread application
+                //Run analysis in the separate thread
                 analyzeProjection();
         }
         
         
-        @SuppressWarnings("empty-statement")
         public void analyzeProjection()
         {
                 //Analyze all projections
@@ -104,10 +103,10 @@ public class CartAnalysisMT implements Runnable
                 String button_text = button.getText();
 
                 //Geographic extent of the analyzed territory
-                final double lat_min = (Collections.min(reference_points, new SortByLat())).getLat();
-                final double lat_max = (Collections.max(reference_points, new SortByLat())).getLat();
-                final double lon_min = (Collections.min(reference_points, new SortByLon())).getLon();
-                final double lon_max = (Collections.max(reference_points, new SortByLon())).getLon();
+                final double lat_min = (Collections.min(reference_points, new SortPointsByLat())).getLat();
+                final double lat_max = (Collections.max(reference_points, new SortPointsByLat())).getLat();
+                final double lon_min = (Collections.min(reference_points, new SortPointsByLon())).getLon();
+                final double lon_max = (Collections.max(reference_points, new SortPointsByLon())).getLon();
                 final double lat_aver = 0.5 * (lat_min + lat_max), lon_aver = 0.5 * (lon_min + lon_max);
 
                 //Initialize cartographic parameters
@@ -266,7 +265,8 @@ public class CartAnalysisMT implements Runnable
 
                                 //Set the determined parameters to the projections
                                 if (method.ordinal() < 3) proj.setR(X.items[0][0]); else proj.setR(R_0[0]);
-                                if (method.ordinal() < 3) proj.setCartPole(new Point3DGeographic (X.items[1][0], X.items[2][0], 0)); else proj.setCartPole(new Point3DGeographic (X.items[0][0], X.items[1][0], 0));
+                                if (method.ordinal() < 3) proj.setCartPole(new Point3DGeographic (X.items[1][0], X.items[2][0], 0)); 
+                                        else proj.setCartPole(new Point3DGeographic (X.items[0][0], X.items[1][0], 0));
                                 if (method.ordinal() < 3) proj.setLat1(X.items[3][0]); else proj.setLat1(X.items[2][0]);
                                 if (method.ordinal() < 3) proj.setLat2(X.items[4][0]); else proj.setLat2(X.items[3][0]);
                                 if (method.ordinal() < 3) proj.setLon0(X.items[5][0]); else proj.setLon0(X.items[4][0]);
@@ -276,17 +276,18 @@ public class CartAnalysisMT implements Runnable
                                 
                                 //Set the determined  parameters to the map
                                 final double map_scale = R / proj.getR() * 1000 ;
+                                //System.out.println("R:" + R + " RR: " + proj.getR() + " S: " + map_scale);
                                 final double rotation = (method.ordinal() < 3 ? 0 : atan2(q2[0], q1[0]) * 180.0 / PI);
 
                                 //Add result to the list of results
-                                TResult  res = new TResult (proj, map_scale, rotation, iterations[0] );
+                                TResult  res = new TResult (proj, map_scale, rotation, q1[0], q2[0], iterations[0]);
                                 results.put(min_cost, res);        
                         }
 
                         catch (Exception e)
                         {
                                 e.printStackTrace();
-                                System.out.println(proj.getName());
+                                //System.out.println(proj.getName());
                         }
                 }
                 

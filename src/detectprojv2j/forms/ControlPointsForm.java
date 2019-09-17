@@ -37,13 +37,13 @@ import java.awt.event.ActionListener;
 
 import detectprojv2j.structures.point.Point3DCartesian;
 
-import detectprojv2j.comparators.sortJColumnByDouble;
+import detectprojv2j.comparators.sortJTableColumnByDouble;
 
 
 public class ControlPointsForm extends javax.swing.JFrame {
         
         private final EarlyMap early_map;                                               //Early map prepresentation
-        private final Map map;                                                          //Reference map prepresentation (OSM)
+        private final OSMMap map;                                                          //Reference map prepresentation (OSM)
         private JPopupMenu pop_up_menu;                                                 //Pop-up menu (point deletition)
         private boolean [] add_test_point;                                              //Control point may be added to the early map
         private boolean [] add_reference_point;                                         //Control point may be added to the reference (OSM) map
@@ -52,7 +52,7 @@ public class ControlPointsForm extends javax.swing.JFrame {
         private int [] index_nearest_prev;                                              //Index of the previous point nearest to the cursor position
 
         
-        public ControlPointsForm(EarlyMap early_map_, Map map_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_)
+        public ControlPointsForm(EarlyMap early_map_, OSMMap map_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_)
         {
                 //Initialize parameters
                 initComponents();
@@ -240,7 +240,7 @@ public class ControlPointsForm extends javax.swing.JFrame {
                  //Enable sorting by columns
                 TableRowSorter trs = new TableRowSorter(model);  
                 for (int i = 0; i < col_names.length; i++)
-                        trs.setComparator(i, new sortJColumnByDouble());
+                        trs.setComparator(i, new sortJTableColumnByDouble());
 
                 controlPointsTable.setRowSorter(trs);   
                 

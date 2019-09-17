@@ -57,7 +57,7 @@ import detectprojv2j.structures.projection.Projection;
 
 import detectprojv2j.consts.Consts;
 
-import detectprojv2j.comparators.SortByDistCart;
+import detectprojv2j.comparators.SortPointsByDistCart;
 
 
 
@@ -67,7 +67,7 @@ public class EarlyMap extends JPanel
         private double zoom;                                                    //Actual zoom ratio: xoom = [0.05, 10]
         private double dx;                                                      //Cummulated horizontal shifts
         private double dy;                                                      //Cummulated Vertical shifts
-        private BufferedImage img;                                              //Image of the early map  
+        public BufferedImage img;                                              //Image of the early map  
         private BufferedImage canvas;                                           //Image representing a canvas
         private AffineTransform at;                                             //Affine transformation object
         private Point start, end;                                               //Points for the current Canvas shift computation
@@ -75,7 +75,7 @@ public class EarlyMap extends JPanel
         public List <Point3DCartesian> test_points;                             //List of test points (public, more comfortable access)
         public List <Point3DCartesian> projected_points;                        //List of projected points (public, more comfortable access)
         
-        private Map map;                                                        //Open street map representation
+        public OSMMap map;                                                        //Open street map representation
         private JPopupMenu pop_up_menu;                                         //Pop-up menu (point deletition)
         private ControlPointsForm control_points_form;                          //Table with results (needs to be updated)
         
@@ -98,7 +98,7 @@ public class EarlyMap extends JPanel
         private int [] index_nearest_prev;                                      //Index of the previous point nearest to the cursor position
         
         
-        public EarlyMap(List <Point3DCartesian> test_points_, Map map_, final ControlPointsForm control_points_form_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] enable_add_control_points_,
+        public EarlyMap(List <Point3DCartesian> test_points_, OSMMap map_, final ControlPointsForm control_points_form_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] enable_add_control_points_,
                 boolean [] enable_panning_lm_, boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean [] computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
         {
                 //Initialize repaint
@@ -450,7 +450,7 @@ public class EarlyMap extends JPanel
                 }
                 
                 //Sort points according to the distance from the given point
-                Point3DCartesian p_nearest = Collections.min(test_points, new SortByDistCart(point));
+                Point3DCartesian p_nearest = Collections.min(test_points, new SortPointsByDistCart(point));
                 
                 //Get spherical distance to the nerest point
                 final double dX = point.getX() - p_nearest.getX();
@@ -507,7 +507,7 @@ public class EarlyMap extends JPanel
         
         
         
-        public void setMap (Map map_) {map = map_;}
+        public void setMap (OSMMap map_) {map = map_;}
 
         public void setControlPointsForm(final ControlPointsForm control_points_form_) {control_points_form = control_points_form_;}
 
@@ -804,7 +804,7 @@ public class EarlyMap extends JPanel
                                 if (red != 238) {
                                         drawn = true;
 
-                                        System.out.println("Move" + red);
+                                        //System.out.println("Move" + red);
                                 }
                         }
                 }

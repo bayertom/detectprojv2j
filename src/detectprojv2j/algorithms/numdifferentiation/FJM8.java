@@ -40,18 +40,18 @@ public class FJM8 {
 
 	private final List <Point3DCartesian> test_points;				//List of test points
 	private final List <Point3DGeographic>  reference_points;			//List of reference points
-	private final ICoordFunctionProj  getX, getY;					//Pointer to the coordinate functions
+	private final ICoordFunctionProj  F, G;                                         //Pointer to the coordinate functions
 	private final TTransformedLongitudeDirection trans_lon_dir;			//Transformed longitude direction
 	private final double [] R;							//Earth radius
 	private final double [] q1, q2; 						//2D Helmert transformation coefficients
 
-	public FJM8(final List <Point3DCartesian > test_points_, final List <Point3DGeographic > reference_points_, final ICoordFunctionProj  pX, final ICoordFunctionProj  pY, final TTransformedLongitudeDirection trans_lon_dir_,
+	public FJM8(final List <Point3DCartesian > test_points_, final List <Point3DGeographic > reference_points_, final ICoordFunctionProj  pF, final ICoordFunctionProj  pG, final TTransformedLongitudeDirection trans_lon_dir_,
                 final double [] R_, final double [] q1_, final double [] q2_)
         { 
                 test_points = test_points_;
                 reference_points = reference_points_;
-                getX = pX; 
-                getY = pY;
+                F = pF; 
+                G = pG;
                 trans_lon_dir  = trans_lon_dir_;
                 R = R_;
                 q1 = q1_;
@@ -76,8 +76,8 @@ public class FJM8 {
 			final double lon = p.getLon();
                         
                         //Create objects
-                        FDiffM8  fderx = new FDiffM8(R[0], lat, lon, getX, trans_lon_dir);
-                        FDiffM8  fdery = new FDiffM8(R[0], lat, lon, getY, trans_lon_dir);
+                        FDiffM8  fderx = new FDiffM8(R[0], lat, lon, F, trans_lon_dir);
+                        FDiffM8  fdery = new FDiffM8(R[0], lat, lon, G, trans_lon_dir);
 
 			//Upper part of the Jacobian matrix: R, latp, lonp, lat0, lon0=0 (angular values in radians)
 			J_T.items[i][0] = NumDifferentiation.getDerivative(fderx::function, XT, FirstDerivative, VariableX1, NUM_DERIV_STEP, false);

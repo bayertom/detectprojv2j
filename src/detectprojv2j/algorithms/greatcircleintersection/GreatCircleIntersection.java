@@ -27,9 +27,8 @@ import detectprojv2j.types.TTransformedLongitudeDirection;
 
 import detectprojv2j.structures.point.Point3DGeographic;
 
-import static detectprojv2j.consts.Consts.RO;
+import static detectprojv2j.consts.Consts.*;
 
-import detectprojv2j.algorithms.carttransformation.CartTransformation;
 import detectprojv2j.algorithms.planeintersection.PlaneIntersection;
 import detectprojv2j.algorithms.sphereintersection.SphereIntersection;
 
@@ -108,12 +107,12 @@ public class GreatCircleIntersection {
                                 final double ri2 = sqrt(xi2[0] * xi2[0] + yi2[0] * yi2[0] + zi2[0] * zi2[0]);
 
                                 //Compute latitude of intersections
-                                final double lati1 = asin(zi1[0] / ri1) * RO;
-                                final double lati2 = asin(zi2[0] / ri2) * RO;
+                                final double lati1 = max(min(asin(zi1[0] / ri1) * RO, MAX_LAT), MIN_LAT);
+                                final double lati2 = max(min(asin(zi2[0] / ri2) * RO, MAX_LAT), MIN_LAT);
 
                                 //Compute longitude of intersections
-                                final double loni1 = atan2(yi1[0], xi1[0]) * RO;
-                                final double loni2 = atan2(yi2[0], xi2[0]) * RO;
+                                final double loni1 = max(min(atan2(yi1[0], xi1[0]) * RO, MAX_LON), MIN_LON);
+                                final double loni2 = max(min(atan2(yi2[0], xi2[0]) * RO, MAX_LON), MIN_LON);
 
                                 //Set parameters to points
                                 i1[0].setLat(lati1);
