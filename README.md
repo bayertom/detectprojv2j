@@ -1,271 +1,150 @@
 # detectprojv2j
 
-<h2><strong><strong><span style="font-family: Arial;">Software </span></strong><span style="color: #ff0000; font-family: Arial;">detectproj</span><span style="font-family: Arial;">, version 1.2,<br />GNU/GPL projection analysis software for Windows ® 7/8/8.1/10, GNU/Linux and MacOS</span></strong></h2>
-<p>New and improved version of the&nbsp; projection analysis SW.</p>
+<p style="text-align: center;"><span style="font-size: 14pt;"><a href="index.php?option=com_content&amp;view=article&amp;id=4:introduction&amp;catid=9:projection-analysis&amp;Itemid=104">Introduction</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=5:projection-detection&amp;catid=9:projection-analysis&amp;Itemid=121">Projection detection</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=6:installation&amp;catid=9:projection-analysis&amp;Itemid=122">Installation</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=7:using-the-tool&amp;catid=9:projection-analysis&amp;Itemid=123">Using the tool</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=8:samples&amp;catid=9:projection-analysis&amp;Itemid=124">Samples</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=9:supported-projections&amp;catid=9:projection-analysis&amp;Itemid=125">Supported projections</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=10:references&amp;catid=9:projection-analysis&amp;Itemid=126">References</a></span></p>
+<h3>Projection detection</h3>
+<p><span style="font-size: 14pt;"><strong>Software <span style="color: #ff0000;">detectproj</span>, version 1.2,<br />GNU/GPL projection analysis software for Windows ® 7/8/8.1/10, GNU/Linux and MacOS</strong></span></p>
+<p><span style="font-size: 14pt;">New and improved version of the projection analysis SW.<br />The exe file is available at&nbsp;<a href="http://web.natur.cuni.cz/~bayertom/index.php/projection-analysis/installation">here</a></span></p>
+<hr />
 <p>&nbsp;</p>
-<p><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>August, 20, 2019: </strong></span><strong><strong><span style="color: #000000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"> <strong>new featu</strong><strong>re</strong></span></span></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>s </strong></span></span></span><span style="color: #ff0000;"><strong><span style="color: #ff0000;"><span style="color: #000000;"><strong>of</strong><span style="color: #ff0000;"><strong> <a href="index.php?option=com_content&amp;view=article&amp;id=13:installation&amp;catid=12:detect-proj&amp;Itemid=120" style="color: #000000;">detectproj</a></strong></span><strong>.</strong></span><strong><br /></strong></span></strong></span></span></strong></strong></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;"></span>Support of the in</span></span></span></span></span></span></span></span></span></span></span></span></span><span style="color: #ff0000;"><span style="color: #000000;">verse equations for the selected map projections (labeled by *)</span><br /><span style="color: #000000;">The analyzed map may be warped from the determined projection to the Mercator projection.</span><br /><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;">The warping procedure runs in the separate thread.</span></span></span></span></span></span></span></span></span></span></span></span></span><span style="color: #ff0000;"><br />An improved<span style="color: #000000;"> performance of the projection analysis.</span><br /><span style="color: #000000;">10 new map projections have been added.</span><br /></span></span></span></span></p>
-
-<h2><strong><strong><span style="font-family: Arial;">Software </span></strong><span style="color: #ff0000; font-family: Arial;">detectproj</span><span style="font-family: Arial;">, version 1.1,<br />GNU/GPL projection analysis software for Windows ® 7/8/8.1/10, GNU/Linux and MacOS.</span></strong></h2>
-<p>Automated estimation of the map projection and its parameters based on the non-linear optimization...<br />Designed for cartographers as well as for enthusiasts.<br />Available free of charge.<br /><br /></p>
-
-<p><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>June, 2, 2017: </strong></span><strong><strong><span style="color: #000000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"> <strong>new featu</strong><strong>re</strong></span></span></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>s </strong></span></span></span><span style="color: #ff0000;"><strong><span style="color: #ff0000;"><span style="color: #000000;"><strong>of</strong><span style="color: #ff0000;"><strong> <a href="index.php?option=com_content&amp;view=article&amp;id=13:installation&amp;catid=12:detect-proj&amp;Itemid=120" style="color: #000000;">detectproj</a></strong></span><strong>.</strong></span><strong><br /></strong></span></strong></span></span></strong></strong></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;">Extended identification of the projection.</span></span></span></span></span></span></span></span></span></span></span></span></span></span><span style="color: #ff0000;"><br /><span style="color: #000000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;">Results sortable according to determined parameters.</span></span></span></span></span></span></span></span></span></span></span></span></span></span><span style="color: #ff0000;"></span></span><br /></span></span></p>
+<p><span style="font-size: 14pt;"><strong>Februry, 10, 2022: minor fixies</strong><br />Minor fixies, an<span style="font-size: 14pt;">&nbsp;improved performance of the projection analysis.</span></span></p>
 <p>&nbsp;</p>
-<p><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>May, 27, 2017: </strong></span><strong><strong><span style="color: #000000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"> <strong>new featu</strong><strong>re</strong></span></span></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>s </strong></span></span></span><span style="color: #ff0000;"><strong><span style="color: #ff0000;"><span style="color: #000000;"><strong>of</strong><span style="color: #ff0000;"><strong> <a href="index.php?option=com_content&amp;view=article&amp;id=13:installation&amp;catid=12:detect-proj&amp;Itemid=120" style="color: #000000;">detectproj</a></strong></span><strong>.</strong></span><strong><br /></strong></span></strong></span></span></strong></strong></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;">Added 3 map <a href="index.php?option=com_content&amp;view=article&amp;id=15:supported-projections&amp;catid=12:detect-proj&amp;Itemid=122">projections</a>: Behrmann, Miller, Wiechel.<br /></span></span></span></span></span></span>New graticule reconstruction algorithm.</span></span></span></span></span></span></span></span><span style="color: #ff0000;"><br /></span></span></p>
-<p>&nbsp;</p>
-
-<p><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>April, 12, 2017: </strong></span><strong><strong><span style="color: #000000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"> <strong>new featu</strong><strong>re</strong></span></span></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>s </strong></span></span></span><span style="color: #ff0000;"><strong><span style="color: #ff0000;"><span style="color: #000000;"><strong>of</strong><span style="color: #ff0000;"><strong> <a href="index.php?option=com_content&amp;view=article&amp;id=13:installation&amp;catid=12:detect-proj&amp;Itemid=120" style="color: #000000;">detectproj</a></strong></span><strong>.</strong></span><strong><br /></strong></span></strong></span></span></strong></strong></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;">Added panning tool. Some minor fixies and convergence improvements.</span></span></span></span></span></span></span></span><span style="color: #ff0000;"><br /></span></span></p>
-<p>&nbsp;</p>
-
-<p><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>March, 14, 2017: </strong><strong>OSM issue fixed</strong></span><strong><strong><span style="color: #000000;">:</span><br /></strong></strong></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;">The Open Street Map loading issue has been fixed.</span></span></span></span></span></span></span></span><span style="color: #ff0000;"><strong><strong><br /></strong></strong></span></span></p>
-<p>&nbsp;</p>
-
-<p><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>March, 3, 2017: </strong><strong>new featu</strong><strong>res of </strong></span></span></span><strong><strong><span style="color: #000000;"><span style="color: #ff0000;"><strong><span style="color: #000000;"><span style="color: #ff0000;"><strong> <a href="index.php?option=com_content&amp;view=article&amp;id=13:installation&amp;catid=12:detect-proj&amp;Itemid=120" style="color: #000000;">detectproj</a></strong></span></span></strong></span></span></strong></strong><strong><strong>.</strong></strong><span style="color: #000000;"><span style="color: #ff0000;"><strong><strong><br /></strong></strong><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;">Adde 6 new map <a href="index.php?option=com_content&amp;view=article&amp;id=15:supported-projections&amp;catid=12:detect-proj&amp;Itemid=122">projections</a>: Adams (3), Guyou, CWE, Littrow, Peirce.<br /></span></span></span></span></span></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;">Some minor</span></span></span></span></span></span> fixies and improvements.<span style="color: #000000;"><span style="color: #ff0000;"><br /></span></span></p>
-<p>&nbsp;</p>
-
-<p><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>January, 15, 2017: </strong><strong>new featu</strong><strong>re</strong></span></span></span><span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><strong>s </strong></span></span></span><span style="color: #000000;"><span style="color: #ff0000;"><strong><span style="color: #000000;"><strong>of</strong><span style="color: #ff0000;"><strong> <a href="index.php?option=com_content&amp;view=article&amp;id=13:installation&amp;catid=12:detect-proj&amp;Itemid=120" style="color: #000000;">detectproj</a></strong></span><strong>.</strong></span><span style="color: #ff0000;"><strong><br /></strong></span></strong><span style="color: #000000;"><span style="color: #000000;">Setting multiple latitude/longitude interval +&nbsp;<span style="color: #ff0000;"><span style="color: #000000;">sampling step</span></span> of generated meridians/parallels. Compare <span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;"><a href="images/detectproj/detectproj_sinu_lon0_support.png">old</a></span></span></span></span>&nbsp; and <span style="color: #000000;"><span style="color: #ff0000;"><span style="color: #000000;"><span style="color: #000000;"><a href="images/detectproj/detectproj_sinu_lon0_support_graticule_step.png">new</a></span></span></span></span> versions.</span><strong><br /></strong><span style="color: #000000;">Multiple directions of the transformed longitude are supported.<br /><span style="color: #ff0000;"><span style="color: #000000;">Graticule of the projection may be generated over the entitre planishere (not only inside the spherical quadrangle represented by min-max box)</span></span></span></span><strong><span style="color: #ff0000;"><span style="color: #000000;">.</span></span></strong></span></span></p>
-
-<p><span style="color: #ff0000;"><strong>New (December 19, 2016): </strong></span><strong>version&nbsp; 1.1 of</strong><span style="color: #ff0000;"><strong> <a href="https://web.natur.cuni.cz/~bayertom/index.php/projection-analysis/installation">detectproj</a></strong></span><strong>.</strong><span style="color: #ff0000;"><strong><br /></strong></span>Support <span style="font-size: 12pt;">lon<sub>0</sub></span> parameter for the oblique aspect of the projection. Compare <a href="https://web.natur.cuni.cz/~bayertom/images/detectproj/detectproj_sinu.png">old</a> and <a href="https://web.natur.cuni.cz/~bayertom/images/detectproj/detectproj_sinu_lon0_support.png">new</a> versions.</p>
-<p>December 9, 2016: Added drag and drop support, <br />December 2, 2016: 12 new map <a href="https://web.natur.cuni.cz/~bayertom/index.php/projection-analysis/supported-projections">projections </a>are supported.<br />November 25, 2016: convergence improvements for all detection methods.<br /><br /></p>
-<h3><strong>Features od the <em>detectproj</em> now include:</strong></h3>
+<p><span style="font-size: 14pt;"><strong>August, 20, 2019: new features of detectproj.</strong><br />Support of the inverse equations for the selected map projections (labeled by *)<br />The analyzed map may be warped from the determined projection to the Mercator projection.<br />The warping procedur runs in the separate thread.<br />An improved performance of the projection analysis.<br />10 new map projections have been added.</span></p>
+<hr />
+<p><span style="font-size: 14pt;"><strong>Software detectproj, version 1.1,<br />GNU/GPL projection analysis software for Windows ® 7/8/8.1/10, GNU/Linux and MacOS.</strong></span></p>
+<p><span style="font-size: 14pt;">Automated estimation of the map projection and its parameters based on the non-linear optimization...<br />Designed for cartographers as well as for enthusiasts.<br />Available free of charge.</span></p>
+<hr />
+<p><span style="font-size: 14pt;"><strong>June, 2, 2017: new features of detectproj.</strong><br />Extended identification of the projection.<br />Results sortable according to determined parameters.</span><span style="font-size: 14pt;"></span></p>
+<hr />
+<p><span style="font-size: 14pt;"><strong>May, 27, 2017: new features of detectproj.</strong><br />Added 3 map projections: Behrmann, Miller, Wiechel.<br />New graticule reconstruction algorithm.</span></p>
+<hr />
+<p><span style="font-size: 14pt;"><strong>April, 12, 2017: new features of detectproj.</strong><br />Added panning tool. Some minor fixies and convergence improvements.</span></p>
+<hr />
+<p><span style="font-size: 14pt;"><strong>March, 14, 2017: OSM issue fixed</strong><br />The Open Street Map loading issue has been fixed.</span></p>
+<hr />
+<p><span style="font-size: 14pt;"><strong>March, 3, 2017: new features of detectproj.</strong><br />Adde 6 new map projections: Adams (3), Guyou, CWE, Littrow, Peirce.<br />Some minor fixies and improvements.</span></p>
+<hr />
+<p><span style="font-size: 14pt;"><strong>January, 15, 2017: new features of detectproj.</strong><br />Setting multiple latitude/longitude interval + sampling step of generated meridians/parallels. Compare old &nbsp;and new versions.<br />Multiple directions of the transformed longitude are supported.<br />Graticule of the projection may be generated over the entitre planishere (not only inside the spherical quadrangle represented by min-max box).</span></p>
+<hr />
+<p><span style="font-size: 14pt;"><strong>December 19, 2016: version &nbsp;1.1 of detectproj.</strong><br />Support λ0 parameter for the oblique aspect of the projection. Compare old and new versions.<br />December 9, 2016: Added drag and drop support. Analyzed map. list of control points opened by drag and drop.<br />December 2, 2016: 12 new map projections are supported.<br />November 25, 2016: convergence improvements for all detection methods.</span></p>
+<hr />
+<p><span style="font-size: 14pt;"><strong>Features of the detectproj now include:</strong></span></p>
 <ul>
-<li>100 map projections are supported,</li>
-<li>detection of the projection name and family,</li>
-<li>estimation of the normal/transverse/oblique aspect of the projection,</li>
-<li>detection of true parallels lat_1, lat_2,</li>
-<li>detection of the central parallel shift lon_0,</li>
-<li>estimation of the map scale, map rotation (optional),</li>
-<li>2 detection methods,</li>
-<li>3 optimization techniques,</li>
-<li>fast detection in the separate thread,</li>
-<li>two map windows side by side,</li>
-<li>Open Street map client as the reference map,</li>
-<li>drag and drop operations,</li>
-<li>add/edit/delete control points,</li>
-<li>list of candidate projections sorted by the residuals,</li>
-<li>visualization of the detected parameters and residuals,</li>
-<li>import/export of control points,</li>
-<li>export reconstructed graticules in DXF,</li>
-<li>and many more...</li>
+<li><span style="font-size: 14pt;">100 map projections are supported,</span></li>
+<li><span style="font-size: 14pt;">detection of the projection name and family,</span></li>
+<li><span style="font-size: 14pt;">estimation of the normal/transverse/oblique aspect of the projection,</span></li>
+<li><span style="font-size: 14pt;">detection of true parallels lat_1, lat_2,</span></li>
+<li><span style="font-size: 14pt;">detection of the central parallel shift lon_0,</span></li>
+<li><span style="font-size: 14pt;">estimation of the map scale, map rotation (optional),</span></li>
+<li><span style="font-size: 14pt;">2 detection methods,</span></li>
+<li><span style="font-size: 14pt;">3 optimization techniques,</span></li>
+<li><span style="font-size: 14pt;">fast detection in the separate thread,</span></li>
+<li><span style="font-size: 14pt;">two map windows side by side,</span></li>
+<li><span style="font-size: 14pt;">Open Street map client as the reference map,</span></li>
+<li><span style="font-size: 14pt;">drag and drop operations,</span></li>
+<li><span style="font-size: 14pt;">add/edit/delete control points,</span></li>
+<li><span style="font-size: 14pt;">list of candidate projections sorted by the residuals,</span></li>
+<li><span style="font-size: 14pt;">visualization of the detected parameters and residuals,</span></li>
+<li><span style="font-size: 14pt;">import/export of control points,</span></li>
+<li><span style="font-size: 14pt;">export reconstructed graticules in DXF,</span></li>
+<li><span style="font-size: 14pt;">setting latitude/longitude interval of the reconstructed graticule,</span></li>
+<li><span style="font-size: 14pt;">setting sampling sensitivity of the reconstructed meridians/parallels,</span></li>
+<li><span style="font-size: 14pt;">support multiple modes of the transformed longitude direction,</span></li>
+<li><span style="font-size: 14pt;">and many more...<br /></span></li>
 </ul>
-
-
-
-<h3><strong>Main controls</strong></h3>
+<hr />
+<p><strong><span style="font-size: 14pt;">Determined parameters</span></strong></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">Suppose the projection ℙ(φk, λk, φ1, φ2, λ0, κ) described by the set of constant values: transformed pole position [φk, λk], standard parallels φ1, φ2, longitude λ0 of the central meridian, constant parameter κ (may be assigned to any other determined value). Furthermore, suppose the analyzed map M(R′, ΔX, ΔY, α) described by its constant values: auxiliary sphere radius R′ (illustrating the scale ratio), origin shifts ΔX, ΔY, and angle of rotation α. For the oblique aspect, the projection equations in closed form may be written as functions of the determined parameters</span></p>
+<p style="text-align: center;"><span style="font-size: 14pt;">X(R′, φk, λk, φ1, φ2, λ0, ΔX, κ, α) = F(φ′, λ′),<br />Y(R′, φk, λk, φ1, φ2, λ0, ΔY, κ, α) = G(φ′, λ′).</span></p>
+<p><strong><span style="font-size: 14pt;">Determined parameters of the projection</span></strong></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">During the analysis, the bellow-mentioned constant parameters of the projection &nbsp;ℙ are determined. They have a strong influence on the shape of the graticule.</span></p>
 <ul>
-<li>Left mouse click: add control point.</li>
-<li>Right mouse click: delete the control point.</li>
-<li>Mouse wheel: Zoom in/out.</li>
-<li>Left mose drag: move the control point.</li>
-<li>Right mouse drag: dynamic shift of the map.</li>
+<li><span style="font-size: 14pt;">Transformed pole position [φk, λk]<br />For the normal aspect, the arbitrary pole position is K=[ 90,0 ] is fixed; for the transverse aspect K=[ 0,? ] . Otherwise, both coordinates need to be determined.</span></li>
+<li><span style="font-size: 14pt;">Standard parallels φ1, φ2<br />The latitudes of two standard parallels, representing intersections of the cone, cylinder secant plane, are determined.</span></li>
+<li><span style="font-size: 14pt;">Longitude λ0 of the central meridian<br />To minimize the distortion and provide a true projection of the mapped region, the central meridian may be shifted. It is frequently chosen in the axis of the symmetry of the mapped region.</span></li>
+<li><span style="font-size: 14pt;">Abitrary constant parameter κ<br />It may represent any other constant value of the projection.<br /></span></li>
 </ul>
-<h3><br />Control points</h3>
-<p>The analysis is based on the minimization of the squares of residuals between test points and projected reference points. The control points are collected by the user. <br />A pair of control points contains the control points on the analyzed map and on the reference map.</p>
-<p><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_test_point.png" alt="detectproj test point" width="29" height="26" />&nbsp;&nbsp;&nbsp;&nbsp; symbol of the test point on the analyzed map,</p>
-<p><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_reference_point.png" alt="detectproj reference point" width="30" height="30" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; symbol of the reference point on Open Street Map.</p>
-<p>Control points located on the map items:<br /><br /><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_points_map_small.png" alt="detectproj points map small" width="675" height="300" /></p>
-<p>Control points located on the meridian/parallel intersection:</p>
-<p>&nbsp;<img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_points_graticule_small.png" alt="detectproj points graticule small" width="668" height="300" /></p>
-<p>&nbsp;</p>
-<h3 style="text-align: justify;"><strong>Properties of the control points</strong></h3>
-<p style="text-align: justify;">The proposed techniques are suitable for sets with approximately the same spatial density of features. On the boundaries of the analyzed region, in particular, it is necessary to place enough points.</p>
-<ol style="text-align: justify;">
-<li>The uniform distribution of analyzed collected points on a map (grid, random set) is crucial.</li>
-<li>The estimated parameters fit well inside the convex hull of the analyzed set; noextrapolation of results outside the analyzed set is supported.</li>
-<li>The proper estimation of parameters on the boundary of the map, the analyzed features should be collected at the margins of the map.</li>
-<li>For the small-scale maps 5 points are sufficient, for the medium-scale maps 10 points are recommended, but for the large-scale maps 15-20 points may be required.</li>
-<li>For early maps, the graticule is significantly more accurate than the map content. Placing control points in the meridian and parallel intersections brings lower residuals between the original and reconstucted graticule.</li>
-</ol>
-<p style="text-align: justify;">The recommended control point distributions:</p>
-<p><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_good_distributions.png" alt="detectproj good distributions" width="640" height="176" /></p>
-<p>Not recommended point distributions:</p>
-<p><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_bad_distributions.png" alt="detectproj bad distributions" width="640" height="364" /></p>
-<p style="text-align: justify;">Our algorithm performs recursive splitting of an edge depending on its geometric complexity and significance. The splitting criterion is calculated for each detected edge of the building. It is based on the calculation of standard deviation ?, that minimizes the sum of the squares of the points distances from the regression line; the variance of the residuals is the minimum possible. The regression line is oriented in accordance with one edge of the smallest area enclosing rectangle, it is parallel to this edge. The regression line also passes through the center of gravity of the set of points.</p>
-<p><span style="color: #0000ff;"><strong><span style="font-size: 14pt;">Analyze projection of the early map</span></strong></span></p>
-<h3>Step1: Import early map</h3>
-<p>The existing early map can be imported from a file. For successfull import, the file can not exceed 50 MB. The following graphic formats are supprted:</p>
+<p><strong><span style="font-size: 14pt;">Determined parameters of the map</span></strong></p>
+<p><span style="font-size: 14pt;">The constant parameters of the map represent its scale, shift, and rotation. They have only a low effect on the graticule shape.</span></p>
 <ul>
-<li>JPG - Joint Photographic Expert Group,</li>
-<li>PNG - Portable Network Graphics,</li>
-<li>GIF - Graphics Interchange program.</li>
+<li><span style="font-size: 14pt;">Scale parameter R'<br />It is determined so as to estimated projection graticule fits best with the analyzed one.</span></li>
+<li><span style="font-size: 14pt;">Rotation α<br />An additional rotation of the analyzed map caused by the inappropriate insertion of the paper form of the map into the scanner.<br /></span></li>
 </ul>
-<p>To import early map file do the following steps:</p>
-<ol>
-<li>Click <strong>File</strong> in the menu, and select the <strong>Import map </strong>item. Alternately, click on the icon.</li>
-<li>In the dialog window <strong>Upload early map</strong> select the graphic file.</li>
-</ol>
-
-
-<p class="MsoNormal"><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;">A pair of control points is represented by the control point on the analyzed map and the control point on the reference map.<span style="mso-spacerun: yes;">&nbsp; </span></span><span class="alt-edited"><span lang="EN" style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin; mso-ansi-language: EN;">Regardless</span></span><span class="shorttext"><span lang="EN" style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin; mso-ansi-language: EN;"> the order in which control points are collected (analyzed map first and reference map second or vice versa) a pair will be added to the list.</span></span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"></span></p>
-<ol>
-<li><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;">Using mouse wheel or <strong style="mso-bidi-font-weight: normal;">Zoom in</strong> tool </span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin; mso-fareast-language: CS; mso-no-proof: yes;"> </span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-spacerun: yes;"></span>zoom the map and find a feature on the map suitable for the analysis. Check its depiction on the reference map.</span></li>
-<li><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; font-family: 'Times New Roman',serif; mso-fareast-font-family: 'Times New Roman';"><span style="mso-list: Ignore;"><span style="font: 7.0pt 'Times New Roman';"> </span></span></span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;">In the toolbar, left-click on the <strong style="mso-bidi-font-weight: normal;">Add control points</strong> tool </span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin; mso-fareast-language: CS; mso-no-proof: yes;"> </span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-spacerun: yes;"></span>.</span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; font-family: 'Times New Roman',serif; mso-fareast-font-family: 'Times New Roman';"><span style="mso-list: Ignore;"><span style="font: 7.0pt 'Times New Roman';"></span></span></span></li>
-<li><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;">Move the cursor above the desired control point and press the left mouse button. Above the early map, the red control point mark. Analogously, the yellow control point mark appears.</span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><br /></span><br /><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"></span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_control_points_small.png" alt="detectproj control points small" width="644" height="353" /><br /><br /></span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin; mso-fareast-language: CS; mso-no-proof: yes;"></span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"></span></li>
-<li><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; font-family: 'Times New Roman',serif; mso-fareast-font-family: 'Times New Roman';"><span style="mso-list: Ignore;"><span style="font: 7.0pt 'Times New Roman';">&nbsp; </span></span></span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;">Move the cursor above the corresponding point on the second map and press the left mouse button. The control point mark appears<br /><br /></span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin; mso-fareast-language: CS; mso-no-proof: yes;"></span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_control_points_small2.png" alt="detectproj control points small2" width="643" height="352" /><br /><br /></span><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"></span></li>
-<li><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;">Repeat these steps until all control points are collected.<br /></span><br /><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"></span><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_control_points_small_all.png" alt="detectproj control points small all" width="851" height="407" /></span></li>
-</ol>
-<p><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"></span></p>
-<h3 class="MsoListParagraphCxSpFirst" style="margin-left: 21.3pt; mso-add-space: auto; text-indent: -18.35pt; mso-list: l0 level4 lfo1;">Move control points</h3>
-<ol>
-<li><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;">Move the cursor above the desired control point, the pair of control points highlights. On the reference map, its feographic coordinates are displayed.<br /><br /></span><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"> </span><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin; mso-fareast-language: CS; mso-no-proof: yes;"><img src="https://web.natur.cuni.cz/~bayertom/images/control_points_move_small.png" alt="control points move small" width="640" height="353" /></span><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;">&nbsp; <br /><br /></span></li>
-<li><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; font-family: 'Times New Roman',serif; mso-fareast-font-family: 'Times New Roman';"><span style="mso-list: Ignore;"></span></span><span style="mso-bidi-font-size: 12.0pt; line-height: 107%; mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;">Dragging the mouse move the point to a destination position.<br /><br /></span><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"></span><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><img src="https://web.natur.cuni.cz/~bayertom/images/control_points_move_small2.jpg" alt="control points move small2" width="640" height="352" /><br /></span></li>
-</ol>
-<p class="MsoNormal" style="text-indent: 21.3pt;"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin; mso-fareast-language: CS; mso-no-proof: yes;"> </span><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"></span></p>
-<h3>Step 3: Selection of the detection method</h3>
-<p>Before analysis it is necessary to select the detection method.</p>
-<ol>
-<li>From the Combo Box select the desired the detection method.<br /><br /> <img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_methods.png" alt="detectproj methods" /><br /><br /> Alternately, click in the <strong>Analysis</strong> menu, and choose the detection method.<br /><br /><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_methods2.png" alt="detectproj methods2" width="347" height="67" /><br /><br /></li>
-<li>Click in selected item, the highlighted method is checked and set as active.<br /><br /></li>
-</ol>
-<p>M7 is recommended for the unrotated maps; this option is suitable for most situations. M8 achieves the best&nbsp; results for the rotated maps (a map rotation ? is involved). This is typical for situations, when the map is incorrectly placed into the scanner or has a switched orientation on the page. Although M8 brings lower residuals, some solutions might be artificial and represent only a geometric construct not&nbsp; used by the cartographer.</p>
-<p class="MsoListParagraph" style="margin-left: 21.3pt; mso-add-space: auto;"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"></span></p>
-<h3>Step 4: Selection of the optimization technique</h3>
-<p style="text-align: justify;">Subsequently, the optimization technique needs to be chosen.</p>
-<ol>
-<li>From the Combo Box select the desired the optimization technique. <br /><br /> <img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_techniques.png" alt="detectproj techniques" /><br /><br /> Alternately, click in the <strong>Analysis</strong> menu, and choose the optimization technique.'<br /><br /><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_techniques2.png" alt="detectproj techniques2" width="317" height="94" /><br /><br /></li>
-<li>Click in selected item, the highlighted technique is checked and set as active.</li>
-</ol>
-<p style="text-align: justify;">The NLS method represents the convex optimization technique which does not ensure the global minimum; only local minimum is found. <span class="shorttext">The direct search technique, Nelder-Mead optimization, belongs to the global optimization methods. Due to small population, the global minimum may not be found. However, it is the fastest method. The differential evolution is the most efficient implemented technique performing a deep exploration of the search space. Unfortunately, it is also the slowest technique.</span></p>
-<h3>Step 5: Run analysis</h3>
-<p>Recall that at least five pairs of control points need to collected. Due to the time reason, do not use more than 30 control points. There are also several above mentioned recommendations on the control points that must be respected.</p>
-<ol>
-<li>Click on the&nbsp;<img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_toolbar_analyze_map.png" alt="detectproj toolbar analyze map" /> button. Alternately, click in the Analysis&nbsp; menu, and choose the Analyze map item.</li>
-<li>Depending on the amount of analyzed points, selected detection method and optimization technique, the results are evaluated within 10 seconds.<br /><br /><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_results_small.png" alt="detectproj results small" width="843" height="506" /></li>
-</ol>
+<p><strong><span style="font-size: 14pt;">Detection methods</span></strong></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">Determining the best fit projection parameters represents a complex problem leading to the convex/global unconstrained optimization of the objective function φ, describing the similarity of the analyzed and reference maps.</span></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">Let P ∈ M and Q ∈ S2 be the sets of features on the analyzed map M and on the sphere S2, ℙx:S2 → M′ be the analyzed projection, and P′ ∈ M′ be the image of Q in ℙx. The dissimilarity &nbsp;δx, δx ≥ 0,</span></p>
+<p style="text-align: center;"><span style="font-size: 14pt;">δx = ϕ (ℙx(Q), P) = ϕ (P′x, P),</span></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">of features on the analyzed map M and on the sphere S2 projected with ℙ, is measured by the objective function ϕ at a point x. For each analyzed map projection ℙ, the vector of its best constant values</span></p>
+<p><img src="images/formula.png" alt="formula" width="241" height="51" style="display: block; margin-left: auto; margin-right: auto;" /></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">minimizing ϕ, may be determined. The minimized function is represented by the sum of the squares of residuals on the corresponding points</span></p>
+<p style="text-align: center;"><span style="font-size: 14pt;">ϕ (P′x, P), = rTr.</span></p>
+<p><span style="font-size: 14pt;">Two types analyses are supported:</span></p>
+<ul>
+<li><span style="font-size: 14pt;">Method M7: 7 determined parameters of the projection (no rotation of the map is supposed).</span></li>
+<li><span style="font-size: 14pt;">Method M8: 8 determined parameters, map rotation allowed.</span></li>
+</ul>
+<p><span style="font-size: 14pt;">The problem leads to the global unconstrained optimization. Three optimization techniques are supported:</span></p>
+<ul>
+<li><span style="font-size: 14pt;">NLS (Non-linear Least Squares): convex optimization, only local optimizer is guaranteed.</span></li>
+<li><span style="font-size: 14pt;">NM (Nelder Mead): non-convex optimization, direct-search method, global optimizer may be found (no guarantee).</span></li>
+<li><span style="font-size: 14pt;">DE (Differential Evolution): non-convex optimization, stochastic method, global optimize may be found (no guarantee), best results (slowest)</span></li>
+</ul>
+<p><strong><span style="font-size: 14pt;">About map projections...</span></strong></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">Map projections are important for creating maps; each map uses a projection. Map projection (or a mapping) transforms a position of the element on the curved surface into a flat surface (map), represented by the plane. A curved surface approximating the Earth is considered to be the sphere or ellipsoid. Each map projection ℙ is defined with the set coordinate functions F, G of two independent variables φ, λ</span></p>
+<p style="text-align: center;"><span style="font-size: 14pt;">X = F(φ, λ), Y = G(φ, λ),</span></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">which are continuous with their first order partial derivatives. The meridian of a longitude λ = λ0 = const is represented by the curve</span></p>
+<p style="text-align: center;"><span style="font-size: 14pt;">X = F(φ, λ0), Y = G(φ, λ0),</span></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">and analogously, a parallel of a latitude φ = φ0 = const, is</span></p>
+<p style="text-align: center;"><span style="font-size: 14pt;">X = F(φ0, λ), Y = G(φ0, λ).</span></p>
+<p><span style="font-size: 14pt;">The map projection analysis represents a challenging, but conceptually difficult, task.</span></p>
+<p><span style="font-size: 14pt;">Cylindrical, conic, azimuthal projections:</span></p>
+<p><img src="images/proj_aspects.png" alt="proj aspects" width="541" height="256" style="display: block; margin-left: auto; margin-right: auto;" /></p>
+<p><strong><span style="font-size: 14pt;">Map projection families</span></strong></p>
+<p><span style="font-size: 14pt;">Depending on the shape of the graticule, the &nbsp;are several important families.</span></p>
+<ul>
+<li style="text-align: justify;"><span style="font-size: 14pt;"><strong>Simple projection</strong><br />A projection surface is represented by the developed surface touching or intersecting a sphere. It is associated with the cylindrical, azimuthal, and conic projections.</span></li>
+</ul>
+<p><span style="font-size: 14pt;">Cylindrical equal-area projection:<br /><img src="images/eqa.png" alt="eqa" width="793" height="393" style="display: block; margin-left: auto; margin-right: auto;" /><br /></span></p>
+<ul>
+<li style="text-align: justify;"><span style="font-size: 14pt;"><strong>Pseudo projections</strong><br />Sometimes, a concept of the auxilliary gemetrical solids is not available, but some analogies remains. To avoid shape distortions, several refinements can be found in the inherited families: pseudocylindrical, pseudoconic, pseudoazimuthal.</span></li>
+</ul>
+<p><span style="font-size: 14pt;">Bonne projection:<br /><img src="images/bonne.png" alt="bonne" width="627" height="576" style="display: block; margin-left: auto; margin-right: auto;" /><br /></span></p>
+<ul>
+<li><span style="font-size: 14pt;"><strong>Globular projections</strong><br />Showing a hemisphere bounded by a circle, they belong to the oldest-known projections using easily drawn curves.</span></li>
+</ul>
+<p><span style="font-size: 14pt;">Apianus projection:</span></p>
+<p><img src="images/apian.png" alt="apian" width="618" height="618" style="display: block; margin-left: auto; margin-right: auto;" /></p>
+<ul>
+<li style="text-align: justify;"><span style="font-size: 14pt;"><strong>Perspective projections</strong><br />Some cylindrical or azimuthal projections may be derived using a perspective, when the sphere is projected to a part of the cylinder. &nbsp;The plane may touch the sphere, but a secant forms are also known.</span></li>
+</ul>
+<p><span style="font-size: 14pt;">Wetch projection:</span></p>
+<p><img src="images/wetch.png" alt="wetch" width="637" height="756" style="display: block; margin-left: auto; margin-right: auto;" /></p>
+<ul>
+<li><span style="font-size: 14pt;"><strong>Polyconic projections</strong><br />The sphere is projected to the plane with infinitely many cones tangent to each parallel. In other words, the map is split into many strips each tangent to a different cone. The typical shape of the polyconic projections, a sliced apple, can easily be recognized.</span></li>
+</ul>
+<p><span style="font-size: 14pt;">Hassler projection:</span></p>
+<p><img src="images/hassler.png" alt="hassler" width="636" height="488" style="display: block; margin-left: auto; margin-right: auto;" /></p>
+<ul>
+<li><span style="font-size: 14pt;"><strong>Modified azimuthal</strong><br />They are based on a geometric modifications of azimuthal projections, different than for pseudoazimuthal projections. Providing a natural depiction the entire planisphere they are used &nbsp;for worls maps.</span></li>
+</ul>
+<p><span style="font-size: 14pt;">Aitoff projection:</span></p>
+<p><img src="images/aitoff.png" alt="aitoff" width="696" height="349" style="display: block; margin-left: auto; margin-right: auto;" /></p>
+<ul>
+<li><span style="font-size: 14pt;"><strong>Interrupted projections</strong><br />They are based on idea that highly distorted regions may be moved to less-distorted parts near the equator or a central meridian. The sphere is projected per-partes with a common projection or combining several different projections.</span></li>
+</ul>
+<p><span style="font-size: 14pt;">Good projection:</span></p>
+<p><img src="images/good.png" alt="good" width="712" height="320" style="display: block; margin-left: auto; margin-right: auto;" /></p>
+<ul>
+<li><span style="font-size: 14pt;"><strong>Miscellaneous projections</strong><br />Many projections can not be classified into the above mentioned group. They are based on the different mathematical/geometrical approaches or have a different shape of meridians/parallels/pole.</span></li>
+</ul>
+<p><img src="images/armad.png" alt="armad" width="613" height="350" style="display: block; margin-left: auto; margin-right: auto;" /></p>
 <p>&nbsp;</p>
-<h3>Step 6: Browse results</h3>
-<p><span class="shorttext">Let's look more closely at the results provided by the detectproj software.</span></p>
-<p><strong>Residuals. </strong>The residuals between the test and projected points can be found in the form <strong>List of control points</strong> form. The possible incorrectly placed control points can be found, moved, or rejected.</p>
-<p><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_results_points_best_fit.png" alt="detectproj results points best fit" width="800" height="146" /></p>
-<p><span class="shorttext"><strong>Reconstructed graticule. </strong></span><span class="shorttext">The reconstructed graticule is drawn over the analyzed. Depending on the early map, amount of control points, their accuracy, it provides a good fit. Ideally, the positional or shape discrepancies between the early map and reconstructed graticule should be less than the graphical accuracy of the map (0.1 mm) However, there might be some situations, when the results are not great.</span></p>
-<p>&nbsp;<img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_results_graticule_small.png" alt="detectproj results graticule small" width="670" height="551" /></p>
-<p><strong>Projected reference points</strong>. The reference points, drawn with the yellow map markers, projected using the best fit projection, are drawn over the analyzed map. In most situation there is a good fit between the test and projected reference points.<br /><br /></p>
-<p><strong>Vector of residuals.</strong> The vetors of residuals between the test and projected reference points are drawn over the analyzed map. Currently, they are visible only under magnification which indicates a good fit.</p>
-<p>&nbsp;<img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_results_residuals.png" alt="detectproj results residuals" /></p>
-<h4>Table list of List of detected projections and properties.</h4>
-<p>The table summarize results of 20 best-fit projections, their determined parameters as well as the parameters of the analyzed map.</p>
-<p>&nbsp;<img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_browse_results.png" alt="detectproj browse results" width="995" height="432" /></p>
-<h4>Display results of different projections</h4>
-<p>After completing the analysis 20 candidate projections and their parametersare summarized in the table <strong>List of detected projections and properties</strong>. Currently, the resonstructed graticule, projected points and vector of residuals refer to the best-fit projection. To change the active projection do the following steps</p>
-<ol>
-<li>Click on the&nbsp;<img src="https://web.natur.cuni.cz/~bayertom/images/table.png" alt="table" />&nbsp; button. Alternately, click in the <strong>Analysis&nbsp;</strong> menu, and choose the <strong>Show results</strong> item.<br /><br /><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_results_projections_best_fit.png" alt="detectproj results projections best fit" width="821" height="148" /><br /><br /></li>
-<li>Find the desired projection in the table <strong>List of detected projections and properties</strong>.</li>
-<li>In the table, click on the row and make the projection active; the table row which higlihts.</li>
-</ol>
-<p style="margin-left: 30px;"><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_results_gall_fit.png" alt="detectproj results gall fit" width="820" height="145" /><br /> <br /> Subsequently, the reconstructed graticule, projected points and residuals refer to the active projection.</p>
-<p style="margin-left: 30px;">The differencies beteen candidate projections are not crucical. Sometimes, the possitional differencies are less than thegraphical accuracy of the map. For example, see the results between the Bonne projection (4th position, normal aspect)<br /><br /><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_results_bonne_graticule_small.png" alt="detectproj results bonne graticule small" width="870" height="667" /></p>
-<p style="margin-left: 30px;">and Gall projection (oblique aspect, 18th position).<br /><br /><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_results_gall_graticule_small.png" alt="detectproj results gall graticule small" width="870" height="663" /><br /><br />Unlike the Bonne projection with the curved meridians, the Gall projection uses straight parallels.</p>
-<p>&nbsp;</p>
-<h3>&nbsp;Step 7: Export reconstructed graticule</h3>
-<p style="margin-bottom: 0.0001pt;">The reconstructed graticule, test, and reference projected points can be extracted to the DXF file. It can be processed by CAD or GIS software. Any candidate projection from the <strong>List of detected projections and properties </strong> may be used to project the reference points and to create a graticule.</p>
-<ol>
-<li>Click on the click in the <strong>Analysis</strong> menu, and choose the <strong>Show results</strong> item.</li>
-<li><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">In the table, click on the row and make the projection active; the table row is higlighted<br /><br /><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_export_graticule_bonne.png" alt="detectproj export graticule bonne" width="821" height="161" /><br /><br /></span></li>
-<li>Click in the <strong>Map</strong> menu, and select the <strong>Export graticule </strong>item. Alternately, click on the icon.</li>
-<li>In the dialog window <strong>Export test points</strong> select the output DXF file. <br /> <br /><img src="https://web.natur.cuni.cz/~bayertom/images/detectproj_export_graticule_dialog.png" alt="detectproj export graticule dialog" width="484" height="358" /><br /><br /></li>
-<li>Click on the <strong>Save</strong> button proceeds the export.</li>
-</ol>
-
-
-
-
-<h3>&nbsp;Sample 1: Map of Europe, normal aspect of the projection</h3>
-<table style="width: 655px; height: 204px; margin-right: auto; margin-left: auto;">
-<tbody>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Title:</span></td>
-<td><span style="font-size: 12pt; font-family: 'Times New Roman',serif;"><span style="font-size: 12pt; font-family: 'Times New Roman',serif;"><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">&nbsp;L'Europe sous l'Empire de Charlemagne ou tableau historique de cette partie du monde</span></span></span><span style="font-size: 12pt; font-family: 'Times New Roman',serif;"><span style="font-size: 12pt; font-family: 'Times New Roman',serif;"><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;"> </span> </span></span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Author: </span></td>
-<td><span style="font-size: 12pt; font-family: 'Times New Roman',serif;">&nbsp;Adrien Huber</span></td>
-</tr>
-<tr>
-<td><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">&nbsp;Date:</span></td>
-<td><span style="font-family: times new roman,times;">&nbsp; <span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">1828,</span></span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Publisher:&nbsp; </span></td>
-<td><span style="font-family: times new roman,times;">&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">A. Brue,</span></span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Location: </span></td>
-<td><span style="font-size: 12pt; font-family: 'Times New Roman',serif;">&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Paris, </span></span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Type:</span></td>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Atlas Map, </span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Height: </span></td>
-<td><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">&nbsp;37 cm, </span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Width: </span></td>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">51 cm, </span></td>
-</tr>
-<tr>
-<td><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">&nbsp;Scale: </span></td>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">1 : 12,500,000.</span></td>
-</tr>
-</tbody>
-</table>
-<p><span style="font-size: 12pt;"><br /><img src="https://web.natur.cuni.cz/~bayertom/images/europe_1_bone_grat_2.jpg" alt="europe 1 bone grat 2" width="885" height="636" style="display: block; margin-left: auto; margin-right: auto;" /></span></p>
-<p><span style="font-size: 12pt;">Determined parameters of the projection:<br /></span><span style="font-size: 12pt;"><span style="font-size: 12pt;">Projection: Bonne.<br /></span>Transformed pole position: ?<sub>k</sub> = 90.0<sup>0</sup>, ?<sub>k</sub> = 0.0<sup>0</sup>.</span><br /><span style="font-size: 12pt;"> Standard parallels: ?<sub>1</sub> =53. 5<sup>0</sup>, ?2 =53. 5<sup>0</sup>.</span><br /><span style="font-size: 12pt;"> Longitude of the central meridian: ?<sub>0</sub> = 14.7<sup>0</sup>.</span><br /><span style="font-size: 12pt;"> Arbitrary constant parameter: k = 1.0. </span><br /><span style="font-size: 12pt;"> Auxiliary sphere radius: R'= 0.3m. </span><br /><span style="font-size: 12pt;"> Map scale: S = 20 910 248.</span><br /><span style="font-size: 12pt;"> Angle of rotation: ? = 0.00.</span></p>
-<p>&nbsp;</p>
-<h3><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Sample 2: World map in hemisphere, transverse aspect of the projection<br /></span></h3>
-<table style="width: 655px; height: 204px; margin-right: auto; margin-left: auto;">
-<tbody>
-<tr>
-<td>&nbsp; <span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Title:</span></td>
-<td><span style="font-size: 12pt; font-family: 'Times New Roman',serif;"><span style="font-size: 12pt; font-family: 'Times New Roman',serif;"><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">&nbsp;&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Novus Orbis Sive America Meridionalis Et Septentrionalis : divisa per sua regna, provincias et insul, cura et opera</span></span></span></span><span style="font-size: 12pt; font-family: 'Times New Roman',serif;"><span style="font-size: 12pt; font-family: 'Times New Roman',serif;"><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;"> </span> </span></span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Author: </span></td>
-<td><span style="font-size: 12pt; font-family: 'Times New Roman',serif;">&nbsp; <span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Seutter, Matthäus, </span><br /></span></td>
-</tr>
-<tr>
-<td><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">&nbsp;Date:</span></td>
-<td><span style="font-family: times new roman,times;">&nbsp; <span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;"><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">1744</span></span></span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Publisher:&nbsp; </span></td>
-<td><span style="font-family: times new roman,times;">&nbsp; <span style="font-size: 12pt; font-family: 'Times New Roman',serif;"><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Seutter, Matthäus, </span></span><br /></span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Location: </span></td>
-<td><span style="font-size: 12pt; font-family: 'Times New Roman',serif;">&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;"><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Augsburg</span>, </span></span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Type:</span></td>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Atlas Map, </span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Height: </span></td>
-<td><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">&nbsp;58 cm, </span></td>
-</tr>
-<tr>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">Width: </span></td>
-<td><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;"><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">&nbsp;50 cm,</span></span></td>
-</tr>
-<tr>
-<td><span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">&nbsp;Scale: </span></td>
-<td>&nbsp;<span style="font-size: 12pt; line-height: 107%; font-family: 'Calibri',sans-serif;">1 : 19,000,000</span></td>
-</tr>
-</tbody>
-</table>
-
-<p>&nbsp;<span style="font-family: 'Times New Roman',serif;"> </span><em></em></p>
-<p><img src="https://web.natur.cuni.cz/~bayertom/images/america_2_stereo_grat2.jpg" alt="america 2 stereo grat2" width="910" height="785" style="display: block; margin-left: auto; margin-right: auto;" /></p>
-<p><span style="font-size: 12pt;"><span style="font-size: 12pt;">Determined parameters of the projection:<br /><span style="font-size: 12pt;">Projection:stereographic.</span></span><br />Transformed pole position: ?<sub>k</sub> = 0.2<sup>0</sup>, ?<sub>k</sub> = -80.3<sup>0</sup>.</span><br /><span style="font-size: 12pt;"> Standard parallels: ?<sub>1</sub> =0. 0<sup>0</sup>, ?<sub>2</sub> =0.0<sup>0</sup>.</span><br /><span style="font-size: 12pt;"> Longitude of the central meridian: ?<sub>0</sub> = 0.0<sup>0</sup>.</span><br /><span style="font-size: 12pt;"> Arbitrary constant parameter: k = 1.0. </span><br /><span style="font-size: 12pt;"> Auxiliary sphere radius: R'= 2.2 m. </span><br /><span style="font-size: 12pt;"> Map scale: S = 39 380 986.</span><br /><span style="font-size: 12pt;"> Angle of rotation: ? = 0.00.</span></p>
-
-
-
-
-
-=======
-"# detectprojv2j" 
->>>>>>> 7fbc3b2cdda953b4c44b50f3080c0e02994e92b8
-=======
-"# detectprojv2j" 
->>>>>>> 7fbc3b2cdda953b4c44b50f3080c0e02994e92b8
-"# detectprojv2j" 
+<p><strong><span style="font-size: 14pt;">Projection aspect</span></strong></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">Map projections are proposed to represent the entire Earth, a hemisphere, continent, or country as accurately as possible. One of the ways to achieve this is an appropriate choice of the projection aspect. There are three projection aspects, which differ in the position of the pole K = [φk, λk]:</span></p>
+<ul>
+<li><span style="font-size: 14pt;">Normal aspect<br />The projection pole K = [90○, 0○] coincides with the North Pole of the Earth. In connection with azimuthal projections, it is also known as the polar aspect.</span></li>
+<li><span style="font-size: 14pt;">Transverse aspect<br />The projection pole K = [0○, λk], λk ∈ [ − 180○, 180○], coincides with the equator and it is also called the equatorial aspect. There are an infinite number of positions of the transverse aspect.</span></li>
+<li><span style="font-size: 14pt;">Oblique aspect<br />The projection pole K = [φk, λk], where φk ∈ [ − 90○, 90○], λk ∈ [ − 180○, 180○], is any other point than the North Pole or the equatorial point.</span></li>
+</ul>
+<p style="text-align: justify;"><span style="font-size: 14pt;">The projection aspect has a crucial impact on the graticule shape. In both the transverse and oblique aspects, the shape of the graticule significantly changes; other constant values of the projection are gentler to the shape of the graticule. It is a known fact that projections may lose their orthogonality shapes of the poles, prime meridian, or equator shape.</span></p>
+<p><img src="images/projections_normal_oblique_small.png" alt="projections normal oblique small" width="683" height="543" style="display: block; margin-left: auto; margin-right: auto;" /></p>
+<p style="text-align: justify;"><span style="font-size: 14pt;">Comparing the azimuthal (a), (b) and conic equidistant (c), (d) projections in the normal and oblique, K=[ 50○, 10○] , aspects; the orthogonality and graticule shapes are not preserved.</span></p>
