@@ -12,32 +12,26 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-=======
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/sphereintersection/SphereIntersection.java</file>
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/quartic/Quartic.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/Projections.java.old</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/graticule/Graticule.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/Projection.java</file>
-<<<<<<< HEAD
-=======
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/FILatDer.java</file>
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/desktop.ini</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/IResiduals.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/EarlyMap.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/tile/MercTile.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/FThetaDer.java</file>
-<<<<<<< HEAD
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/io/DXFExport.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/TInterval2D.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/comparators/IndexComparator.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/MapPolygonImpl.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/JMapViewer.java.r33089</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/JMapViewer.java.r35022</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/MapMarkerDot.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathMatrixException.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/IThetaFunction.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathSingularityException.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/JMapViewer.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/ProjectionAzimuthal.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/TTransformedLongitudeDirection.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathZeroDevisionException.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/OsmTileLoader.java</file>
@@ -58,16 +52,19 @@
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/comparators/SortByFirst.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/ICoordFunctionProjJI.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/graticule/Parallel.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/ProjectionMiscellaneous.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/mapwarp/MapWarp.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/old/Setting.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathException.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/singularitydetection/SingularityDetection.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/FILat.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/graticule/Meridian.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/JMapViewer.java.mine</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/ICoordFunctionProjRI.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/ProjectionPseudoAzimuthal.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/tile/Pixel.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/IFunctionX.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/ICartTransformation.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/comparators/SortPointsByY.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/Tile.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/GenericType.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/sphereintersection/SphereIntersection.java</file>
@@ -77,11 +74,11 @@
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/io/IO.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/comparators/SortPixelsByX.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/cartanalysis/CartAnalysisMT.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/ControlPointsForm.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/.git/config</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/consts/Consts.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/TileController.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/carttransformation/CartTransformation.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/NewtonRaphson.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/TInterval.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/comparators/SortPixelsByY.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/geneticalgorithms/DifferentialEvolution.java</file>
@@ -89,46 +86,21 @@
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/Triplet.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/comparators/SortPointsByLon.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/MyMapMarker.java</file>
-=======
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/TGraticuleSampling.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/io/DXFExport.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/interfaces/TileSource.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/TInterval2D.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/MapPolygonImpl.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/io/IO.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/cartanalysis/CartAnalysisMT.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/consts/Consts.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/TileController.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/MapMarkerDot.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathMatrixException.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/carttransformation/CartTransformation.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/IThetaFunction.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/NewtonRaphson.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/TInterval.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathSingularityException.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/JMapViewer.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/geneticalgorithms/DifferentialEvolution.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/nonlinearleastsquares/FRM7.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/TTransformedLongitudeDirection.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathZeroDevisionException.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/IJacobian.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/MyMapMarker.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/simplexmethod/SimplexMethod.java</file>
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/MapMarkerCircle.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/IPoint3DFeatures.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/ProjectionPseudoConic.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathInvalidArgumentException.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/comparators/SortBySecond.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathOverflowException.java</file>
-<<<<<<< HEAD
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/tilesources/OsmTileSource.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/FILon.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/INumDerivative.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathLatSingularityException.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/ProjectionEllipsoidal.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/planeintersection/PlaneIntersection.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/FTheta.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/dpi/DPI.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/tile/BigBufferedImage.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/Settings.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/sphericaldistance/SphericalDistance.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/adaptivesampling/AdaptiveSampling.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/FILonDer.java</file>
@@ -139,7 +111,9 @@
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/matrix/Matrix.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/nonlinearleastsquares/NonLinearLeastSquares.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/comparators/sortJTableColumnByDouble.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/ProjectionPolyConic.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/nonlinearleastsquares/FRM8.java</file>
+            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/ProjectionCylindrical.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/OsmMercator.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/ProjectionConic.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/MapObjectImpl.java</file>
@@ -147,52 +121,6 @@
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/IPoint3DConstructor.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/graticuleAS/GraticuleAS.java</file>
             <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/comparators/SortPointsByDistGeo.java</file>
-=======
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/ICoordFunctionProj.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/FILon.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/INumDerivative.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathLatSingularityException.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/ResultsForm.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/planeintersection/PlaneIntersection.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/FTheta.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/dpi/DPI.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/sphericaldistance/SphericalDistance.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/adaptivesampling/AdaptiveSampling.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathLonSingularityException.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/TAdaptiveControl.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/AboutBox.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/FILonDer.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/Projections.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/Detectprojv2j.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/OSMMap.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/RasterMapMarker.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/forms/MainApplication.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/ICoordFunctionProjJI.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/graticule/Parallel.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/mapwarp/MapWarp.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/interfaces/MapMarker.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/TResult.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/angle3points/Angle3Points.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/old/Setting.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/exceptions/MathException.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/singularitydetection/SingularityDetection.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/matrix/Matrix.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/newtonraphson/FILat.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/graticule/Meridian.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/nonlinearleastsquares/NonLinearLeastSquares.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/ICoordFunctionProjRI.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/nonlinearleastsquares/FRM8.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/OsmMercator.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/structures/projection/ProjectionConic.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/IFunctionX.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/ICartTransformation.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/MapObjectImpl.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/greatcircleintersection/GreatCircleIntersection.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/IPoint3DConstructor.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/jmapviewer/src/org/openstreetmap/gui/jmapviewer/Tile.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/types/GenericType.java</file>
-            <file>file:/E:/Tomas/Java/detectprojv2j/src/detectprojv2j/algorithms/graticuleAS/GraticuleAS.java</file>
->>>>>>> ea1389cca3027d015eff4476abc3c71495f9e1f5
         </group>
     </open-files>
 </project-private>
