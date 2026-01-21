@@ -1,34 +1,83 @@
 # detectprojv2j
 
-<p style="text-align: center;"><span style="font-size: 14pt;"><a href="index.php?option=com_content&amp;view=article&amp;id=4:introduction&amp;catid=9:projection-analysis&amp;Itemid=104">Introduction</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=5:projection-detection&amp;catid=9:projection-analysis&amp;Itemid=121">Projection detection</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=6:installation&amp;catid=9:projection-analysis&amp;Itemid=122">Installation</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=7:using-the-tool&amp;catid=9:projection-analysis&amp;Itemid=123">Using the tool</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=8:samples&amp;catid=9:projection-analysis&amp;Itemid=124">Samples</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=9:supported-projections&amp;catid=9:projection-analysis&amp;Itemid=125">Supported projections</a> | <a href="index.php?option=com_content&amp;view=article&amp;id=10:references&amp;catid=9:projection-analysis&amp;Itemid=126">References</a></span></p>
-<h3>Projection detection</h3>
-<p><span style="font-size: 14pt;"><strong>Software <span style="color: #ff0000;">detectproj</span>, version 1.2,<br />GNU/GPL projection analysis software for Windows ® 7/8/8.1/10, GNU/Linux and MacOS</strong></span></p>
-<p><span style="font-size: 14pt;">New and improved version of the projection analysis SW.<br />The executable file is available&nbsp;<a href="http://web.natur.cuni.cz/~bayertom/index.php/projection-analysis/installation">here</a>.</span></p>
+### Software detectproj, version 1.3 (01/2026),
+Moved from Java 8 to Java 25. Support of the inverse reprojection on selected projections. Reprojection by tiles is thread-safe
+
 <hr />
-<p>&nbsp;</p>
-<p><span style="font-size: 14pt;"><strong>Februry, 10, 2022: minor fixies</strong><br />Minor fixies, an<span style="font-size: 14pt;">&nbsp;improved performance of the projection analysis.</span></span></p>
-<p>&nbsp;</p>
-<p><span style="font-size: 14pt;"><strong>August, 20, 2019: new features of detectproj.</strong><br />Support of the inverse equations for the selected map projections (labeled by *)<br />The analyzed map may be warped from the determined projection to the Mercator projection.<br />The warping procedur runs in the separate thread.<br />An improved performance of the projection analysis.<br />10 new map projections have been added.</span></p>
+
+### detectproj, version 1.2.1 (02/2024),
+Minor fixies and speed imrovement.
+
 <hr />
-<p><span style="font-size: 14pt;"><strong>Software detectproj, version 1.1,<br />GNU/GPL projection analysis software for Windows ® 7/8/8.1/10, GNU/Linux and MacOS.</strong></span></p>
-<p><span style="font-size: 14pt;">Automated estimation of the map projection and its parameters based on the non-linear optimization...<br />Designed for cartographers as well as for enthusiasts.<br />Available free of charge.</span></p>
+
+### detectproj, version 1.2(02/2022),
+Improved performance of the projection analysis.
+
 <hr />
-<p><span style="font-size: 14pt;"><strong>June, 2, 2017: new features of detectproj.</strong><br />Extended identification of the projection.<br />Results sortable according to determined parameters.</span><span style="font-size: 14pt;"></span></p>
+
+### detectproj, version 1.1.1 (08/2019),
+Support of the inverse equations for the selected map projections (labeled by *). Experimantal support of the inverse reprojection on selected projections. An improved performance of the projection analysis. 10 new map projections have been added.
+
 <hr />
-<p><span style="font-size: 14pt;"><strong>May, 27, 2017: new features of detectproj.</strong><br />Added 3 map projections: Behrmann, Miller, Wiechel.<br />New graticule reconstruction algorithm.</span></p>
+
+### detectproj, version 1.1 (01/2019),
+Automated estimation of the map projection and its parameters based on the non-linear optimization.
+
 <hr />
-<p><span style="font-size: 14pt;"><strong>April, 12, 2017: new features of detectproj.</strong><br />Added panning tool. Some minor fixies and convergence improvements.</span></p>
+
+### detectproj, version 1.09 (07/2017)
+Extended identification of the projection. Results sortable according to determined parameters.
+
 <hr />
-<p><span style="font-size: 14pt;"><strong>March, 14, 2017: OSM issue fixed</strong><br />The Open Street Map loading issue has been fixed.</span></p>
+
+### detectproj, version 1.08 (05/2017)
+Added 3 map projections: Behrmann, Miller, Wiechel. New graticule reconstruction algorithm.
+
 <hr />
-<p><span style="font-size: 14pt;"><strong>March, 3, 2017: new features of detectproj.</strong><br />Adde 6 new map projections: Adams (3), Guyou, CWE, Littrow, Peirce.<br />Some minor fixies and improvements.</span></p>
+
+### detectproj, version 1.07 (04/2017)
+Added panning tool. Some minor fixies and convergence improvements.
+
 <hr />
-<p><span style="font-size: 14pt;"><strong>January, 15, 2017: new features of detectproj.</strong><br />Setting multiple latitude/longitude interval + sampling step of generated meridians/parallels. Compare old &nbsp;and new versions.<br />Multiple directions of the transformed longitude are supported.<br />Graticule of the projection may be generated over the entitre planishere (not only inside the spherical quadrangle represented by min-max box).</span></p>
+
+### detectproj, version 1.06 (03/2017)
+OSM issue fixed The Open Street Map loading issue has been fixed.
+
 <hr />
-<p><span style="font-size: 14pt;"><strong>December 19, 2016: version &nbsp;1.1 of detectproj.</strong><br />Support λ0 parameter for the oblique aspect of the projection. Compare old and new versions.<br />December 9, 2016: Added drag and drop support. Analyzed map. list of control points opened by drag and drop.<br />December 2, 2016: 12 new map projections are supported.<br />November 25, 2016: convergence improvements for all detection methods.</span></p>
+
+### detectproj, version 1.05 (03/2017)
+Added 6 new map projections: Adams (3), Guyou, CWE, Littrow, Peirce. Some minor fixies and improvements.
+
 <hr />
-<p><span style="font-size: 14pt;"><strong>Features of the detectproj now include:</strong></span></p>
-<ul>
+
+### detectproj, version 1.04 (03/2017)
+Setting multiple latitude/longitude interval + sampling step of generated meridians/parallels. Compare old and new versions. Multiple directions of the transformed longitude are supported. Graticule of the projection may be generated over the entitre planishere (not only inside the spherical quadrangle represented by min-max box).
+
+<hr />
+
+### detectproj, version 1.03 (12/2016)
+Support λ0 parameter for the oblique aspect of the projection. Compare old and new versions. 
+
+<hr />
+
+### detectproj, version 1.02 (11/2016)
+Added drag and drop support. Analyzed map. list of control points opened by drag and drop. 
+
+<hr />
+ 
+### detectproj, version 1.01 (10/2016)
+December 2, 2016: 12 new map projections are supported.
+
+<hr />
+
+### detectproj, version 1.00 (9/2016)
+First version of the detectproj. Convergence improvements for all detection methods.
+
+<hr />
+
+
+## Features of the detectproj now include
+
 <li><span style="font-size: 14pt;">100 map projections are supported,</span></li>
 <li><span style="font-size: 14pt;">detection of the projection name and family,</span></li>
 <li><span style="font-size: 14pt;">estimation of the normal/transverse/oblique aspect of the projection,</span></li>
@@ -52,7 +101,8 @@
 <li><span style="font-size: 14pt;">and many more...<br /></span></li>
 </ul>
 <hr />
-<p><strong><span style="font-size: 14pt;">Determined parameters</span></strong></p>
+
+## Determined parameters
 <p style="text-align: justify;"><span style="font-size: 14pt;">Suppose the projection ℙ(φk, λk, φ1, φ2, λ0, κ) described by the set of constant values: transformed pole position [φk, λk], standard parallels φ1, φ2, longitude λ0 of the central meridian, constant parameter κ (may be assigned to any other determined value). Furthermore, suppose the analyzed map M(R′, ΔX, ΔY, α) described by its constant values: auxiliary sphere radius R′ (illustrating the scale ratio), origin shifts ΔX, ΔY, and angle of rotation α. For the oblique aspect, the projection equations in closed form may be written as functions of the determined parameters</span></p>
 <p style="text-align: center;"><span style="font-size: 14pt;">X(R′, φk, λk, φ1, φ2, λ0, ΔX, κ, α) = F(φ′, λ′),<br />Y(R′, φk, λk, φ1, φ2, λ0, ΔY, κ, α) = G(φ′, λ′).</span></p>
 <p><strong><span style="font-size: 14pt;">Determined parameters of the projection</span></strong></p>
@@ -69,7 +119,8 @@
 <li><span style="font-size: 14pt;">Scale parameter R'<br />It is determined so as to estimated projection graticule fits best with the analyzed one.</span></li>
 <li><span style="font-size: 14pt;">Rotation α<br />An additional rotation of the analyzed map caused by the inappropriate insertion of the paper form of the map into the scanner.<br /></span></li>
 </ul>
-<p><strong><span style="font-size: 14pt;">Detection methods</span></strong></p>
+
+## Detection methods
 <p style="text-align: justify;"><span style="font-size: 14pt;">Determining the best fit projection parameters represents a complex problem leading to the convex/global unconstrained optimization of the objective function φ, describing the similarity of the analyzed and reference maps.</span></p>
 <p style="text-align: justify;"><span style="font-size: 14pt;">Let P ∈ M and Q ∈ S2 be the sets of features on the analyzed map M and on the sphere S2, ℙx:S2 → M′ be the analyzed projection, and P′ ∈ M′ be the image of Q in ℙx. The dissimilarity &nbsp;δx, δx ≥ 0,</span></p>
 <p style="text-align: center;"><span style="font-size: 14pt;">δx = ϕ (ℙx(Q), P) = ϕ (P′x, P),</span></p>
@@ -88,7 +139,8 @@
 <li><span style="font-size: 14pt;">NM (Nelder Mead): non-convex optimization, direct-search method, global optimizer may be found (no guarantee).</span></li>
 <li><span style="font-size: 14pt;">DE (Differential Evolution): non-convex optimization, stochastic method, global optimize may be found (no guarantee), best results (slowest)</span></li>
 </ul>
-<p><strong><span style="font-size: 14pt;">About map projections...</span></strong></p>
+
+## About map projections...
 <p style="text-align: justify;"><span style="font-size: 14pt;">Map projections are important for creating maps; each map uses a projection. Map projection (or a mapping) transforms a position of the element on the curved surface into a flat surface (map), represented by the plane. A curved surface approximating the Earth is considered to be the sphere or ellipsoid. Each map projection ℙ is defined with the set coordinate functions F, G of two independent variables φ, λ</span></p>
 <p style="text-align: center;"><span style="font-size: 14pt;">X = F(φ, λ), Y = G(φ, λ),</span></p>
 <p style="text-align: justify;"><span style="font-size: 14pt;">which are continuous with their first order partial derivatives. The meridian of a longitude λ = λ0 = const is represented by the curve</span></p>
