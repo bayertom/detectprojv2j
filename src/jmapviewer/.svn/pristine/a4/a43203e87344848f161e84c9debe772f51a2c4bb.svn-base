@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="all" name="jmapviewer"
+         xmlns:jacoco="antlib:org.jacoco.ant"
+         xmlns:if="ant:if"
+         xmlns:mvn="antlib:org.apache.maven.resolver.ant"
+>
+
+    <property name="java.lang.version" value="8" />
+    <dirname property="base.dir" file="${ant.file.jmapviewer}"/>
+    <property name="maven.artifact.resolver.version" value="1.5.1"/>
+    <property name="maven.artifact.resolver.parent.dir" value="${user.home}/.m2/repository/org/apache/maven/resolver/maven-resolver-ant-tasks/${maven.artifact.resolver.version}/"/>
+    <property name="jacoco.includes" value="org.openstreetmap.gui.jmapviewer.*" />
+    <property name="jacoco.inclbootstrapclasses" value="false" />
+    <property name="jacoco.inclnolocationclasses" value="false" />
+    <!-- For Java specific stuff by version -->
+    <condition property="isJava9"><matches string="${ant.java.version}" pattern="(1.)?(9|[2-9][0-9])" /></condition>
+    <condition property="isJava23"><matches string="${ant.java.version}" pattern="2[3-9]|[3-9][0-9]" /></condition>
+    <!-- Disable jacoco 0.8.11 on Java 23+, see https://www.jacoco.org/jacoco/trunk/doc/changes.html for latest supported version -->
+    <condition property="coverageByDefault">
+        <not>
+            <isset property="isJava23"/>
+        </not>
+    </condition>
+    <path id="test.classpath">
+        <pathelement location="bin"/>
+    </path>
+
+    <target name="all" depends="clean,build,test,svn_info,pack,create_run_jar,spotbugs,checkstyle,javadoc,create_release_zip,create_source_release_zip" />
+
+    <target name="clean">
+        <mkdir dir="bin" />
+        <mkdir dir="bintest" />
+        <mkdir dir="javadoc" />
+        <mkdir dir="report" />
+        <delete>
+            <fileset dir="bin">
+                <include name="**" />
+            </fileset>
+            <fileset dir="bintest">
+                <include name="**" />
+            </fileset>
+            <fileset dir="javadoc">
+                <include name="**" />
+            </fileset>
+            <fileset dir="report">
+                <include name="**" />
+            </fileset>
+            <fileset dir="." includes="*.jar,*.exec"/>
+        </delete>
+    </target>
+
+    <target name="build" depends="clean">
+        <!-- compile module info - we need to compile everything to ensure that all requires are there -->
+        <javac srcdir="src" destdir="bin" release="9" debug="true" includeantruntime="false" encoding="UTF-8" if:set="isJava9">
+            <include name="module-info.java" />
+            <include name="org/openstreetmap/gui/jmapviewer/**" />
+        </javac>
+
+        <!-- Remove the files compiled with Java 9 so that the next compile stage will compile to the appropriate version -->
+        <delete>
+            <fileset dir="bin">
+                <include name="org/openstreetmap/gui/jmapviewer/**" />
+            </fileset>
+        </delete>
+
+        <javac srcdir="src" destdir="bin" release="${java.lang.version}" debug="true" includeantruntime="false" encoding="UTF-8">
+            <include name="org/openstreetmap/gui/jmapviewer/**" />
+        </javac>
+
+        <copy todir="bin">
+            <fileset dir="src">
+                <include name="**/*.png" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="svn_info" description="Get SVN info for use in JAR/ZIP filenames.">
+        <!-- Get the svn ReleaseVersion property -->
+        <exec executable="svn" outputproperty="svnReleaseVersion">
+            <arg line="propget ReleaseVersion" />
+            <env key="LANG" value="en_US"/>
+        </exec>
+    </target>
+    
+    <target name="pack" depends="build">
+        <!-- Create the JAR file containing the compiled class files -->
+        <jar destfile="JMapViewer.jar" filesetmanifest="mergewithoutmain">
+            <fileset dir="bin" includes="module-info.class,**/jmapviewer/**" />
+        </jar>
+        <!-- Create the JAR file containing the source java files -->
+        <jar destfile="JMapViewer_src.jar" filesetmanifest="mergewithoutmain">
+            <fileset dir="src" includes="module-info.java,**/jmapviewer/**" />
+        </jar>
+    </target>
+    
+    <!-- if you want to build outside of svn, use "ant clean build [pack]" -->
+    
+    <target name="create_run_jar" description="Create a JAR file that can be used to execute the JMapViewer demo app. Requires JMapViewer.jar to be present.">
+        <jar destfile="JMapViewer_Demo.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="org.openstreetmap.gui.jmapviewer.Demo" />
+                <attribute name="Class-Path" value="JMapViewer.jar" />
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="create_release_zip" description="Create a release zip file containing the binary and source jar files as well as the demo starter">
+        <zip basedir="." destfile="releases/${svnReleaseVersion}/JMapViewer-${svnReleaseVersion}.zip">
+            <include name="JMapViewer*.jar" />
+            <include name="Readme.txt" />
+            <include name="Gpl.txt" />
+        </zip>
+        <delete>
+            <fileset dir="." includes="JMapViewer*.jar"/>
+        </delete> 
+    </target>
+    
+    <target name="create_source_release_zip" description="Create a release zip file containing the source files">
+        <zip destfile="releases/${svnReleaseVersion}/JMapViewer-${svnReleaseVersion}-Source.zip">
+            <zipfileset file="Readme.txt" prefix="jmapviewer-${svnReleaseVersion}"/>
+            <zipfileset file="build.xml" prefix="jmapviewer-${svnReleaseVersion}"/>
+            <zipfileset file="Gpl.txt" prefix="jmapviewer-${svnReleaseVersion}"/>
+            <zipfileset dir="src" includes="**/jmapviewer/**" prefix="jmapviewer-${svnReleaseVersion}/src"/>
+        </zip>
+    </target>
+
+    <target name="checkstyle" depends="resolve">
+        <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+            classpathref="checkstyle.classpath"/>
+        <checkstyle config="${basedir}/tools/checkstyle/jmapviewer_checks.xml">
+            <!-- Exclude the module-info since checkstyle currently cannot parse it -->
+            <fileset dir="${basedir}/src" includes="**/*.java" excludes="module-info.java" />
+            <formatter type="xml" toFile="checkstyle-jmapviewer.xml"/>
+        </checkstyle>
+    </target>
+
+    <target name="spotbugs" depends="pack,resolve">
+        <taskdef name="spotbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+            classpathref="spotbugs.classpath"/>
+        <property name="spotbugs-classpath" refid="spotbugs.classpath"/>
+        <spotbugs output="xml"
+                outputFile="spotbugs-jmapviewer.xml"
+                classpath="${spotbugs-classpath}"
+                effort="max"
+                >
+            <sourcePath path="${basedir}/src" />
+            <class location="JMapViewer.jar" />
+        </spotbugs>
+    </target>
+
+    <target name="javadoc">
+        <javadoc destdir="javadoc" 
+                sourcepath="src"
+                encoding="UTF-8"    
+                packagenames="org.openstreetmap.gui.jmapviewer.*"
+                windowtitle="JMapViewer"
+                use="true"
+                private="true"
+                linksource="true"
+                author="false">
+            <link href="https://docs.oracle.com/javase/8/docs/api"/>
+            <doctitle><![CDATA[<h2>JMapViewer - Javadoc</h2>]]></doctitle>
+            <bottom><![CDATA[<a href="https://josm.openstreetmap.de/">JMapViewer</a>]]></bottom>
+            <arg value="-html5" if:set="isJava9" />
+        </javadoc>
+    </target>
+
+    <target name="download-artifact-resolver">
+        <mkdir dir="${maven.artifact.resolver.parent.dir}"/>
+        <get src="https://repo1.maven.org/maven2/org/apache/maven/resolver/maven-resolver-ant-tasks/${maven.artifact.resolver.version}/maven-resolver-ant-tasks-${maven.artifact.resolver.version}-uber.jar"
+             dest="${maven.artifact.resolver.parent.dir}/maven-resolver-ant-tasks-${maven.artifact.resolver.version}-uber.jar"
+             usetimestamp="true" />
+    </target>
+    <target name="init-maven" depends="download-artifact-resolver">
+        <path id="maven.lib.path">
+            <fileset dir="${maven.artifact.resolver.parent.dir}" includes="maven-resolver-ant-tasks-${maven.artifact.resolver.version}-uber.jar"/>
+        </path>
+        <taskdef uri="antlib:org.apache.maven.resolver.ant" resource="org/apache/maven/resolver/ant/antlib.xml" classpathref="maven.lib.path"/>
+    </target>
+    <target name="resolve" depends="init-maven" description="Resolve Maven dependencies">
+        <mvn:pom file="pom.xml"/>
+        <!-- This stanza is necessary since the maven resolver doesn't read repo settings from the pom.xml file -->
+        <!-- resolver.repositories makes it global -->
+        <mvn:remoterepos id="resolver.repositories">
+            <mvn:remoterepo id="JOSM-central" url="https://josm.openstreetmap.de/repository/public/" />
+        </mvn:remoterepos>
+        <mvn:resolve>
+            <mvn:path refid="testlib.classpath" classpath="test"/>
+        </mvn:resolve>
+        <mvn:resolve>
+            <mvn:dependencies>
+                <mvn:dependency groupId="org.jacoco" artifactId="org.jacoco.ant" version="${pom.properties.version.maven.jacoco}" classifier="nodeps" type="jar" scope="test"/>
+            </mvn:dependencies>
+            <mvn:path refid="jacoco.classpath" classpath="test"/>
+        </mvn:resolve>
+        <mvn:resolve>
+            <mvn:dependencies>
+                <mvn:dependency groupId="com.puppycrawl.tools" artifactId="checkstyle" version="${pom.properties.version.maven.checkstyle}" scope="compile"/>
+            </mvn:dependencies>
+            <mvn:path refid="checkstyle.classpath" classpath="compile"/>
+        </mvn:resolve>
+        <mvn:resolve>
+            <mvn:dependencies>
+                <mvn:dependency groupId="com.github.spotbugs" artifactId="spotbugs" version="${pom.properties.version.maven.spotbugs}" scope="compile"/>
+                <mvn:dependency groupId="com.github.spotbugs" artifactId="spotbugs-ant" version="${pom.properties.version.maven.spotbugs}" scope="compile"/>
+            </mvn:dependencies>
+            <mvn:path refid="spotbugs.classpath" classpath="compile"/>
+        </mvn:resolve>
+    </target>
+
+    <target name="test" depends="clean, build, resolve">
+        <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="jacoco.classpath"/>
+        <javac srcdir="test" destdir="bintest"
+            target="${java.lang.version}" source="${java.lang.version}" debug="on"
+            includeantruntime="false" createMissingPackageInfoClass="false" encoding="UTF-8">
+            <compilerarg value="-Xlint:all"/>
+            <compilerarg value="-Xlint:-serial"/>
+            <classpath>
+                <path refid="testlib.classpath"/>
+                <path refid="test.classpath"/>
+            </classpath>
+        </javac>
+        <jacoco:agent destfile="report/jacoco.exec" enabled="${coverageByDefault}" includes="${jacoco.includes}" dumponexit="true"
+                      inclbootstrapclasses="${jacoco.inclbootstrapclasses}" inclnolocationclasses="${jacoco.inclnolocationclasses}"
+                      property="jacocoagent" if:true="${coverageByDefault}"/>
+        <junitlauncher printsummary="yes">
+            <classpath>
+                <path refid="testlib.classpath"/>
+                <path refid="test.classpath"/>
+                <pathelement location="bintest"/>
+            </classpath>
+            <testclasses outputdir="report">
+                <fileset dir="bintest" includes="**/*Test.class"/>
+                <fork>
+                    <jvmarg value="${jacocoagent}" if:set="jacocoagent" />
+                    <jvmarg value="-Dfile.encoding=UTF-8"/>
+                </fork>
+                <listener type="legacy-brief" sendSysOut="true" sendSysErr="true"/>
+                <listener type="legacy-plain" />
+                <listener type="legacy-xml" />
+            </testclasses>
+        </junitlauncher>
+        <jacoco:report>
+            <executiondata>
+                <fileset dir="report" includes="*.exec"/>
+            </executiondata>
+            <structure name="JMapViewer Test Coverage">
+                <classfiles>
+                    <fileset dir="bin" includes="org/openstreetmap/"/>
+                </classfiles>
+                <sourcefiles encoding="UTF-8">
+                    <fileset dir="src" includes="org/openstreetmap/"/>
+                </sourcefiles>
+            </structure>
+            <xml destfile="report/jacoco.xml"/>
+        </jacoco:report>
+    </target>
+
+</project>
