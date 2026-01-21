@@ -6,7 +6,7 @@ Moved from Java 8 to Java 25. Support of the inverse reprojection on selected pr
 <hr />
 
 ### detectproj, version 1.2.1 (02/2024),
-Minor fixies and speed imrovement.
+Minor fixies and speed imrovements.
 
 <hr />
 
