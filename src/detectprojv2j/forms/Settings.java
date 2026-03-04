@@ -29,17 +29,15 @@ import javax.swing.JTextField;
 
 import detectprojv2j.types.TInterval;
 import detectprojv2j.types.TTransformedLongitudeDirection;
-
 import detectprojv2j.structures.point.Point3DGeographic;
 import detectprojv2j.structures.projection.Projection;
-
 import detectprojv2j.comparators.SortPointsByLat;
 import detectprojv2j.comparators.SortPointsByLon;
 
 
 public class Settings extends javax.swing.JDialog {
-
-        private final List<Point3DGeographic> reference_points;                         //List of reference points (public, more comfortable access)
+        
+        private final List<Point3DGeographic> reference_points;                         //List of reference points
         private final TTransformedLongitudeDirection [] default_lon_dir;                //Default transformed longitude direction
         private final boolean [] analyze_lon0;                                          //Enable/disable lon0_trans analysis 
         
@@ -55,16 +53,15 @@ public class Settings extends javax.swing.JDialog {
     
         private TInterval lat_extent;                                                   //Geographic extent of the analyzed territory in the latitudinal direction
         private TInterval lon_extent;                                                   //Geographic extent of the analyzed territory in the longitudinal direction
-
-        private final List <Projection> projections;                                    //List of the analyzed projections
         
         
-        public Settings(final List<Point3DGeographic> reference_points_, final TTransformedLongitudeDirection [] default_lon_dir_, final boolean [] analyze_lon0_, final boolean [] create_entire_graticule_, final double [] lat1_step_, final double [] lat2_step_, final double [] lat3_step_, 
-                final double [] lon1_step_, final double [] lon2_step_, final double [] lon3_step_, final double [] lat_incr_, final double [] lon_incr_, final TInterval lat_extent_, final TInterval lon_extent_, final List <Projection> projections_) 
+         public Settings(final List<Point3DGeographic> reference_points_, final TTransformedLongitudeDirection [] default_lon_dir_, final boolean [] analyze_lon0_, final boolean [] create_entire_graticule_, final double [] lat1_step_, final double [] lat2_step_, final double [] lat3_step_, 
+                final double [] lon1_step_, final double [] lon2_step_, final double [] lon3_step_, final double [] lat_incr_, final double [] lon_incr_, final TInterval lat_extent_, final TInterval lon_extent_) 
         {
                 initComponents();
                 
                 reference_points = reference_points_;
+
                 default_lon_dir = default_lon_dir_;
                 analyze_lon0 = analyze_lon0_;
                 create_entire_graticule = create_entire_graticule_;
@@ -79,8 +76,6 @@ public class Settings extends javax.swing.JDialog {
                 lon_incr = lon_incr_;
                 lat_extent = lat_extent_;
                 lon_extent = lon_extent_;
-                
-                projections = projections_;
                 
                 //Input verifier: set longitude step of meridians
                 InputVerifier lon_step_verifier = new InputVerifier() {
@@ -97,7 +92,7 @@ public class Settings extends javax.swing.JDialog {
                                         double lon_step_trial = Double.parseDouble(text);
 
                                         //Too narrow interval
-                                        if (((lon_extent.max_value - lon_extent.min_value) / lon_step_trial  > 50.0) && (reference_points.size() > 1))
+                                        if (((lon_extent.max_value - lon_extent.min_value) / lon_step_trial  > 50.0))
                                         {
                                                 //Show warning box
                                                 JOptionPane.showMessageDialog(Settings.this, "Too small step, computation will take a long time");

@@ -54,37 +54,37 @@ import detectprojv2j.structures.graticule.Meridian;
 import detectprojv2j.structures.graticule.Parallel;
 import detectprojv2j.structures.point.Point3DCartesian;
 import detectprojv2j.structures.projection.Projection;
-
 import detectprojv2j.consts.Consts;
-
 import detectprojv2j.comparators.SortPointsByDistCart;
-
-
+import java.util.ArrayList;
 
 
 public class EarlyMap extends JPanel 
 {
-        private boolean repaint_vector_data;                                    //Indicator, whether vector data need to be repainted
-        private double zoom;                                                    //Actual zoom ratio: xoom = [0.05, 10]
-        private double dx;                                                      //Cummulated horizontal shifts
-        private double dy;                                                      //Cummulated Vertical shifts
-        public BufferedImage img;                                              //Image of the early map  
-        private BufferedImage canvas;                                           //Image representing a canvas
-        private AffineTransform at;                                             //Affine transformation object
-        private Point start, end;                                               //Points for the current Canvas shift computation
+        public BufferedImage img;                                               //Image of the early map (public, more comfortable access
+        private double img_dpi;                                                 //DPI of the early map
+        
+        public OSMMap map;                                                      //Open street map representation (public, more comfortable access)
         
         public List <Point3DCartesian> test_points;                             //List of test points (public, more comfortable access)
-        public List <Point3DCartesian> projected_points;                        //List of projected points (public, more comfortable access)
         
-        public OSMMap map;                                                        //Open street map representation
-        private JPopupMenu pop_up_menu;                                         //Pop-up menu (point deletition)
-        private ControlPointsForm control_points_form;                          //Table with results (needs to be updated)
+        public List <Point3DCartesian> projected_points;                        //List of projected points (public, more comfortable access)
         
         private Projection proj;                                                //Projection assigned to the early map
         private List <Meridian > meridians;                                     //List of meridians of the graticule
         private List <Parallel> parallels;                                      //List of parallels of the graticule
         private List <List<Point3DCartesian> > meridians_proj;                  //List of projected meridians of the graticule
         private List <List<Point3DCartesian> > parallels_proj;                  //List of projected parallels of the graticule
+        
+        private AffineTransform at;                                             //Affine transformation object
+        private Point start, end;                                               //Points for the current Canvas shift computation
+
+        private double zoom;                                                    //Actual zoom ratio: xoom = [0.05, 10]
+        private double dx;                                                      //Cummulated horizontal shifts
+        private double dy;                                                      //Cummulated Vertical shifts   
+
+        private JPopupMenu pop_up_menu;                                         //Pop-up menu (point deletition)
+        private ControlPointsForm control_points_form;                          //Table with results (needs to be updated)
        
         private boolean [] add_test_point;                                      //Control point may be added to the early map
         private boolean [] add_reference_point;                                 //Control point may be added to the reference (OSM) map
@@ -99,24 +99,14 @@ public class EarlyMap extends JPanel
         private int [] index_nearest_prev;                                      //Index of the previous point nearest to the cursor position
         
         
-        public EarlyMap(List <Point3DCartesian> test_points_, OSMMap map_, final ControlPointsForm control_points_form_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] enable_add_control_points_,
+        public EarlyMap(OSMMap map_, final ControlPointsForm control_points_form_, boolean [] add_test_point_, boolean [] add_reference_point_, boolean [] enable_add_control_points_,
                 boolean [] enable_panning_lm_, boolean [] enable_zoom_in_lm_, boolean [] enable_zoom_out_lm_, boolean [] enable_zoom_fit_all_lm_, boolean [] computation_in_progress_, int [] index_nearest_, int [] index_nearest_prev_) 
-        {
-                //Initialize repaint
-                repaint_vector_data = true;
-                
-                //Initial zoom and shifts
-                zoom = 1;
-                dx = 0;
-                dy = 0;
-               
-                //Initialize start + end points for the current Canvas shift computation
-                start = new Point(0, 0);
-                end = new Point(0, 0);
-                
+        {              
+                //Assign map (OSM)
+                map = map_;
+              
                 //Initialize JPG file to null
                 img = null;
-                canvas = null;
 
                 //Load default image
                 try
@@ -136,21 +126,41 @@ public class EarlyMap extends JPanel
                 {
                         ex.printStackTrace();
                 }
+                
+                
+                //Create new points
+                test_points = new ArrayList<>();
+                projected_points = new ArrayList<>();
+                
+                //Map projection
+                proj = null;
+                
+                //Meridians and parallels
+                meridians = new ArrayList<>();
+                parallels = new ArrayList<>();
+                
+                //Projected meridians and parallels
+                projected_points = new ArrayList<>();
+                meridians_proj = new ArrayList<>();
+                parallels_proj = new ArrayList<>();
+                
+                //Initialize start + end points for the current Canvas shift computation
+                start = new Point(0, 0);
+                end = new Point(0, 0);
+                
+                //Initial zoom and shifts
+                zoom = 1;
+                dx = 0;
+                dy = 0;
+                
+                //Initialize DPI
+                img_dpi = 300;
                   
                 //Create new affine transformation and set its parameters
                 at = new AffineTransform();
                 at.translate(0, 0);
                 at.scale(1, 1);
-                
-                //Assign points
-                test_points = test_points_;
-                
-                //Map projection
-                proj = null;
-                
-                //Assign map (OSM)
-                map = map_;
-                
+                               
                 //Assign table with results
                 control_points_form = control_points_form_;
                 
@@ -165,16 +175,7 @@ public class EarlyMap extends JPanel
                 computation_in_progress = computation_in_progress_;
                 index_nearest = index_nearest_;
                 index_nearest_prev = index_nearest_prev_;
-                
-                //Meridians and parallels
-                meridians = null;
-                parallels = null;
-                
-                //Projected meridians and parallels
-                projected_points = null;
-                meridians_proj = null;
-                parallels_proj = null; 
-                
+                              
                 //Enable tool tip represented by the geographic coordinates
                 this.setToolTipText("");
                                                
@@ -300,8 +301,7 @@ public class EarlyMap extends JPanel
                                                 //Update table with control points
                                                 control_points_form.clearTable();
                                                 control_points_form.printResult();
-                                                
-                                                repaint_vector_data = true;
+                                               
                                         }
                                 } 
                                 
@@ -720,32 +720,49 @@ public class EarlyMap extends JPanel
         //Get projection assigned to the early map
         public Projection getProjection(){return proj;}
         
+        
         //Get list of projected poins
         public List<Point3DCartesian> getProjectedPoints() {return projected_points;}
+        
         
         //Get list of meridians
         public List<Meridian> getMeridians() {return meridians;}
         
+        
         //Get list of parallels
         public List<Parallel> getParallels() {return parallels;}
         
+        
         //Get list of projected meridians
         public List<List<Point3DCartesian>> getProjectedMeridians() {return meridians_proj;}
+        
         
         //Get list of projected parallels
         public List<List<Point3DCartesian>> getProjectedParalells() {return parallels_proj;}
         
         
+        //Get DPI of the early map
+        public double getDPI(){return img_dpi;}
+        
+               
         public void setProjection(final Projection proj_)
         {
                 //Set projection
                 proj = proj_;
         }
         
+        
         public void setImage(final BufferedImage img_)
         {
                 //Set early map image
                 img = img_;
+        }
+        
+        
+        public void setDPI (final double img_dpi_)
+        {
+                //Set image DPI
+                img_dpi = img_dpi_;
         }
         
         
@@ -772,6 +789,7 @@ public class EarlyMap extends JPanel
                 parallels = parallels_;
         }
         
+        
         public void setProjectedMeridians (final List<List<Point3DCartesian>> meridians_proj_) 
         {
                 //Set projected meridians
@@ -791,25 +809,40 @@ public class EarlyMap extends JPanel
                 repaint();
         }
         
-        
-        public boolean testRaster()
-        {
-                boolean drawn = false;
-                for (int i = 0; i < canvas.getWidth(); i++) {
-                        for (int j = 0; j < canvas.getHeight(); j++) {
-                                int color = canvas.getRGB(i, j);
-                                int blue = color & 0xff;
-                                int green = (color & 0xff00) >> 8;
-                                int red = (color & 0xff0000) >> 16;
-
-                                if (red != 238) {
-                                        drawn = true;
-
-                                        //System.out.println("Move" + red);
-                                }
-                        }
-                }
                 
-                return drawn;
+        public void clearMeridians(){
+                //Clear all meridians
+                meridians.clear();
+                
+                //Repaint early map
+                repaint();
         }
+        
+        
+        public void clearParallels(){
+                //Clear all paralells
+                parallels.clear();
+                
+                //Repaint early map
+                repaint();
+        }
+        
+        
+        public void clearProjectedMeridians(){
+                //Clear all projected meridians
+                meridians_proj.clear();
+                
+                //Repaint early map
+                repaint();
+        }
+              
+        
+        public void clearProjectedParallels(){
+                //Clear all projected paralells
+                parallels_proj.clear();
+                
+                //Repaint early map
+                repaint();
+        }
+                
 }

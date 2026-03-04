@@ -1,6 +1,6 @@
 // Description: About box of the program
 
-// Copyright (c) 2015 - 2016
+// Copyright (c) 2015 - 2025
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -48,7 +48,6 @@ public class AboutBox extends javax.swing.JFrame {
 
                 setTitle("About");
                 setLocation(new java.awt.Point(800, 300));
-                setPreferredSize(new java.awt.Dimension(470, 460));
                 setResizable(false);
                 setType(java.awt.Window.Type.UTILITY);
                 getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -70,7 +69,7 @@ public class AboutBox extends javax.swing.JFrame {
                 );
                 logoPanelLayout.setVerticalGroup(
                         logoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
                 );
 
                 aboutSoftwarePanel.add(logoPanel);
@@ -78,24 +77,24 @@ public class AboutBox extends javax.swing.JFrame {
                 descriptionPanel.setLayout(new javax.swing.BoxLayout(descriptionPanel, javax.swing.BoxLayout.Y_AXIS));
 
                 titleLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-                titleLabel.setText("<html> <br> detectproj v. 1.2.9 </html>");
+                titleLabel.setText("<html> <br> detectproj v. 1.3.0 </html>");
                 descriptionPanel.add(titleLabel);
 
-                descriptionLabel.setText("<html><br> Estimation of the unknown projection and its parameters from a map.<br> <br> License: GNU/GPL v. 2.0 </html>");
+                descriptionLabel.setText("<html> <br>Estimation of the unknown projection and its parameters from a map. Inverse reprojection of the map to Web Mercator.<br> <br> License: GNU/GPL v. 2.0 </html>");
                 descriptionPanel.add(descriptionLabel);
 
                 aboutSoftwarePanel.add(descriptionPanel);
 
                 authorLabel.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
                 authorLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-                authorLabel.setText("© 2016-19, Tomas Bayer");
+                authorLabel.setText("© 2016-26, Tomas Bayer");
 
                 adressLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-                adressLabel.setText("<html> <br> Department of Applied Geoinformatics and Cartography, <br> Faculty of Science, Charles University, Prague.<br><br> E-mail: bayertom@natur.cuni.cz</html>");
+                adressLabel.setText("<html> <br> Department of Applied Geoinformatics and Cartography, <br> Faculty of Science, Charles University, Prague.<br><br> E-mail: bayert@email.cz</html>");
 
                 supportedMethodsLabel.setText("<html>Supported detection methods: M7, M8 <br> Supported optimizations: NLS, NM, DE </html>");
 
-                otherInformationLabel.setText("<html> Map operations based on jMapViewer library. <br> Compiler: NetBeans 8.x, 64. </html>");
+                otherInformationLabel.setText("<html> Map operations based on jMapViewer library. <br> Compiler: NetBeans 28, Java 25, 64 bit. </html>");
 
                 javax.swing.GroupLayout aboutFurtherInformationPanelLayout = new javax.swing.GroupLayout(aboutFurtherInformationPanel);
                 aboutFurtherInformationPanel.setLayout(aboutFurtherInformationPanelLayout);
@@ -140,7 +139,8 @@ public class AboutBox extends javax.swing.JFrame {
                 textPanelLayout.setVerticalGroup(
                         textPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(textPanelLayout.createSequentialGroup()
-                                .addComponent(aboutSoftwarePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap()
+                                .addComponent(aboutSoftwarePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(aboutFurtherInformationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())

@@ -30,8 +30,13 @@ import java.io.IOException;
 
 import detectprojv2j.types.GenericType;
 import detectprojv2j.types.IPoint3DFeatures;
-
 import detectprojv2j.exceptions.BadDataException;
+import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import javax.imageio.ImageIO;
 
 public class IO {
         
@@ -194,4 +199,47 @@ public class IO {
                     e.printStackTrace();
                 }
         }
+        
+        
+        public static void saveImage(final BufferedImage img, final String file_name, final String mask) {
+                //Save image to a file: jpg, png, tiff
+                try {
+                        //Create output file
+                        File output_file = new File(file_name);
+
+                        //Write raster to the output file
+                        ImageIO.write(img, mask, output_file);
+
+                } 
+                
+                //Throw exception
+                catch (IOException evt) {
+                        evt.printStackTrace();
+                }
+        }
+        
+        
+        public static void saveTextFile(final String text, final String file_name) {
+                //Write given text into a text file
+                try {
+                        //Create output file
+                        File output_file = new File(file_name);
+                        
+                        //Create writer
+                        Writer w = new OutputStreamWriter(new FileOutputStream(output_file), StandardCharsets.US_ASCII);
+                        
+                        //Write text into the file
+                        w.write(text);
+                        
+                        //Close file
+                        w.close();         
+                }
+                 
+                //Throw exception
+                catch (IOException e) 
+                {
+                    e.printStackTrace();
+                }
+        }
+        
 }

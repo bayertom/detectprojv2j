@@ -1,7 +1,7 @@
 // Description: Performs cartometric analysis (i.e. estimation of the map projection)
 // Computation runs in a separate thread
 
-// Copyright (c) 2015 - 2016
+// Copyright (c) 2015 - 2026
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -61,19 +61,20 @@ import detectprojv2j.algorithms.transformation.HelmertTransformation2D;
 import detectprojv2j.algorithms.simplexmethod.*;
 
 
+//Cartometric analysis, run in a separate thread
 public class CartAnalysisMT implements Runnable
 {
-        private final List<Point3DCartesian> test_points;
-        private final List <Point3DGeographic> reference_points; 
-	private final List <Projection> projections;
-        private final TreeMap<Double, TResult> results;
-        private final TAnalysisMethod method;
-        private final boolean analyze_lon0;
-        private final PrintStream s;
-        private final JToggleButton button;
-        private final Runnable f_callback;
+        private final List<Point3DCartesian> test_points;                       //List of analyzed points
+        private final List <Point3DGeographic> reference_points;                //List of reference points
+	private final List <Projection> projections;                            //List of projections
+        private final TreeMap<Double, TResult> results;                         //List of results sorted according to the residuals
+        private final TAnalysisMethod method;                                   //Method of analysis: hybrid BFGS, Nelder-Mead, differential evolution
+        private final boolean analyze_lon0;                                     //Analyze also lon0 shift?
+        private final PrintStream s;                                            //Reference to print stream        
+        private final JToggleButton button;                                     //Reference to button starting the analysis
+        private final Runnable f_callback;                                      //Reference to a callback
         
-        public CartAnalysisMT(final List<Point3DCartesian> test_points_, final List <Point3DGeographic> reference_points_, List <Projection> projections_, 
+        public CartAnalysisMT(final List<Point3DCartesian> test_points_, final List <Point3DGeographic> reference_points_, List <Projection> projections_,
                 TreeMap<Double, TResult> results_, final TAnalysisMethod method_, final boolean analyze_lon0_, final PrintStream s_, final JToggleButton button_, final Runnable f_callback_)
         {
                 test_points = test_points_;
@@ -211,7 +212,7 @@ public class CartAnalysisMT implements Runnable
                                 else
                                         frm8 = new FRM8(test_points, reference_points, proj.getX(), proj.getY(), proj.getLonDir(), R_0, q1, q2, dx, dy);
                                 
-                                // Method M7, Non-linear least squares
+                                //Method M7, Non-linear least squares
                                 if (method == TAnalysisMethod.NLSM7)
                                 {
                                         FJM7 fjm7 = new FJM7(test_points, reference_points, proj.getX(), proj.getY(), proj.getLonDir());
@@ -277,7 +278,7 @@ public class CartAnalysisMT implements Runnable
                                 proj.setDy(dy[0]);
                                 
                                 //Set the determined  parameters to the map
-                                final double map_scale = R / proj.getR() * 1000 ;
+                                final double map_scale = R / (proj.getR()) * 1000 ;
                                 //System.out.println("R:" + R + " RR: " + proj.getR() + " S: " + map_scale);
                                 final double rotation = (method.ordinal() < 3 ? 0 : atan2(q2[0], q1[0]) * 180.0 / PI);
 
@@ -291,6 +292,7 @@ public class CartAnalysisMT implements Runnable
                                 e.printStackTrace();
                                 //System.out.println(proj.getName());
                         }
+                        
                 }
                 
                 //Set the old text caption

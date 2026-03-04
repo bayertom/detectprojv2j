@@ -72,7 +72,13 @@ public final class Consts {
 
     //Maximum longitude
     public static final double MAX_LON = 180.0;
+    
+    //Maximum latitude in Mercator projection
+    public static final double MAX_LAT_MERC = 85.0;
 
+    //Minimum latitude in Mercator projection
+    public static final double MIN_LAT_MERC = -85.0;
+    
     //Minimum position difference between two 2D points. Points having angle difference < MIN_ANGLE_DIF are unique
     public static final double MIN_POSITION_DIFF = 5.0e-4;
     
@@ -87,5 +93,11 @@ public final class Consts {
     
     //Set step for numeric derivative using Stirling method
     public static final double MAP_MARKER_RADIUS = 10;
+    
+    //Set maximum dimension of the mosaic  in pixels
+    public static final int MAX_MOSAIC_MAP_DIM = 10000;
+    
+    //Set resolution
+    public static final double MM_PER_INCH = 25.4;  
 
 }

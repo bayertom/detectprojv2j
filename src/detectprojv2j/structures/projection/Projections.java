@@ -1,7 +1,7 @@
 // Description: List of all implemented map projections
 // Supported equations in the non-closed form,
 
-// Copyright (c) 2015 - 2017
+// Copyright (c) 2015 - 2018
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -176,6 +176,7 @@ public class Projections {
                 ProjectionPseudoCylindrical wink1 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::F_wink1, Projections::G_wink1, Projections::FI_wink1, Projections::GI_wink1, "Winkel I.*", "wink1");
                 ProjectionPseudoCylindrical wink2 = new ProjectionPseudoCylindrical (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::F_wink2, Projections::G_wink2, Projections::FI_wink2, Projections::GI_wink2, "Winkel II.*", "wink2");
                 ProjectionPseudoAzimuthal wintri = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::F_wintri, Projections::G_wintri, Projections::FI_wintri, Projections::GI_wintri, "Winkel, tripel*", "wintri");
+                ProjectionPseudoAzimuthal wintrib = new ProjectionPseudoAzimuthal (R0, 90.0, 0.0, 10.0, default_lon_dir, 0.0, 0.0, 0.0, 1.0, Projections::F_wintri_bopc, Projections::G_wintri_bopc, Projections::FI_wintri, Projections::GI_wintri, "Winkel, tripel, BOPC", "wintrib");
 
 
                 //Add projections to the list
@@ -307,6 +308,7 @@ public class Projections {
                 projections.add(wink2);
                 
                 projections.add(wintri);
+                projections.add(wintrib);
         
         }
         
@@ -13301,6 +13303,45 @@ public class Projections {
                 }
         }
         */
+       
+        //Winkel Tripel BOPC
+        public static double F_wintri_bopc(final double lat, final double lon, final double R, final double lat1, final double lat2, final double lon0, final double dx, final double dy, final double c)
+        {
+                //Aitoff projection
+                final double X1 = F_aitoff(lat, lon, R, lat1, lat2, lon0, dx, dy, c);
+
+                //Equidistant cylindrical
+                final double X2 = F_cea(lat, lon, R, lat1, lat2, lon0, dx, dy, c);
+
+                //Average of both projections
+                final double X = 0.5 * (X1 + X2);
+
+                //Throw exception
+                if (abs(X) > MAX_FLOAT )
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate F_wintri coordinate function, ", "F_wintri > MAX_FLOAT: ", X);
+
+                return X;
+        }
+
+
+        public static double G_wintri_bopc(final double lat, final double lon, final double R, final double lat1, final double lat2, final double lon0, final double dx, final double dy, final double c)
+        {
+                //Aitoff projection
+                final double Y1 = G_aitoff(lat, lon, R, lat1, lat2, lon0, dx, dy, c);
+
+                //Equidistant cylindrical
+                final double Y2 = G_cea(lat, lon, R, lat1, lat2, lon0, dx, dy, c);
+
+                //Average of both projections
+                final double Y = 0.5 * (Y1 + Y2);
+
+                //Throw exception
+                if (abs(Y) > MAX_FLOAT )
+                        throw new MathOverflowException ("MathOverflowException: can not evaluate G_wintri coordinate function, ", "G_wintri > MAX_FLOAT: ", Y);
+
+                return Y;
+        }
+       
         
         //Other functions
         public static double GN(ICoordFunctionProjJI function_ji, ICoordFunctionProjRI function_fri, ICoordFunctionProjRI function_gri, final double X, final double Y, final double R, final double lat1, final double lat2, 

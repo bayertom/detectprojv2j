@@ -79,7 +79,7 @@ public class ProjectionPseudoAzimuthal extends Projection
         public TInterval getLonPInterval() { return new TInterval (MIN_LON, MAX_LON); }
 
         @Override
-        public TInterval getLat1Interval() { return new TInterval (0, 0); }
+        public TInterval getLat1Interval() { return new TInterval (0, MAX_LAT1); }
 
         @Override
         public void setCartPole(final Point3DGeographic cart_pole_) { cart_pole = cart_pole_; }

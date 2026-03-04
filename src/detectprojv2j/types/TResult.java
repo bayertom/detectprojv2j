@@ -1,6 +1,6 @@
 // Description: Determined projection and map parameters (1 result)
 
-// Copyright (c) 2015 - 2017
+// Copyright (c) 2015 - 2026
 // Tomas Bayer
 // Charles University in Prague, Faculty of Science
 // bayertom@natur.cuni.cz
@@ -43,7 +43,7 @@ public class TResult {
         public List <Point3DCartesian> points_proj;                             //List of projected reference points, first x samples
         public List <List<Point3DCartesian> > meridians_proj;                   //List of projected meridians, first x samples
         public List <List<Point3DCartesian> > parallels_proj;                   //List of projected parallels, first x samples
-        public List <MercTile> tiles;                                           //List of tiles of the georeferenced map;
+        public List <MercTile> tiles;                                           //List of tiles of the georeferenced raster tiles
         
         public TResult (final Projection proj_, final double map_scale_, final double map_rotation_, final double q1_, final double q2_, final int iterations_)
         {
@@ -55,6 +55,7 @@ public class TResult {
                 q2 = q2_;
                 iterations = iterations_;
                 
+                //Lists will be initialized later
                 meridians = null;
                 parallels = null;
                 points_proj = null;
